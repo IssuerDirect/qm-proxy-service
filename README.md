@@ -4,6 +4,7 @@ This is the proxy server for SNN + Quotemedia API integration
 
 ## Run
 
+Copy `.env.example` file to `.env` and change information
 
 ```
 # Install packages
