@@ -2,15 +2,15 @@
 
 This is the proxy server for SNN + Quotemedia API integration
 
-# Run
+## Run
 
 
 ```
 # Install packages
-npm install
+> npm install
 
 # Run application
-npm run start
+> npm run start
 ```
 
 Then, visit http://localhost:3000
