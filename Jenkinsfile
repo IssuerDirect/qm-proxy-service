@@ -1,3 +1,6 @@
 @Library('isdrLibrary') _
 
-isdrPipeline(regName: 'MEU TESTE')
+isdrPipeline {
+  registryName = 'vmazzi'
+  imageName    = 'test'
+}
