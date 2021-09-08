@@ -1,3 +1,3 @@
 @Library('isdrLibrary') _
 
-isdrPipeline(reg: 'MEU TESTE')
+isdrPipeline(regName: 'MEU TESTE')
