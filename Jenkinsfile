@@ -1,7 +1,6 @@
 @Library('isdrLibrary') _
 
 isdrPipeline {
-  registryName   = 'vmazzi'
-  imageName      = 'test'
+  projectName    = 'qm-proxy-service'
   dockerFilePath = 'SNN-api'
 }
