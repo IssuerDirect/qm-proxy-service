@@ -1,6 +1,5 @@
 @Library('isdrLibrary')
 
-isdrPipeline {
+isdrPipeline(
    regName = "MEU TESTE"
-
-}
+)
