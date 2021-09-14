@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SNN_api
+namespace snn
 {
     public class Startup
     {
@@ -26,6 +26,7 @@ namespace SNN_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContextPool<PlatformDB>(x => x.UseSqlServer(Configuration.GetConnectionString("accounts")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
