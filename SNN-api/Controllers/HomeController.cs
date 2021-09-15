@@ -13,7 +13,7 @@ namespace snn.Controllers
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
-        public HomeController(IConfiguration config) {
+        public HomeController(IConfiguration config, platformDB platformDB, net3000.accounts.DBContext.accountsDB accountsDB) {
             myConfig = config;
         }
 
