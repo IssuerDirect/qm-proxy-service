@@ -11,7 +11,7 @@ namespace snn
     public class SNNLib
     {
         lib clib = new lib();
-        public platformDB platformDB = new platformDB();
+        public platformDB platformDB;
         public IConfiguration config {
             set {
                 clib.myConfiguration = value;
