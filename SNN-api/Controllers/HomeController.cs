@@ -14,8 +14,7 @@ namespace snn.Controllers
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
-        apiResponse apiResponse = new apiResponse();
-        public HomeController(IConfiguration config, platformDB platformDB, net3000.accounts.DBContext.accountsDB accountsDB) {
+        public HomeController(IConfiguration config) {
             myConfig = config;
         }
 
