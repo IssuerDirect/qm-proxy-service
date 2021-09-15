@@ -25,7 +25,7 @@ namespace snn.Controllers
         }
 
         [HttpGet("/insights")]
-        public apiResponse getInsights() {
+        public apiResponse getInsights(int index=0) {
 
             return myResponse;
         }
