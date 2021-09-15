@@ -32,7 +32,12 @@ namespace snn.Controllers
         /// <remarks>Get a paged list of insights ordered by id desc. Page size is 24</remarks>
         [HttpGet("/insights")]
         public apiResponse getInsights(int index = 0) {
-
+            var myList = lib.platformDB.snn_Insight.Skip(index * pageSize).Take(pageSize).OrderByDescending(s => s.id);
+            myResponse.data = lib;
+            myResponse.count = myList.Count();
+            myResponse.pageIndex = index;
+            myResponse.pageSize = pageSize;
+            myResponse.data = myList.ToList();
             return myResponse;
         }
 
