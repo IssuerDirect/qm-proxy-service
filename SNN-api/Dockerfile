@@ -8,5 +8,4 @@ RUN dotnet publish -c release -o /app --no-restore
 ENV ASPNETCORE_URLS=http://*:5000
 
 WORKDIR /app
-#COPY --from=build /app .
 ENTRYPOINT ["dotnet", "SNN-api.dll"]
