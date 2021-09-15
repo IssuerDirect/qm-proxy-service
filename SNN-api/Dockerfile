@@ -5,6 +5,7 @@ WORKDIR /source
 COPY . .
 RUN dotnet restore
 RUN dotnet publish -c release -o /app --no-restore
+
 ENV ASPNETCORE_URLS=http://*:5000
 
 WORKDIR /app
