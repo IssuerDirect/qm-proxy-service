@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Net;
+using net3000;
 
 namespace snn.Controllers
 {
@@ -13,6 +14,7 @@ namespace snn.Controllers
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
+        apiResponse apiResponse = new apiResponse();
         public HomeController(IConfiguration config, platformDB platformDB, net3000.accounts.DBContext.accountsDB accountsDB) {
             myConfig = config;
         }

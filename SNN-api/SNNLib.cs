@@ -11,6 +11,8 @@ namespace snn
     {
         commonCore clib = new commonCore();
         accesswireLib acc = new accesswireLib();
+        public platformDB platformDB = new platformDB();
+
         public accesswireDB accesswireDB
         {
             get

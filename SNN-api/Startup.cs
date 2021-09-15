@@ -29,7 +29,7 @@ namespace snn
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<platformDB>(x => x.UseMySql(Configuration.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(Configuration.GetConnectionString("PlatformID"))));
-            services.AddDbContextPool<net3000.accounts.DBContext.DB>(x => x.UseSqlServer(Configuration.GetConnectionString("accounts")));
+            services.AddDbContextPool<net3000.accounts.DBContext.accountsDB>(x => x.UseSqlServer(Configuration.GetConnectionString("accounts")));
             services.AddDbContextPool<accesswireCore.accesswireDB>(x => x.UseSqlServer(Configuration.GetConnectionString("accesswire")));
 
             services.AddControllers();
