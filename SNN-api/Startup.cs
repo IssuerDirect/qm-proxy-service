@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
@@ -26,7 +28,9 @@ namespace snn
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<PlatformDB>(x => x.UseSqlServer(Configuration.GetConnectionString("accounts")));
+            services.AddDbContextPool<platformDB>(x => x.UseMySql(Configuration.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(Configuration.GetConnectionString("PlatformID"))));
+            services.AddDbContextPool<net3000.accounts.DBContext.DB>(x => x.UseSqlServer(Configuration.GetConnectionString("accounts")));
+            services.AddDbContextPool<accesswireCore.accesswireDB>(x => x.UseSqlServer(Configuration.GetConnectionString("accesswire")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
