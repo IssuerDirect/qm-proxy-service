@@ -37,6 +37,25 @@ namespace snn.Controllers
             ViewBag.types = platformDB.ref_InsightType.Select(a => new { a.id, a.name }).ToDictionary(z => z.id, z => z.name);
             return View();
         }
+        [HttpDelete("/snn_Insights/{ids}")]
+        public apiResponse delete([FromQuery] string ids)
+        {
+            if (!readContext()) { return standardMessages.invalid; }
+            var IDS = ids.Split(',').Select(a=>Convert.ToInt32( a)).ToList<int>() ;
+         var tobeRemoved=   platformDB.snn_Insight.Where(a => IDS.Contains(a.id)).ToList();
+            if(tobeRemoved.Any())
+            {
+                platformDB.snn_Insight.RemoveRange(tobeRemoved);
+                platformDB.SaveChanges();
+                myResponse = standardMessages.deleted;
+                myResponse.data = ids;
+            }
+            else
+            {
+                myResponse = standardMessages.notFound;
+            }
+            return myResponse;
+        }
 
         bool readContext()
         {
