@@ -48,7 +48,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: snn-proxy.isdrdev.com
+    - host: qm-proxy.isdrdev.com
       paths:
         - path: /
           pathType: ImplementationSpecific
