@@ -44,3 +44,5 @@ Thumbs.db
 .env
 .env.local
 /.vs
+/SNN-api/obj
+/SNN-api/bin/Debug/net5.0

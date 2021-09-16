@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Net;
+using net3000;
 
-namespace SNN_api.Controllers
+namespace snn.Controllers
 {
     [ApiController]
     public class HomeController : ControllerBase
