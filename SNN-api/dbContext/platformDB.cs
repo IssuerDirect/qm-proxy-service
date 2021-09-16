@@ -10,7 +10,7 @@ namespace snn
             : base(options)
         {
         }
-
+        public DbSet<snn_alerts> snn_alerts { get; set; }
         public DbSet<snn_Insight> snn_Insight { get; set; }
         public DbSet<ref_InsightType> ref_InsightType { get; set; }
         public DbSet<snn_users> snn_users { get; set; }
