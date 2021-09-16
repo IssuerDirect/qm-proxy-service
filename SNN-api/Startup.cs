@@ -36,7 +36,7 @@ namespace SNN_api
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com")
+                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com", "http://snn", "http://http://snn.isdrdev.com")
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod());
