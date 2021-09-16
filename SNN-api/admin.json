@@ -1,0 +1,23 @@
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": "P-C03A91C27170FC177C60786",
+    "username": "prasanna.pitchumani@issuerdirect.com",
+    "email": "prasanna.pitchumani@issuerdirect.com",
+    "phone": "9194814000",
+    "first_name": "Prasanna",
+    "last_name": "Pitchumani",
+    "social": null,
+    "last_login": "2021-09-15 21:40:17",
+    "investorType": null,
+    "auth_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImp0aSI6IlJrdDNRalF3UW5Nd2VVSnZWV0ZJVlhCaFpWUk1kM1JIZERKcWNHRllPRms9In0.eyJpc3MiOiJodHRwczpcL1wvcGxhdGZvcm1pZC1hbHBoYS5pc2RyZGV2LmNvbSIsImlhdCI6MTYzMTc0MjAxNywibmJmIjoxNjMxNzQyMDE3LCJqdGkiOiJSa3QzUWpRd1FuTXdlVUp2VldGSVZYQmhaVlJNZDNSSGRESnFjR0ZZT0ZrPSIsInVpZCI6IlAtQzAzQTkxQzI3MTcwRkMxNzdDNjA3ODYiLCJleHAiOjE2MzY5MjYwMTd9.k6yj9TOuziTAgAl3g2RbR5AJpJYXOV0NdLqqZhW7q453kecrrSKdiD3h497E_daWj4ko2mnqJ4UCgTuET4dlkw",
+    "level": 10,
+    "settings": null,
+    "ref_Status": 0,
+    "ref_Country": "US",
+    "instance": "I-A7738683FAB5F98510ED76D54D124F",
+    "companies": []
+  },
+  "count": 1,
+  "message": []
+}
