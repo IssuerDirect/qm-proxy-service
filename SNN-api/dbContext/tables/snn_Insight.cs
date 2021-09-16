@@ -22,5 +22,7 @@ namespace snn
         public string link { get; set; }
         [ForeignKey("type")]
         public virtual ref_InsightType ref_InsightType { get; set; }
+        [ForeignKey("ref_Status")]
+        public virtual ref_Status ref_Statuses { get; set; }
     }
 }
