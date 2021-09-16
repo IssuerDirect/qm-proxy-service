@@ -1,0 +1,33 @@
+﻿<html lang="en">
+<head runat="server">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://www.net3000.ca/apps/css/admin/style.css?v=3.2" rel="stylesheet" />
+    <link href="https://www.net3000.ca/apps/css/common.css?v=1" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <environment include="Development">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    </environment>
+    @RenderSection("headercode", required: false)
+</head>
+<body class="bg-gradient" style="height: 100%">
+    <div class="d-flex justify-content-center align-items-center" style="height: 100%">
+        @RenderBody()
+    </div>
+
+    @Html.AntiForgeryToken()
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.2/mustache.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://scripts.net3000.ca/v2/common/common.js?v=3"></script>
+    <script src="https://scripts.net3000.ca/v2/cm/cm.js?v=3"></script>
+    <script src="https://kit.fontawesome.com/4e30836028.js" crossorigin="anonymous"></script>
+    <script src='https://www.google.com/recaptcha/api.js?render=6Le1cs4UAAAAAFzAcc-6pcJDZI2A2hg0cEaDCGvT'></script>
+    @RenderSection("Scripts", false)
+</body>   
+</html>
