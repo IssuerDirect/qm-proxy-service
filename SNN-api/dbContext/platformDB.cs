@@ -20,7 +20,7 @@ namespace snn
             if (!optionsBuilder.IsConfigured)
             {
                 if (myConfig != null) {
-                    optionsBuilder.UseMySql(myConfig.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(myConfig.GetConnectionString("newsroom")));
+                    optionsBuilder.UseMySql(myConfig.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(myConfig.GetConnectionString("PlatformID")));
                 }
             }
         }

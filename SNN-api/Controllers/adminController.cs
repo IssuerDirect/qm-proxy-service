@@ -12,7 +12,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/admin"), AutoValidateAntiforgeryToken, Authorize]
+    [Route("/admin"), AutoValidateAntiforgeryToken]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -21,8 +21,8 @@ namespace snn.Controllers
         int pageSize = 24;
         public AdminController(IConfiguration config, platformDB platformDB)
         {
-            lib.config = config;
             lib.platformDB = platformDB;
+            lib.config = config;
             clib.myConfiguration = config;
         }
 
@@ -35,10 +35,8 @@ namespace snn.Controllers
         [HttpPost("/login")]
         public apiResponse login([FromBody] Dictionary<string, string> credentials)
         {
-            var user = new Dictionary<string, string>();
-            user.Add("email", credentials["email"]);
-            user.Add("password", credentials["password"]);
-            myResponse = lib.logMeIn(user, HttpContext);
+            credentials.Add("logingroupid", "0-1");
+            myResponse = lib.logMeIn(credentials, HttpContext);
             if (myResponse.code != 200) { return myResponse; }
             if (credentials.ContainsKey("ReturnUrl"))
             {

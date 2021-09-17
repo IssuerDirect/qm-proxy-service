@@ -44,7 +44,7 @@ namespace snn
             var possibleUsers = platformDB.snn_users.Where(u => u.email == inputUser["email"]);
             if (inputUser.ContainsKey("logingroupid"))
             {
-                possibleUsers = possibleUsers.Where(u => u.logingroupid.ToString() == inputUser["logingroupid"]);
+                possibleUsers = possibleUsers.Where(u => u.logingroupid == inputUser["logingroupid"]);
             }
             
             var allmatching = possibleUsers.ToList();
@@ -112,7 +112,7 @@ namespace snn
                 user = new snn_users();
                 user.id = userID;
                 user.firstName = myUser.FindFirst(ClaimTypes.Name)?.Value;
-                user.logingroupid = int.Parse(myUser.FindFirst(ClaimTypes.Role)?.Value);
+                user.logingroupid = myUser.FindFirst(ClaimTypes.Role)?.Value;
                 user.email = myUser.FindFirst(ClaimTypes.Email)?.Value;
             }
             return user;
