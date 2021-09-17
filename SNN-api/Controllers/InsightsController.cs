@@ -50,7 +50,18 @@ namespace snn.Controllers
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
-            lib.platformDB.snn_Insight.Add(insight);
+            var myInsight = new snn_Insight();
+            if (insight.id == 0)
+            {
+                lib.platformDB.snn_Insight.Add(insight);
+            }
+            else 
+            {
+                myInsight = lib.platformDB.snn_Insight.Where(i => i.id == insight.id).FirstOrDefault();
+                if (myInsight == null) { return standardMessages.notFound; }
+                clib.mergeChanges(myInsight, myInsight);
+                lib.platformDB.snn_Insight.Update(myInsight);
+            }
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
