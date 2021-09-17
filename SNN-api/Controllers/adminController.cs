@@ -11,6 +11,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
+    [Route("/admin")]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();

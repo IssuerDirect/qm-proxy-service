@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    public class snn_Insights : Controller
+    [Route("/Insights")]
+    public class Insights : Controller
     {
         apiResponse myResponse;
         net3000.common.lib clib = new net3000.common.lib();
         private readonly platformDB platformDB;
         int pageSize = 50;
-        public snn_Insights(IConfiguration configuration, platformDB snnDB)
+        public Insights(IConfiguration configuration, platformDB snnDB)
         {
             platformDB  = snnDB ; 
             clib.myConfiguration = configuration;
