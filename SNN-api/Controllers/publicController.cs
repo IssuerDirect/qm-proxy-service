@@ -57,6 +57,11 @@ namespace snn.Controllers
                 if (user.ContainsKey("password")) {
                     users.password = clib.encrypt(user["password"]);
                 }
+                users.firstName = user["first_name"];
+                users.lastname = user["last_name"];
+                users.phone = user["phone"];
+                users.ref_Country = user["ref_Country"];
+                users.additional = user["additional"];
             }
 
             string token = lib.GenerateJSONWebToken(users);
