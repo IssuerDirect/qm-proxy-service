@@ -37,7 +37,7 @@ namespace snn.Controllers
             return View();
         }
 
-        [HttpPost("/insight")]
+        [HttpPost("/alert")]
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
@@ -48,7 +48,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/Insight/{ids}")]
+        [HttpDelete("/alert/{ids}")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
