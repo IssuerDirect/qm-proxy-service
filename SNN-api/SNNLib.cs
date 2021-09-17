@@ -48,7 +48,7 @@ namespace snn
             }
             
             var allmatching = possibleUsers.ToList();
-            user = allmatching.Where(u => u.password == inputUser["password"] || u.password == encrypt(inputUser["password"]) || u.password == hashMe(inputUser["password"], u.token.ToString())).FirstOrDefault();
+            user = allmatching.Where(u => u.password == inputUser["password"] || u.password == encrypt(inputUser["password"])).FirstOrDefault();
             if (user != null)
             {
                 return loginResponse(user, myContext);
