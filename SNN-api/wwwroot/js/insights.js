@@ -53,21 +53,23 @@ $(function () {
                 })).json();
                 this.fullList =this.fullList.concat(nextPage.data);
             },
-            delete: async function (item) {
+           async deleteInsight(item=null) {
                 let confirmResult = await Swal.fire({
                     title: 'Are you sure?',
-                    text: `You're about to delete client# ${item.id} - ${item.title}`,
+                    text: `You're about to delete client# ${this.recs.length > 0? this.recs.join() : item.id}`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Delete'
                 });
                 if (confirmResult.value) {
                     this.processing = true;
-                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight/${item.id}`, method: "Delete" })).json();
+                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0? this.recs.join() : item.id}`, method: "Delete" })).json();
                     this.msgBox = res.html;
                     this.processing = false;
                     this.fullList = this.fullList.filter(c => c.id != item.id);
-                }
+               this.recs = [];
+               }
+
             },
             showactionBar: function () {
                 if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }

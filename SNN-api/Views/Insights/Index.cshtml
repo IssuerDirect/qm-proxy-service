@@ -75,7 +75,7 @@
                 </td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm">
-                        <a :href="`javascript:confirmDeleteRecord('${insight.title}','${insight.id}')`" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
+                        <a  v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
                         <a :href="'snn_Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
                     </div>
                 </td>
