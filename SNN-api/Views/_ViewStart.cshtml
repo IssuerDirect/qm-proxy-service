@@ -1,0 +1,7 @@
+﻿@{
+    Layout = "_admin";
+    if (!Context.Request.IsHttps && !Context.Request.Host.ToString().Contains("localhost")) {
+        string secureConnection = "https://" + Context.Request.Host.ToString() + Context.Request.QueryString;
+        Context.Response.Redirect(secureConnection);
+    }
+}

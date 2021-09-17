@@ -76,6 +76,7 @@ namespace snn
 
             app.UseRouting();
 
+            app.UseStaticFiles();
             app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
