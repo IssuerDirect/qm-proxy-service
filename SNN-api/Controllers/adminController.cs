@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using net3000;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/admin")]
+    [Route("/admin"), AutoValidateAntiforgeryToken, Authorize]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();

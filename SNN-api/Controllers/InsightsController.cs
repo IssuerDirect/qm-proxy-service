@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using net3000;
 using net3000.common.models;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights")]
+    [Route("/admin/Insights"), AutoValidateAntiforgeryToken, Authorize]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -90,8 +91,8 @@ namespace snn.Controllers
 
         bool readContext()
         {
-            //clib.myUser(User);
-            //if (clib.account <= 0) { return false; }
+            lib.myUser(User);
+            if (lib.user.id <= 0) { return false; }
             return true;
         }
     }
