@@ -83,7 +83,7 @@ namespace snn
 
             return myResponse;
         }
-        string GenerateJSONWebToken(snn_users user)
+        public string GenerateJSONWebToken(snn_users user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clib.appSetting("Token")));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
