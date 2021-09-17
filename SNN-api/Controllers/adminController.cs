@@ -31,8 +31,6 @@ namespace snn.Controllers
             return View();
         }
 
-       
-        #endregion
         [HttpPost("/login")]
         public apiResponse login([FromBody] Dictionary<string, string> credentials)
         {
@@ -49,6 +47,7 @@ namespace snn.Controllers
             myResponse.message = "You're logged in, I'll redirect you to your page";
             return myResponse;
         }
+
         /// <summary>
         /// Linked from admin area top menu
         /// </summary>
@@ -72,6 +71,7 @@ namespace snn.Controllers
             ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
             return View("index");
         }
+        
         [HttpGet("/messageid/{messageID}")]
         public IActionResult messageid(string messageID)
         {
