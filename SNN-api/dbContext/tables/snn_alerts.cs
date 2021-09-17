@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations; 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace snn
 {
@@ -12,5 +12,7 @@ namespace snn
         public int? userID { get; set; }
         public DateTime? date { get; set; }
         public String details { get; set; }
+        [ForeignKey("categoryID")]
+        public snn_alertsCategrories category  { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using net3000.common.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace snn.Controllers
 {
@@ -23,17 +24,23 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-
-        public IActionResult Index(string keywords = null, int pageIndex = 0)
+        [HttpGet("/admin/Alerts")]
+        public IActionResult Index(string keywords = null,int categoryId=0, int pageIndex = 0,bool json=false)
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            var alerts = lib.platformDB.snn_alerts.Where(a => (keywords == null || a.details.Contains(keywords))).Skip(pageSize * pageIndex).Take(pageSize).ToList();
+            var alerts = lib.platformDB.snn_alerts.Where(a => a.userID==clib.user.id &&(categoryId==0 || a.categoryID==categoryId ) && (keywords == null || a.details.Contains(keywords))).Include(a=>a.category ).ToList();
             myResponse.count = alerts.Count();
-            myResponse.data = alerts;
+            myResponse.data = alerts.Skip(pageSize * pageIndex).Take(pageSize);
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
+            if (json)
+            {
+                return Json(myResponse);
+            }
+            ViewBag.categories= lib.platformDB.snn_alertsCategrories.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.category  }).ToList();
             ViewData["alerts"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
+
             return View();
         }
 

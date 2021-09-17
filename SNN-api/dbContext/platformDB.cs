@@ -15,6 +15,7 @@ namespace snn
         public DbSet<ref_InsightType> ref_InsightType { get; set; }
         public DbSet<snn_users> snn_users { get; set; }
         public DbSet<ref_Status> ref_Status { get; set; }
+        public DbSet<snn_alertsCategrories> snn_alertsCategrories { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
