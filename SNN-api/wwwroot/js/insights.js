@@ -25,20 +25,14 @@ $(function () {
                 return 'SNN Insights';
             },
             displayedInsights: function () {
-                this.insightsList = this.fullList.data;
+                this.insightsList = this.fullList;
 
 
-                if (this.keywords != null) {
-                    this.insightsList = this.insightsList.filter(p => (p.title != null && p.title.toLowerCase().includes(this.keywords.toLowerCase())));
-                }
-                if (this.typeId && this.typeId != 0) {
-                    this.insightsList = this.insightsList.filter(p => p.type === this.typeId);
-                }
-                if (this.statusId && this.statusId != -90) {
-                    this.insightsList = this.insightsList.filter(p => p.ref_Status === this.statusId);
-                }
-
+              
                 return this.insightsList;
+            },
+            showloader: function () {
+                return this.totalCount > this.fullList.length ;
             }
         },
         methods: {
@@ -51,55 +45,24 @@ $(function () {
                 }
             },
             search: function (includeKeyword = false) {
-                this.insightsList = this.fullList;
-                if (includeKeyword != false && this.keywords != null) {
-                    this.insightsList = this.insightsList.filter(p => p.title.toLowerCase().includes(this.keywords.toLowerCase()))
-                }
-                if (this.typeId != 0) {
-                    this.insightsList = this.insightsList.filter(p => p.type === this.typeId);
-                }
-                if (this.statusId != -90) {
-                    this.insightsList = this.insightsList.filter(p => p.ref_Status === this.statusId);
-                }
+                this.insightsList = this.fullList.data;
+
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
-                this.currentPage++;
+                this.currentPage+=1;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/Insights/Index?pageIndex=${this.currentPage}`
-                })).json;
+                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&json=true`
+                })).json();
                 this.typeId = 0;
                 this.statusId = -90;
                 this.keywords = null;
-                this.fullList.concat(nextPage.data);
+                this.fullList =this.fullList.concat(nextPage.data);
                 this.insightsList = this.fullList;
             },
             takeAction: async function () {
                 this.msgBox = null;
-                if (this.action == "delete") {
-                    deleteOptions = {};
-                    deleteOptions.title = "Delete Selected Packages?";
-                    deleteOptions.html = `Are you sure you want to delete Packages:<br><span style='color:red; font-weight: bold'>${this.recs.join(',')}</span>`;
-                    deleteOptions.action = `/mt/packages/delete?ids=${this.recs.join(',')}`;
-                    deleteOptions.callBackFunction = this.deleteConfirmation;
-                    adminConfirmDelete(deleteOptions);
-                } else {
-                    this.msgBox = null;
-                    var newStatus = this.action == "hide" ? true : false;
-                    var res = await (await net3000.common.handlePromise({
-                        apiurl: `/mt/packages/changeStatus?packagesIDs=${this.recs.join(',')}&hide=${newStatus}`,
-                        method: 'PUT'
-                    })).json();
-                    if (this.action == "hide") {
-                        for (id of this.recs) {
-                            var package = this.insightsList.filter(p => p.id == id)[0];
-                            package.isAvailable = false;
-                            package.hidePackage = true;
-                        }
-                    }
-                    this.recs = [];
-                    this.msgBox = res.html;
-                }
+            
             },
             deleteConfirmation: function (myResponse) {
                 this.msgBox = myResponse.html;
