@@ -1,4 +1,7 @@
-﻿
+﻿@{
+    Layout = "~/views/shared/_Layout.cshtml";
+}
+
 
 <div id="insights">
     <h1>{{title}}</h1>
@@ -18,21 +21,21 @@
                 </select>
             </div>
         </div>
-            <div class="col-md-3">
-                <form v-on:submit.prevent="search(true);" method="post">
-                    <div class="input-group">
-                        <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
-                        <div class="input-group-append ">
-                            <button type="button" class="btn btn-secondary" v-on:click="search(true)">Search</button>
-                        </div>
+        <div class="col-md-3">
+            <form v-on:submit.prevent="search(true);" method="post">
+                <div class="input-group">
+                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
+                    <div class="input-group-append ">
+                        <button type="button" class="btn btn-secondary" v-on:click="search(true)">Search</button>
                     </div>
-                </form>
-            </div>
-            <div class="col-md-3 text-right">
-                    <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
-
-            </div>
+                </div>
+            </form>
         </div>
+        <div class="col-md-3 text-right">
+            <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
+
+        </div>
+    </div>
 
     <table class="table">
         <thead class="thead-blue">

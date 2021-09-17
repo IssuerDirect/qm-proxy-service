@@ -11,6 +11,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
+    [Route("/client")]
     public class clientController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -24,11 +25,25 @@ namespace snn.Controllers
             clib.myConfiguration = config;
         }
 
-        [HttpPost("/alert")]
-        public apiResponse alert(snn_alerts alert)
+        [HttpPost("/client/alert")]
+        public apiResponse insertAlert(snn_alerts alert)
         {
-            if (!isClient()) { return standardMessages.unauthorized; }
-            //Add code
+            if (!isClient()) { return standardMessages.unauthorized; } 
+
+            lib.platformDB.snn_alerts.Add(alert);
+            lib.platformDB.SaveChanges();
+            myResponse = standardMessages.saved;
+            myResponse.data = alert.id;
+            return standardMessages.saved;
+        }
+
+        [HttpPut("/client/alert")]
+        public apiResponse updateAlert(snn_alerts alert)
+        {
+            if (!isClient()) { return standardMessages.unauthorized; } 
+
+            lib.platformDB.snn_alerts.Update(alert);
+            lib.platformDB.SaveChanges();
             return standardMessages.saved;
         }
 

@@ -67,7 +67,7 @@ $(function () {
                 //not using this now. We're loading all account packages and filtering on page
                 this.currentPage++;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/snn_Insights/Index?pageIndex=${this.currentPage}` 
+                    apiurl: `/Insights/Index?pageIndex=${this.currentPage}` 
                 })).json;
                 this.typeId = 0;
                 this.statusId = -90;
