@@ -6,7 +6,6 @@ using net3000.common.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
@@ -38,13 +37,13 @@ namespace snn.Controllers
         }
 
         [HttpPost("/alert")]
-        public apiResponse saveInsight([FromBody] snn_Insight insight)
+        public apiResponse saveInsight([FromBody] snn_alerts alert)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
-            lib.platformDB.snn_Insight.Add(insight);
+            lib.platformDB.snn_alerts.Add(alert);
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
-            myResponse.data = insight;
+            myResponse.data = alert;
             return myResponse;
         }
 
@@ -53,10 +52,10 @@ namespace snn.Controllers
         {
             if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
-            var tobeRemoved = lib.platformDB.snn_Insight.Where(a => IDS.Contains(a.id)).ToList();
+            var tobeRemoved = lib.platformDB.snn_alerts.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
             {
-                lib.platformDB.snn_Insight.RemoveRange(tobeRemoved);
+                lib.platformDB.snn_alerts.RemoveRange(tobeRemoved);
                 lib.platformDB.SaveChanges();
                 myResponse = standardMessages.deleted;
                 myResponse.data = ids;
