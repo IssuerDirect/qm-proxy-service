@@ -37,7 +37,6 @@ namespace snn.Controllers
             var user = new Dictionary<string, string>();
             user.Add("email", credentials["email"]);
             user.Add("password", credentials["password"]);
-            user.Add("appCode", "0");
             myResponse = clib.logMeIn(user, HttpContext);
             if (myResponse.code != 200) { return myResponse; }
             if (credentials.ContainsKey("ReturnUrl"))

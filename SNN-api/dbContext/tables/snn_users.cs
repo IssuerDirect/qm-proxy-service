@@ -18,5 +18,6 @@ namespace snn
         public string country { get; set; }
         public int? userid { get; set; }
         public int? logingroupid { get; set; }
+        public Guid token { get; set; } = Guid.NewGuid();
     }
 }
