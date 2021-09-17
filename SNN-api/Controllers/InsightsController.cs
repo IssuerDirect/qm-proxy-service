@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using net3000;
 using net3000.common.models;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights")]
+    [Route("/admin/Insights"), AutoValidateAntiforgeryToken, Authorize]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -50,14 +51,25 @@ namespace snn.Controllers
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
-            lib.platformDB.snn_Insight.Add(insight);
+            var myInsight = new snn_Insight();
+            if (insight.id == 0)
+            {
+                lib.platformDB.snn_Insight.Add(insight);
+            }
+            else 
+            {
+                myInsight = lib.platformDB.snn_Insight.Where(i => i.id == insight.id).FirstOrDefault();
+                if (myInsight == null) { return standardMessages.notFound; }
+                clib.mergeChanges(myInsight, myInsight);
+                lib.platformDB.snn_Insight.Update(myInsight);
+            }
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
             return myResponse;
         }
 
-        [HttpDelete("/admin/Insight/{ids}")]
+        [HttpDelete("/admin/Insight")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
@@ -79,8 +91,8 @@ namespace snn.Controllers
 
         bool readContext()
         {
-            //clib.myUser(User);
-            //if (clib.account <= 0) { return false; }
+            lib.myUser(User);
+            if (lib.user.id <= 0) { return false; }
             return true;
         }
     }

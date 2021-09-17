@@ -1,4 +1,4 @@
-﻿
+﻿using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,12 +29,14 @@ namespace snn.Controllers
         public apiResponse insights(int index = 0)
         {
             myResponse = standardMessages.found;
-         myResponse.data=   lib.platformDB.snn_Insight.OrderByDescending(a=>a.id).Skip(pageSize * index).Take(pageSize).ToList();
+            var myList = lib.platformDB.snn_Insight.Where(i => i.ref_Status == 125 || i.ref_Status == 25);
+            myResponse.count = myList.Count();
+            myResponse.data = myList.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
             return myResponse;
         }
 
         [HttpPost("/public/loggedin")]
-        public apiResponse loggedin(Dictionary<string,string> user)
+        public apiResponse loggedin(Dictionary<string, string> user)
         {
             if (!user.ContainsKey("email")) { return null; }
             var users = lib.platformDB.snn_users.Where(u => u.userid == user["userid"]).FirstOrDefault();
@@ -60,6 +62,21 @@ namespace snn.Controllers
             string token = lib.GenerateJSONWebToken(users);
             myResponse.data = token;
             return myResponse;
+        }
+
+        [HttpPost("/uploadImages")]
+        public ckeditorResponse uploadImages([FromQuery] string guid = null, [FromQuery] int? id = null)
+        {
+            ckeditorResponse fileList = new ckeditorResponse();
+            if (HttpContext.Request.Form.Files == null || HttpContext.Request.Form.Files.Count() == 0) { return new ckeditorResponse(); }
+            foreach (var file in HttpContext.Request.Form.Files) {
+                string myName = clib.GetFriendlyLink(Path.GetFileNameWithoutExtension(file.FileName)) + Path.GetExtension(file.FileName);
+                var myStream = new MemoryStream();
+                file.CopyTo(myStream);
+                fileList.fileName = myName;
+            }
+
+            return fileList;
         }
     }
 }

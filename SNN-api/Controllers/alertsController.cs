@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using net3000;
+using Microsoft.AspNetCore.Authorization;
 using net3000.common.models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace snn.Controllers
 {
-    [Route("/admin/alerts")]
+    [Route("/admin/alerts"), AutoValidateAntiforgeryToken, Authorize]
     public class alertsController : Controller
     {
         apiResponse myResponse;
