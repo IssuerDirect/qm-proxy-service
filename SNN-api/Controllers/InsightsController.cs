@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 namespace snn.Controllers
 {
     [Route("/admin/Insights")]
-
-    [AutoValidateAntiforgeryToken]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -29,7 +27,7 @@ namespace snn.Controllers
         [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0)
         {
-            //if (!readContext()) { return Unauthorized(); }
+            if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
             var insights = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).
                   Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses).Skip(pageSize * pageIndex).Take(pageSize).ToList();
