@@ -27,7 +27,7 @@ namespace snn.Controllers
         }
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0, bool json = false)
         {
-            //  if (!readContext()) { return Unauthorized(); }
+            if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
             var insights = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).
                   Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses).OrderByDescending(a => a.id).ToList();
@@ -84,7 +84,7 @@ namespace snn.Controllers
         [HttpDelete("/admin/Insight")]
         public apiResponse delete([FromQuery] string ids)
         {
-            // if (!readContext()) { return standardMessages.invalid; }
+            if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
             var tobeRemoved = lib.platformDB.snn_Insight.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
