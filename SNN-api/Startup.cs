@@ -50,8 +50,8 @@ namespace snn
                  .AddCookie("CookieAuthentication", config =>
                  {
                      config.Cookie.Name = "loginUser";
-                     config.LoginPath = "/admin?messageid=loginrequired";
-                     config.LogoutPath = "/admin?action=logout";
+                     config.LoginPath = "/messageid/loginrequired";
+                     config.LogoutPath = "/logout";
                  });
             services.AddAntiforgery(options =>
             {

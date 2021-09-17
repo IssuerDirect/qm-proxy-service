@@ -112,58 +112,6 @@
                         actionName: "loginUser",
                         callBackFunction: this.loginLink
                     });
-                },
-                loginLink: async function () {
-                    this.msgBox = {};
-                    $("#loginLinkform").removeClass("was-validated");
-                    if (!document.getElementById("loginLinkform").checkValidity()) {
-                        $("#loginLinkform").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.common.handlePromise({
-                        apiurl: "/loginlink?email=" + this.email,
-                        method: "post"
-                    })).json();
-                    this.processing = false;
-                },
-                sendMessage: async function () {
-                    this.msgBox = {};
-                    $("#contactForm").removeClass("was-validated");
-                    if (!document.getElementById("contactForm").checkValidity()) {
-                        $("#contactForm").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.content.processForm({
-                        formID: 99,
-                        account: 1,
-                        formData: { email: this.email, message: this.message }
-                    })).json();
-                    if (this.msgBox.code == 200 && this.msgBox.data != undefined) {
-                        this.email = null;
-                        this.message = null;
-                    }
-                    this.processing = false;
-                },
-                resetPassword: async function () {
-                    this.msgBox = {};
-                    $("#setpasswordForm").removeClass("was-validated");
-                    if (!document.getElementById("setpasswordForm").checkValidity()) {
-                        $("#setpasswordForm").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.common.handlePromise({
-                        apiurl: "/resetPassword",
-                        method: "post",
-                        body: JSON.stringify({ password: this.password, token: this.token, confirmPassword: this.confirmPassword })
-                    })).json();
-                    if (this.msgBox.code == 200 && this.msgBox.data != undefined) {
-                        //window.location = this.msgBox.data;
-                        window.location = "/dashboard";
-                    }
-                    this.processing = false;
                 }
             },
             mounted: function () {

@@ -31,6 +31,61 @@ namespace snn.Controllers
             return View();
         }
 
+        [HttpPost("/login")]
+        public apiResponse login([FromBody] Dictionary<string, string> credentials)
+        {
+            var user = new Dictionary<string, string>();
+            user.Add("email", credentials["email"]);
+            user.Add("password", credentials["password"]);
+            user.Add("appCode", "0");
+            myResponse = clib.logMeIn(user, HttpContext);
+            if (myResponse.code != 200) { return myResponse; }
+            if (credentials.ContainsKey("ReturnUrl"))
+            {
+                myResponse.data = credentials["ReturnUrl"];
+            }
+            myResponse.message = "You're logged in, I'll redirect you to your page";
+            return myResponse;
+        }
+        /// <summary>
+        /// Linked from admin area top menu
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/logout")]
+        public IActionResult logout()
+        {
+            HttpContext.Response.Cookies.Delete("loginUser");
+            if (Request.Query["messageid"] == "unauthorized")
+            {
+                myResponse = standardMessages.unauthorized;
+                myResponse.message = "You're not authorized to access the page you were trying to access";
+            }
+            else
+            {
+                myResponse = standardMessages.saved;
+                myResponse.title = "Logged Out";
+                myResponse.message = "You're now logged out";
+            }
+            ViewData["currentView"] = "null";
+            ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
+            return View("index");
+        }
+        [HttpGet("/messageid/{messageID}")]
+        public IActionResult messageid(string messageID)
+        {
+            if (messageID == "loginrequired")
+            {
+                myResponse = standardMessages.unauthorized;
+                myResponse.message = "You need to login to access the page you were trying to access";
+            }
+            else
+            {
+                myResponse = clib.apiAppMessage(messageID);
+            }
+            ViewData["currentView"] = "null";
+            ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
+            return View("index");
+        }
         bool isAdmin()
         {
             if (HttpContext.Request.Headers != null && HttpContext.Request.Headers.ContainsKey("Authorization"))
