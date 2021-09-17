@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/Insights")]
+    [Route("/admin/Insights")]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -23,7 +23,7 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-        [HttpGet("/Insights/Index")]
+        [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0)
         {
             if (!readContext()) { return Unauthorized(); }
@@ -40,7 +40,7 @@ namespace snn.Controllers
             return View();
         }
 
-        [HttpPost("/insight")]
+        [HttpPost("/admin/insight")]
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
@@ -51,7 +51,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/Insight/{ids}")]
+        [HttpDelete("/admin/Insight/{ids}")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace snn.Controllers
 {
-    [Route("/alerts")]
+    [Route("/admin/alerts")]
     public class alertsController : Controller
     {
         apiResponse myResponse;
@@ -36,7 +36,7 @@ namespace snn.Controllers
             return View();
         }
 
-        [HttpPost("/alert")]
+        [HttpPost("/admin/alert")]
         public apiResponse saveInsight([FromBody] snn_alerts alert)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
@@ -47,7 +47,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/alert/{ids}")]
+        [HttpDelete("/admin/alert/{ids}")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
