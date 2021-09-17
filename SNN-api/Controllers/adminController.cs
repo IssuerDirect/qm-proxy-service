@@ -27,6 +27,7 @@ namespace snn.Controllers
 
         public IActionResult Index()
         {
+            ViewData["msgBox"] = "null";
             return View();
         }
 
