@@ -7,13 +7,15 @@
     <h1>{{title}}</h1>
     <div v-html="msgBox"></div>
     <div class="row mb-4">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Type</label>
                 <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control">
                     <option value="0">None</option>
                 </select>
             </div>
+        </div>
+        <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Status</label>
                 <select asp-items="ViewBag.statuses" v-model.number="statusId" class="form-control">
@@ -21,6 +23,7 @@
                 </select>
             </div>
         </div>
+      
         <div class="col-md-3">
             <form v-on:submit.prevent="search(true)" method="post">
                 <div class="input-group">
@@ -93,7 +96,9 @@
             </tr>
         </tbody>
     </table>
-
+    <div v-if="showloader" class="text-center">
+        <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
+    </div>
     <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar()">
         <div class="form-inline">
             <div class="input-group mx-auto">
@@ -110,4 +115,4 @@
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
-<script src="/js/insights.js?v=0"></script>
+<script src="/js/insights.js?v=990"></script>

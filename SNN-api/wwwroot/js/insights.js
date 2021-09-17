@@ -30,6 +30,9 @@ $(function () {
 
               
                 return this.insightsList;
+            },
+            showloader: function () {
+                return this.totalCount > this.fullList.length ;
             }
         },
         methods: {
@@ -47,14 +50,14 @@ $(function () {
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
-                this.currentPage++;
+                this.currentPage+=1;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/Insights/Index?pageIndex=${this.currentPage}`
-                })).json;
+                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&json=true`
+                })).json();
                 this.typeId = 0;
                 this.statusId = -90;
                 this.keywords = null;
-                this.fullList.concat(nextPage.data);
+                this.fullList =this.fullList.concat(nextPage.data);
                 this.insightsList = this.fullList;
             },
             takeAction: async function () {
