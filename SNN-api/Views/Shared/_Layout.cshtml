@@ -29,11 +29,19 @@
     <script src="https://use.fontawesome.com/166f98bcb8.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    
+
+
+    <!-- Vue JS -->
     <environment include="Development">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     </environment>
     <environment exclude="Development">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     </environment>
+    @*<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="/js/common.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
