@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 namespace snn.Controllers
 {
     [Route("/Insights")]
-    public class Insights : Controller
+    public class InsightsController : Controller
     {
         apiResponse myResponse;
         net3000.common.lib clib = new net3000.common.lib();
         SNNLib lib = new SNNLib();
         int pageSize = 50;
 
-        public Insights(IConfiguration configuration, platformDB snnDB)
+        public InsightsController(IConfiguration configuration, platformDB snnDB)
         {
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
@@ -34,7 +34,7 @@ namespace snn.Controllers
             myResponse.data = insights;
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
-            ViewData["insights"] = Json(myResponse);
+            ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse); ;
             ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new { a.id, a.name }).ToDictionary(z => z.id, z => z.name);
             ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new { a.id, a.name }).ToDictionary(z => z.id, z => z.name);
             return View();
