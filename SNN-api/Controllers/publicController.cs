@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -28,8 +28,9 @@ namespace snn.Controllers
         [HttpGet("/public/insights")]
         public apiResponse insights(int index = 0)
         {
-
-            return standardMessages.saved;
+            myResponse = standardMessages.found;
+         myResponse.data=   lib.platformDB.snn_Insight.OrderByDescending(a=>a.id).Skip(pageSize * index).Take(pageSize).ToList();
+            return myResponse;
         }
        
     }
