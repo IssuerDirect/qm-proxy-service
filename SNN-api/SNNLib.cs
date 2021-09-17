@@ -44,7 +44,7 @@ namespace snn
             var possibleUsers = platformDB.snn_users.Where(u => u.email == inputUser["email"]);
             if (inputUser.ContainsKey("logingroupid"))
             {
-                possibleUsers = possibleUsers.Where(u => u.logingroupid.ToString() == inputUser["logingroupid"]);
+                possibleUsers = possibleUsers.Where(u => u.logingroupid == inputUser["logingroupid"]);
             }
             
             var allmatching = possibleUsers.ToList();

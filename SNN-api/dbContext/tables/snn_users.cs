@@ -18,5 +18,8 @@ namespace snn
         public string country { get; set; }
         public string userid { get; set; }
         public string logingroupid { get; set; }
+        public string additional { get; set; }
+        public string ref_Country { get; set; }
+
     }
 }
