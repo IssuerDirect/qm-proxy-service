@@ -12,9 +12,8 @@ $(function () {
             recs: [],
             selectAll: false,
             msgBox: "",
-            totalCount: totalCount,
-            currentPage: 0,
-            title:"Insights"
+            totalCount: insightsListData.count,
+            currentPage: 0
         },
         computed: {
             title: function () {
@@ -28,17 +27,17 @@ $(function () {
             displayedInsights: function () {
                 this.insightsList = this.fullList.data;
 
-                
+
                 if (this.keywords != null) {
-                    this.insightsList = this.insightsList.filter(p => (p.title != null && p.title.toLowerCase().includes(this.keywords.toLowerCase())) );
+                    this.insightsList = this.insightsList.filter(p => (p.title != null && p.title.toLowerCase().includes(this.keywords.toLowerCase())));
                 }
                 if (this.typeId && this.typeId != 0) {
                     this.insightsList = this.insightsList.filter(p => p.type === this.typeId);
                 }
                 if (this.statusId && this.statusId != -90) {
-                    this.insightsList = this.insightsList.filter(p => p.ref_Status === this.statusId );
+                    this.insightsList = this.insightsList.filter(p => p.ref_Status === this.statusId);
                 }
-                
+
                 return this.insightsList;
             }
         },
@@ -67,7 +66,7 @@ $(function () {
                 //not using this now. We're loading all account packages and filtering on page
                 this.currentPage++;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/Insights/Index?pageIndex=${this.currentPage}` 
+                    apiurl: `/Insights/Index?pageIndex=${this.currentPage}`
                 })).json;
                 this.typeId = 0;
                 this.statusId = -90;
@@ -108,12 +107,12 @@ $(function () {
                 this.recs = [];
             },
             showactionBar: function () {
-                if (this.recs.length > 0) { return "display: block;" } else { return "display: none;";}
+                if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }
             }
         },
-        mounted: function() {
+        mounted: function () {
             this.insightsList = this.fullList;
         }
-    })    
+    });    
 
 });

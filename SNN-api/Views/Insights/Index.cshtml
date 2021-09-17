@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/views/shared/_Layout.cshtml";
+    Layout = "~/views/shared/_admin.cshtml";
 }
 
 
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <form v-on:submit.prevent="search(true);" method="post">
+            <form v-on:submit.prevent="search(true)" method="post">
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
                     <div class="input-group-append ">
@@ -110,4 +110,4 @@
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
-<script src="/js/insights.js"></script>
+<script src="/js/insights.js?v=4"></script>

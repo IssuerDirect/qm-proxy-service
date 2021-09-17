@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using net3000;
@@ -35,8 +36,8 @@ namespace snn.Controllers
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
             ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse); ;
-            ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new { a.id, a.name }).ToDictionary(z => z.id, z => z.name);
-            ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new { a.id, a.name }).ToDictionary(z => z.id, z => z.name);
+            ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value= a.id.ToString(), Text= a.name }).ToList();
+            ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new  SelectListItem() { Value=a.id.ToString(),  Text= a.name }).ToList();
             return View();
         }
 
