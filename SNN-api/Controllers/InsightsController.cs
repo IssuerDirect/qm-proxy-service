@@ -23,7 +23,7 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-
+        [HttpGet("/Insights/Index")]
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0)
         {
             if (!readContext()) { return Unauthorized(); }
