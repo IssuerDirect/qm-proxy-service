@@ -112,7 +112,7 @@ namespace snn
                 user = new snn_users();
                 user.id = userID;
                 user.firstName = myUser.FindFirst(ClaimTypes.Name)?.Value;
-                user.logingroupid = int.Parse(myUser.FindFirst(ClaimTypes.Role)?.Value);
+                user.logingroupid = myUser.FindFirst(ClaimTypes.Role)?.Value;
                 user.email = myUser.FindFirst(ClaimTypes.Email)?.Value;
             }
             return user;

@@ -17,6 +17,6 @@ namespace snn
         public string password { get; set; }
         public string country { get; set; }
         public string userid { get; set; }
-        public int? logingroupid { get; set; }
+        public string logingroupid { get; set; }
     }
 }

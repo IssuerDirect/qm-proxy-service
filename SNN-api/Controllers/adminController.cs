@@ -12,7 +12,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/admin"), AutoValidateAntiforgeryToken, Authorize]
+    [Route("/admin"), AutoValidateAntiforgeryToken]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();
