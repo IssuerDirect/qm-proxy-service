@@ -51,7 +51,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/Insights/{ids}")]
+        [HttpDelete("/Insight/{ids}")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
@@ -73,8 +73,8 @@ namespace snn.Controllers
 
         bool readContext()
         {
-            clib.myUser(User);
-            if (clib.account <= 0) { return false; }
+            //clib.myUser(User);
+            //if (clib.account <= 0) { return false; }
             return true;
         }
     }
