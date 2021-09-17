@@ -10,7 +10,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Type</label>
-                <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control">
+                <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control"  v-on:change="search()">
                     <option value="0">None</option>
                 </select>
             </div>
@@ -18,7 +18,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label class="control-label">Status</label>
-                <select asp-items="ViewBag.statuses" v-model.number="statusId" class="form-control">
+                <select asp-items="ViewBag.statuses" v-model.number="statusId" class="form-control" v-on:change="search()">
                     <option value="-90">None</option>
                 </select>
             </div>
@@ -29,7 +29,7 @@
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
                     <div class="input-group-append ">
-                        <button type="button" class="btn btn-secondary" v-on:click="search(true)">Search</button>
+                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
                     </div>
                 </div>
             </form>
@@ -59,7 +59,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="insight of displayedInsights">
+            <tr v-for="insight of fullList">
                 <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="insight.id" /></td>
                 <td>
                     {{ insight.id }}
@@ -75,7 +75,7 @@
                 </td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm">
-                        <a :href="`javascript:confirmDeleteRecord('${insight.title}','${insight.id}')`" class="btn btn-outline-secondary btn-sm" title="Delete" id="package.id"><i class="fa fa-trash"></i></a>
+                        <a :href="`javascript:confirmDeleteRecord('${insight.title}','${insight.id}')`" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
                         <a :href="'snn_Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
                     </div>
                 </td>

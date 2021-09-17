@@ -4,7 +4,6 @@ $(function () {
         el: "#insights",
         data: {
             fullList: insightsListData.data,
-            insightsList: [],
             action: "unhide",
             typeId: 0,
             statusId: -90,
@@ -24,13 +23,6 @@ $(function () {
                 //return sts;
                 return 'SNN Insights';
             },
-            displayedInsights: function () {
-                this.insightsList = this.fullList;
-
-
-              
-                return this.insightsList;
-            },
             showloader: function () {
                 return this.totalCount > this.fullList.length ;
             }
@@ -39,52 +31,47 @@ $(function () {
             selectionChange: function () {
                 this.recs = [];
                 if (this.selectAll) {
-                    for (pak of this.insightsList) {
+                    for (pak of this.fullList) {
                         this.recs.push(pak.id);
                     }
                 }
             },
-            search: function (includeKeyword = false) {
-                this.insightsList = this.fullList.data;
+            search: async  function () {
 
+                    this.currentPage = 0;
+                    var items = await (await net3000.common.handlePromise({
+                        apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
+                    })).json();
+             this.fullList = items.data;
+                    this.totalCount = items.count;
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
                 this.currentPage+=1;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&json=true`
+                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
                 })).json();
-                this.typeId = 0;
-                this.statusId = -90;
-                this.keywords = null;
                 this.fullList =this.fullList.concat(nextPage.data);
-                this.insightsList = this.fullList;
             },
-            takeAction: async function () {
-                this.msgBox = null;
-                if (this.action == null) {
-                    return;
-                } else if (this.action == "delete") {
-                    var res = await (await net3000.common.handlePromise({
-                        apiurl: `/admin/Insights?ids=${this.recs.join(',')}`,
-                        method: "delete"
-                    })).json();
-                    this.fullList = this.fullList.filter(r => !this.recs.contains(r.id));
-                    this.recs = [];
-                    this.msgBox = res;
+            delete: async function (item) {
+                let confirmResult = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: `You're about to delete client# ${item.id} - ${item.title}`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Delete'
+                });
+                if (confirmResult.value) {
+                    this.processing = true;
+                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight/${item.id}`, method: "Delete" })).json();
+                    this.msgBox = res.html;
+                    this.processing = false;
+                    this.fullList = this.fullList.filter(c => c.id != item.id);
                 }
-            },
-            deleteConfirmation: function (myResponse) {
-                this.msgBox = myResponse.html;
-                this.fullList = this.fullList.filter(p => !this.recs.includes(p.id));
-                this.recs = [];
             },
             showactionBar: function () {
                 if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }
             }
-        },
-        mounted: function () {
-            this.insightsList = this.fullList;
         }
     });    
 
