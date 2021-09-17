@@ -79,9 +79,20 @@ namespace snn
             }
 
             var myResponse = standardMessages.loggedin;
-            myResponse.data = new { token = GenerateJSONWebToken(login), client = new { login.firstName, login.lastname, login.email, login.logingroupid } };
+            myResponse.data = loginRedirect(myContext);
 
             return myResponse;
+        }
+        public string loginRedirect(HttpContext myContext = null)
+        {
+            if (myContext != null && myContext.Request.Query.ContainsKey("return"))
+            {
+                return myContext.Request.Query["return"];
+            }
+            else
+            {
+                return "/admin/insights";
+            }
         }
         public string GenerateJSONWebToken(snn_users user)
         {

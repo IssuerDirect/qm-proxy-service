@@ -25,28 +25,40 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-        [HttpGet("/admin/Insights")]
-        public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0,bool json=false)
+        public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0, bool json = false)
         {
-            if (!readContext()) { return Unauthorized(); }
+            //  if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
             var insights = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).
-                  Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses).OrderByDescending(a=>a.id).ToList();
+                  Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses).OrderByDescending(a => a.id).ToList();
             myResponse.count = insights.Count();
             myResponse.data = insights.Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
-            if(json)
+            if (json)
             {
                 return Json(myResponse);
             }
             ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
-            ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value= a.id.ToString(), Text= a.name }).ToList();
-            ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new  SelectListItem() { Value=a.id.ToString(),  Text= a.name }).ToList();
-           
+            ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+            ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+
             return View();
         }
-
+        public IActionResult details(int? id = null)
+        {
+            if (!readContext()) { return Unauthorized(); }
+            snn_Insight model = new snn_Insight();
+            if (id.HasValue)
+            {
+                model = lib.platformDB.snn_Insight.Where(i => i.id == id).FirstOrDefault();
+                if (model == null)
+                {
+                    return NotFound();
+                }
+            }
+            return View("details", model);
+        }
         [HttpPost("/admin/insight")]
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
@@ -56,7 +68,7 @@ namespace snn.Controllers
             {
                 lib.platformDB.snn_Insight.Add(insight);
             }
-            else 
+            else
             {
                 myInsight = lib.platformDB.snn_Insight.Where(i => i.id == insight.id).FirstOrDefault();
                 if (myInsight == null) { return standardMessages.notFound; }
@@ -72,7 +84,7 @@ namespace snn.Controllers
         [HttpDelete("/admin/Insight")]
         public apiResponse delete([FromQuery] string ids)
         {
-            if (!readContext()) { return standardMessages.invalid; }
+            // if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
             var tobeRemoved = lib.platformDB.snn_Insight.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
