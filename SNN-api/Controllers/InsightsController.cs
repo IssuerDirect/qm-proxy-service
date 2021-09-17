@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights"), AutoValidateAntiforgeryToken, Authorize]
+    [Route("/admin/insights"), AutoValidateAntiforgeryToken]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -25,7 +25,6 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-        [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0,bool json=false)
         {
             if (!readContext()) { return Unauthorized(); }
