@@ -25,10 +25,24 @@ namespace snn.Controllers
         }
 
         [HttpPost("/alert")]
-        public apiResponse alert(snn_alerts alert)
+        public apiResponse insertAlert(snn_alerts alert)
         {
-            if (!isClient()) { return standardMessages.unauthorized; }
-            //Add code
+            if (!isClient()) { return standardMessages.unauthorized; } 
+
+            lib.platformDB.snn_alerts.Add(alert);
+            lib.platformDB.SaveChanges();
+            myResponse = standardMessages.saved;
+            myResponse.data = alert.id;
+            return standardMessages.saved;
+        }
+
+        [HttpPut("/alert")]
+        public apiResponse updateAlert(snn_alerts alert)
+        {
+            if (!isClient()) { return standardMessages.unauthorized; } 
+
+            lib.platformDB.snn_alerts.Update(alert);
+            lib.platformDB.SaveChanges();
             return standardMessages.saved;
         }
 
