@@ -62,7 +62,17 @@ $(function () {
             },
             takeAction: async function () {
                 this.msgBox = null;
-            
+                if (this.action == null) {
+                    return;
+                } else if (this.action == "delete") {
+                    var res = await (await net3000.common.handlePromise({
+                        apiurl: `/admin/Insights?ids=${this.recs.join(',')}`,
+                        method: "delete"
+                    })).json();
+                    this.fullList = this.fullList.filter(r => !this.recs.contains(r.id));
+                    this.recs = [];
+                    this.msgBox = res;
+                }
             },
             deleteConfirmation: function (myResponse) {
                 this.msgBox = myResponse.html;

@@ -50,19 +50,12 @@
                 <th>
                     Title
                 </th>
-                <th v-if="typeId == 0">
+                <th>
                     Type
                 </th>
-                <th v-if="statusId == -90">
+                <th colspan="2">
                     Status
                 </th>
-                <th>
-                    src
-                </th>
-                <th>
-                    Link
-                </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -80,14 +73,7 @@
                 <td v-if="statusId == -90">
                     {{ insight.ref_Statuses.name }}
                 </td>
-                <td>
-                    {{ insight.src }}
-                </td>
-                <td>
-                    {{ insight.link }}
-                </td>
                 <td class="text-right">
-
                     <div class="btn-group btn-group-sm">
                         <a :href="`javascript:confirmDeleteRecord('${insight.title}','${insight.id}')`" class="btn btn-outline-secondary btn-sm" title="Delete" id="package.id"><i class="fa fa-trash"></i></a>
                         <a :href="'snn_Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
@@ -103,7 +89,9 @@
         <div class="form-inline">
             <div class="input-group mx-auto">
                 <select class="form-control" v-model="action">
+                    <option :value="null">Select Action</option>
                     <option value="delete">Delete Selected</option>
+                    <option value="125">Set as Public</option>
                 </select>
                 <div class="input-group-append">
                     <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>

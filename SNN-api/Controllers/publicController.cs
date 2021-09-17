@@ -29,7 +29,9 @@ namespace snn.Controllers
         public apiResponse insights(int index = 0)
         {
             myResponse = standardMessages.found;
-            myResponse.data = lib.platformDB.snn_Insight.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
+            var myList = lib.platformDB.snn_Insight.Where(i => i.ref_Status == 125 || i.ref_Status == 25);
+            myResponse.count = myList.Count();
+            myResponse.data = myList.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
             return myResponse;
         }
 

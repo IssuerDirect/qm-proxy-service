@@ -57,7 +57,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/admin/Insight/{ids}")]
+        [HttpDelete("/admin/Insight")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
