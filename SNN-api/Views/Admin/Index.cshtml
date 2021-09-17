@@ -4,10 +4,10 @@
 }
 
 <div class="rounded bg-white p-3 shadow-10" style="width: 400px; display: none" id="loginApp">
-    <div class="tab-content border-0" v-if="currentView == null">
+    <div class="tab-content border-0">
         <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="loginTab" id="loginPanel">
             <h4 class="text-center">Administration Login</h4>
-            <div v-html="msgBox.html"></div>
+            <div v-if="msgBox" v-html="msgBox.html"></div>
             <form id="loginForm" class="needs-validation" novalidate v-on:submit.prevent="verifyCaptcha()">
                 <div class="form-group">
                     <input type="email" name="email" required class="form-control" id="loginEmail" placeholder="enter your email" v-model="email" />
@@ -31,7 +31,7 @@
 
         <div id="passwordPanel" class="tab-pane fade" role="tabpanel" aria-labelledby="passwordTab">
             <h4 class="text-center">Forgot Password?</h4>
-            <div v-html="msgBox.html"></div>
+            <div v-if="msgBox" v-html="msgBox.html"></div>
             <form id="loginLinkform" class="needs-validation" novalidate v-on:submit.prevent="verifyCaptcha2()">
                 <p>I'll send you a link you can use once to create a password and login.</p>
                 <div class="form-group">
@@ -50,82 +50,16 @@
             </form>
         </div>
 
-        <div id="supportPanel" class="tab-pane fade" role="tabpanel" aria-labelledby="supportTab">
-            <h4 class="text-center">Contact Support</h4>
-            <div v-html="msgBox.html"></div>
-            <div class="text-center mb-2" style="font-size: 1.25em;">
-                <a href="skype:net3000.ca?call" class="mr-1"><i class="fab fa-skype" aria-hidden="true"></i></a>
-                <a href="https://wa.me/14168754044" style="color:#25D366" class="mr-1"><i class="fab fa-whatsapp px-1" aria-hidden="true"></i></a>
-                <a href="https://m.me/net3000.ca" target="_blank" class="mr-1"><i class="fab fa-facebook-messenger" aria-hidden="true"></i></a>
-
-            </div>
-            <p>
-                <span class="fa fa-phone mr-2" title="phone & SMS" style="font-size: .75rem;"></span>&nbsp;<a href="tel:+1-416-875-4044">+1-416-875-4044</a><br />
-                <span class="fa fa-envelope mr-2" title="email support" style="font-size: .75rem;"></span>&nbsp;<a href="mailto:support@net3000.ca">support@net3000.ca</a>
-            </p>
-            <form class="form requires-validation" id='contactForm' v-on:submit.prevent="sendMessage()">
-
-                <div class="form-group">
-                    <input type="email" placeholder="Enter your email" class="form-control" name="email" required />
-                </div>
-                <div class="form-group">
-                    <textarea id="messageText" rows="5" placeholder="How can I help you?" class="form-control" name="message"></textarea>
-                </div>
-
-                <div class="form-group text-center">
-                    <div id="buttonContainer">
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                        <button disabled class="btn btn-primary d-none"><span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Please Wait ...</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+        
     </div>
-    <div id="setPasswordPanel" v-if="currentView == 'setPassword'">
-        <h4 class="text-center">Create a Password</h4>
-        <div v-html="msgBox.html"></div>
-        <form id="setpasswordForm" class="needs-validation" novalidate v-on:submit.prevent="resetPassword()">
-            <div class="form-group">
-                <input type="password" placeholder="New Password" class="form-control" v-model="password"/>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="password" required class="form-control" placeholder="Confirm Password" v-model="confirmPassword" />
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit" v-if="!processing">
-                            Save <i class="mt-1 fa fa-arrow-circle-right"></i>
-                        </button>
-                        <button class="btn btn-primary" disabled v-if="processing">
-                            <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
-                            Please Wait
-                        </button>                        
-                    </div>
-                </div>
-                <div class="invalid-feedback">
-                    Please select a valid state.
-                </div>
-            </div>
-        </form>        
-    </div>
-    <hr />
-    <ul class="nav nav-pills small" id="pills-tab" role="tablist">
-        <li class="nav-item mr-2 active">
-            <a class="text-muted" id="loginTab" data-toggle="pill" href="#loginPanel" role="tab" aria-controls="loginPanel" aria-selected="true"><i class="fa fa-arrow-circle-right mr-2"></i> Login</a> <span class="ml-2">|</span>
-        </li>
-        <li class="nav-item mr-2">
-            <a class="text-muted" id="passwordTab" data-toggle="pill" href="#passwordPanel" role="tab" aria-controls="passwordPanel" aria-selected="false"><i class="fa fa-refresh mr-2"></i>Forgot Password?</a>
-        </li>
-        <li class="nav-item">
-            <span class="mr-2">|</span><a class="text-muted" id="supportTab" data-toggle="pill" href="#supportPanel" role="tab" aria-controls="supportPanel" aria-selected="false"><i class="fa fa-question-circle mr-2"></i> Support</a>
-        </li>
-    </ul>
+    
+    
 </div>
 <script>
     $(function () {
         new Vue({
             el: "#loginApp",
             data: {
-                currentView: @Html.Raw(ViewData["currentView"]),
                 msgBox: @Html.Raw(ViewData["msgBox"]),
                 email: null,
                 password: null,
@@ -178,58 +112,6 @@
                         actionName: "loginUser",
                         callBackFunction: this.loginLink
                     });
-                },
-                loginLink: async function () {
-                    this.msgBox = {};
-                    $("#loginLinkform").removeClass("was-validated");
-                    if (!document.getElementById("loginLinkform").checkValidity()) {
-                        $("#loginLinkform").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.common.handlePromise({
-                        apiurl: "/loginlink?email=" + this.email,
-                        method: "post"
-                    })).json();
-                    this.processing = false;
-                },
-                sendMessage: async function () {
-                    this.msgBox = {};
-                    $("#contactForm").removeClass("was-validated");
-                    if (!document.getElementById("contactForm").checkValidity()) {
-                        $("#contactForm").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.content.processForm({
-                        formID: 99,
-                        account: 1,
-                        formData: { email: this.email, message: this.message }
-                    })).json();
-                    if (this.msgBox.code == 200 && this.msgBox.data != undefined) {
-                        this.email = null;
-                        this.message = null;
-                    }
-                    this.processing = false;
-                },
-                resetPassword: async function () {
-                    this.msgBox = {};
-                    $("#setpasswordForm").removeClass("was-validated");
-                    if (!document.getElementById("setpasswordForm").checkValidity()) {
-                        $("#setpasswordForm").addClass("was-validated");
-                        return;
-                    }
-                    this.processing = true;
-                    this.msgBox = await (await net3000.common.handlePromise({
-                        apiurl: "/resetPassword",
-                        method: "post",
-                        body: JSON.stringify({ password: this.password, token: this.token, confirmPassword: this.confirmPassword })
-                    })).json();
-                    if (this.msgBox.code == 200 && this.msgBox.data != undefined) {
-                        //window.location = this.msgBox.data;
-                        window.location = "/dashboard";
-                    }
-                    this.processing = false;
                 }
             },
             mounted: function () {

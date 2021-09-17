@@ -11,6 +11,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
+    [Route("/admin")]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -26,43 +27,11 @@ namespace snn.Controllers
 
         public IActionResult Index()
         {
+            ViewData["msgBox"] = "null";
             return View();
         }
 
-        #region insights
-        /// <summary>
-        /// Paged list of insights
-        /// </summary>
-        /// <param name="index">Optional, starts with 0</param>
-        /// <remarks>Get a paged list of insights ordered by id desc. Page size is 24</remarks>
-        [HttpGet("/insights")]
-        public apiResponse getInsights(int index = 0)
-        {
-            if (!isAdmin()) { return standardMessages.unauthorized; }
-            var myList = lib.platformDB.snn_Insight.Skip(index * pageSize).Take(pageSize).OrderByDescending(s => s.id);
-            myResponse.data = lib;
-            myResponse.count = myList.Count();
-            myResponse.pageIndex = index;
-            myResponse.pageSize = pageSize;
-            myResponse.data = myList.ToList();
-            return myResponse;
-        }
-
-        /// <summary>
-        /// Create or update insight
-        /// </summary>
-        /// <param name="insight">Insight object</param>
-        /// <remarks>To update, include id, if id is 0 it inserts</remarks>
-        [HttpPost("/insight")]
-        public apiResponse saveInsight([FromBody] snn_Insight insight)
-        {
-            if (!isAdmin()) { return standardMessages.unauthorized; }
-            lib.platformDB.snn_Insight.Add(insight);
-            lib.platformDB.SaveChanges();
-            myResponse = standardMessages.saved;
-            myResponse.data = insight;
-            return myResponse;
-        }
+       
         #endregion
         [HttpPost("/login")]
         public apiResponse login([FromBody] Dictionary<string, string> credentials)

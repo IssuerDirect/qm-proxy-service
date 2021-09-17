@@ -3,7 +3,7 @@ $(function () {
     insightlist = new Vue({
         el: "#insights",
         data: {
-            fullList: insightsListData,
+            fullList: insightsListData.data,
             insightsList: [],
             action: "unhide",
             typeId: 0,
@@ -18,14 +18,15 @@ $(function () {
         },
         computed: {
             title: function () {
-                var sts = `${this.selectedStatus} ${this.packageTypes[this.packageType]} Packages`;
-                if (this.packageType == 0) {
-                    sts = "All " + sts;
-                }                          
-                return sts;
+                //var sts = `${this.selectedStatus} ${this.packageTypes[this.packageType]} Packages`;
+                //if (this.packageType == 0) {
+                //    sts = "All " + sts;
+                //}                          
+                //return sts;
+                return 'SNN Insights';
             },
             displayedInsights: function () {
-                this.insightsList = this.fullList;
+                this.insightsList = this.fullList.data;
 
                 
                 if (this.keywords != null) {
