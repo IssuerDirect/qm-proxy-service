@@ -66,8 +66,12 @@ $(function () {
                     var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0? this.recs.join() : item.id}`, method: "Delete" })).json();
                     this.msgBox = res.html;
                     this.processing = false;
-                    this.fullList = this.fullList.filter(c => c.id != item.id);
-               this.recs = [];
+                    if (this.recs.length > 0)
+                        this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
+                    else
+                        this.fullList = this.fullList.filter(c => c.id != item.id);
+                    this.recs = new [];
+                    this.totalCount = this.fullList.count;
                }
 
             },

@@ -23,13 +23,14 @@ namespace snn.Controllers
         {
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
+            lib.config = configuration;
         }
         [HttpGet("/admin/Alerts")]
         public IActionResult Index(string keywords = null,int categoryId=0, int pageIndex = 0,bool json=false)
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            var alerts = lib.platformDB.snn_alerts.Where(a => a.userID==clib.user.id &&(categoryId==0 || a.categoryID==categoryId ) && (keywords == null || a.details.Contains(keywords))).Include(a=>a.category ).ToList();
+            var alerts = lib.platformDB.snn_alerts.Where(a => a.userID==lib.user.id && (categoryId==0 || a.categoryID==categoryId ) && (keywords == null || a.details.Contains(keywords))).Include(a=>a.category ).ToList();
             myResponse.count = alerts.Count();
             myResponse.data = alerts.Skip(pageSize * pageIndex).Take(pageSize);
             myResponse.pageSize = pageSize;
@@ -55,7 +56,7 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpDelete("/admin/alert/{ids}")]
+        [HttpDelete("/admin/alert")]
         public apiResponse delete([FromQuery] string ids)
         {
             if (!readContext()) { return standardMessages.invalid; }
@@ -77,8 +78,8 @@ namespace snn.Controllers
 
         bool readContext()
         {
-            //clib.myUser(User);
-            //if (clib.account <= 0) { return false; }
+            clib.myUser(User);
+            if (clib.account <= 0) { return false; }
             return true;
         }
     }

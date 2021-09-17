@@ -3,7 +3,7 @@
     <div v-html="msgBox"></div>
     <div class="row mb-4">
 
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="form-group">
                 <label class="control-label">Category</label>
                 <select asp-items="ViewBag.categories" v-model.number="categoryId" class="form-control" v-on:change="search()">
@@ -23,7 +23,7 @@
                 </form>
 
         </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-3 text-right">
                 <a class="btn btn-primary" href='@Url.Action("details")'>Create Alert</a>
 
             </div>
@@ -50,7 +50,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="alert of displayedAlerts">
+                <tr v-for="alert of fullList">
                     <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="alert.id" /></td>
                     <td>
                         {{ alert.id }}
@@ -67,8 +67,8 @@
                     <td class="text-right">
 
                         <div class="btn-group btn-group-sm">
-                            <a v-on:click="deleteAlert(alert)" class="btn btn-outline-secondary btn-sm" title="Delete" :id="alert.id"><i class="fa fa-trash"></i></a>
-                            <a :href="'snn_Insights/details/' + alert.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                            <a v-on:click="deletealert(alert)" class="btn btn-outline-secondary btn-sm" title="Delete" :id="alert.id"><i class="fa fa-trash"></i></a>
+                            <a :href="'snn_Alerts/details/' + alert.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -84,7 +84,7 @@
                         <option value="delete">Delete Selected</option>
                     </select>
                     <div class="input-group-append">
-                        <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>
+                        <button id="Button1" v-on:click="deletealert()" class="btn btn-primary">Go</button>
                     </div>
                 </div>
             </div>

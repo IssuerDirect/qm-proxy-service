@@ -5,7 +5,7 @@ $(function () {
         data: {
             fullList: alertsListData.data,
             action: "unhide",
-            categoryId: -90,
+            categoryId: 0,
             keywords: "",
             recs: [],
             selectAll: false,
@@ -30,6 +30,9 @@ $(function () {
                     }
                 }
             },
+            dateFormat: function (date) {
+                return moment(date).format("DD MMM YYYY");
+            },
             search: async function () {
 
                 this.currentPage = 0;
@@ -46,6 +49,7 @@ $(function () {
                     apiurl: `/admin/Alerts/?pageIndex=${this.currentPage}&keywords=${this.keywords}&categoryId=${this.categoryId}&json=true`
                 })).json();
                 this.fullList = this.fullList.concat(nextPage.data);
+                this.totalCount = this.fullList.count;
             },
             async deletealert(item = null) {
                 let confirmResult = await Swal.fire({
@@ -57,11 +61,15 @@ $(function () {
                 });
                 if (confirmResult.value) {
                     this.processing = true;
-                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/alert/${this.recs.length > 0 ? this.recs.join() : item.id}`, method: "Delete" })).json();
+                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/alert?ids=${this.recs.length > 0 ? this.recs.join() : item.id}`, method: "Delete" })).json();
                     this.msgBox = res.html;
                     this.processing = false;
+                    if (this.recs.length > 0)
+                    this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
+                        else
                     this.fullList = this.fullList.filter(c => c.id != item.id);
-                    this.recs = [];
+                    this.recs = new [];
+                    this.totalCount = this.fullList.count;
                 }
 
             },
