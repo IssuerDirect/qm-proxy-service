@@ -192,4 +192,11 @@ namespace snn
             return Convert.ToBase64String(encryptOnRead(Encoding.ASCII.GetBytes(data)));
         }
     }
+
+    public class ckeditorResponse
+    {
+        public int uploaded { get; set; }
+        public string fileName { get; set; }
+        public string url { get; set; }
+    }
 }
