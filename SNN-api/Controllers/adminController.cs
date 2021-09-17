@@ -31,8 +31,6 @@ namespace snn.Controllers
             return View();
         }
 
-       
-        #endregion
         [HttpPost("/login")]
         public apiResponse login([FromBody] Dictionary<string, string> credentials)
         {
