@@ -75,11 +75,10 @@ namespace snn
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

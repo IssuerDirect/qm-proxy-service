@@ -25,6 +25,8 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
+
+        [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0, bool json = false)
         {
             if (!readContext()) { return Unauthorized(); }
@@ -45,6 +47,8 @@ namespace snn.Controllers
 
             return View();
         }
+
+        [HttpGet("/admin/Insights/details")]
         public IActionResult details(int? id = null)
         {
             if (!readContext()) { return Unauthorized(); }
@@ -59,6 +63,7 @@ namespace snn.Controllers
             }
             return View("details", model);
         }
+
         [HttpPost("/admin/insight")]
         public apiResponse saveInsight([FromBody] snn_Insight insight)
         {
