@@ -17,24 +17,28 @@
     </div>
     <div class="col-sm-2">
         <label>Type</label>
-        <select class="form-control"></select>
+        <select asp-items="ViewBag.types" class="form-control" asp-for="type">
+            <option value="null">Select Type</option>
+        </select>
     </div>
     <div class="col-sm-2">
         <label>Status</label>
-        <select class="form-control"></select>
+        <select asp-items="ViewBag.statuses" class="form-control" asp-for="ref_Status">
+            <option value="null">Select Status</option>
+        </select>
     </div>
 </div>
 <script src="~/js/ckeditor/ckeditor.js"></script>
 
 <textarea asp-for="body" id="body"></textarea>
 
-<div class="border-top border-bottom py-2">
+<div class="border-top border-bottom py-2 mt-3">
     <div class="row">
         <div class="col">
             <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
         </div>
         <div class="col text-right">
-            <button class="btn-primary btn">Save</button>
+            <button class="btn-primary btn" asp-action="saveInsight">Save</button>
         </div>
     </div>
 </div>

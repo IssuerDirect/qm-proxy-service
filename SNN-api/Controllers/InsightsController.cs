@@ -53,10 +53,13 @@ namespace snn.Controllers
                 return Json(myResponse);
             }
             ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
+            fillDataBags();
+            return View();
+        }
+
+        void fillDataBags() {
             ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-
-            return View();
         }
 
         [HttpGet("/admin/Insights/details")]
@@ -71,7 +74,12 @@ namespace snn.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["title"] = "Edit Insight# " + id.Value;
             }
+            else {
+                ViewData["title"] = "Create Insight";
+            }
+            fillDataBags();
             return View("details", model);
         }
 
