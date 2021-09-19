@@ -41,34 +41,6 @@ $(function () {
         trigger: 'hover',
         html: true
     });
-
-    $(".singleDateTime").daterangepicker({
-        singleDatePicker: true,
-        timePicker: true,
-        autoUpdateInput: false
-    });
-    $(".singleDateTime").on("apply.daterangepicker", function (ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY hh:mm A'));
-    });
-
-    $(".singleDate").daterangepicker({
-        singleDatePicker: true,
-        timePicker: false,
-        autoUpdateInput: false
-    });
-    $(".singleDate").on("apply.daterangepicker", function (ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY'));
-    });
-    
-    $(".dateRange").daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: 'MM/DD/YYYY hh:mm A'
-        }
-    });
-    $(".dateRange").on("apply.daterangepicker", function (ev, picker) {
-        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-    });
    
 });
 
@@ -146,14 +118,7 @@ function closeEditor(name) {
     }
 }
 
-function createEditor4(name, account) {
-    if (editors[name] === undefined) {
-        editors[name] = CKEDITOR.replace(name, { customConfig: '/js/ckeditor4/config.js', filebrowserImageUploadUrl: '/api/CkeditorImage/' + account});
-    }
-}
-
-var ckeditorDefaultConfig = { customConfig: '/js/ckeditor4/config.js', filebrowserImageUploadUrl: '/api/CkeditorImage/' + account };
-var ckeditor5DefaultConfig = { customConfig: '/js/ckeditor/Adminconfig.js', filebrowserImageUploadUrl: '/api/CkeditorImage/' + account };
+var ckeditor5DefaultConfig = { customConfig: '/js/ckeditor/Adminconfig.js', filebrowserImageUploadUrl: '/api/CkeditorImage/' };
 
 //loads images to local storage, initializes VUE instances on each input with class feature-image
 function mountFeatureImages() {

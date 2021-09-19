@@ -1,21 +1,46 @@
 ﻿@model snn.snn_Insight
+@section headercode {
+    <link href="~/js/ckeditor/theme.css" rel="stylesheet" />
+}
 <h1>
-    Details
+    @ViewData["title"]
 </h1>
 
-<dir>
-    <table>
-        <tr>
-            <td>Title</td>
-            <td>@Model.title</td>
-        </tr>
-        <tr>
-            <td>image</td>
-            <td>@Model.image</td>
-        </tr>
-        <tr>
-            <td>url</td>
-            <td>@Model.src</td>
-        </tr>
-    </table>
-</dir>
+<div class="form-group row">
+    <div class="col-sm-6">
+        <label>Title</label>
+        <input type="text" asp-for="title" class="form-control" />
+    </div>
+    <div class="col-sm-2">
+        <label>Date</label>
+        <input type="datetime-local" asp-for="title" class="form-control" />
+    </div>
+    <div class="col-sm-2">
+        <label>Type</label>
+        <select class="form-control"></select>
+    </div>
+    <div class="col-sm-2">
+        <label>Status</label>
+        <select class="form-control"></select>
+    </div>
+</div>
+<script src="~/js/ckeditor/ckeditor.js"></script>
+
+<textarea asp-for="body" id="body"></textarea>
+
+<div class="border-top border-bottom py-2">
+    <div class="row">
+        <div class="col">
+            <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
+        </div>
+        <div class="col text-right">
+            <button class="btn-primary btn">Save</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        createEditor("#body");
+    })
+</script>

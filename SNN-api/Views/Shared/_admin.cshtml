@@ -16,7 +16,7 @@
     </environment>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-
+    <script src="~/js/admin.js"></script>
     @RenderSection("headercode", required: false)
 
 </head>
@@ -85,7 +85,7 @@
             }
             //parameters.headers = { "X-CSRF-TOKEN-HEADERNAME": $("input[name='AntiforgeryFieldname']").val(), credentials:"same-origin" };
             if (parameters.method == undefined) { parameters.method = "POST"; }
-            let postOptions = { apiurl: '@Url.Content("~/")' + url, parameters: parameters, method: parameters.method, buttonContainer: parameters.buttonContainer, account: @User.FindFirst(System.Security.Claims.ClaimTypes.GroupSid)?.Value };
+            let postOptions = { apiurl: '@Url.Content("~/")' + url, parameters: parameters, method: parameters.method, buttonContainer: parameters.buttonContainer };
             if (body != undefined && body != null) {
                 postOptions.body = JSON.stringify(body);
             }
@@ -106,7 +106,7 @@
                     if (deleteOptions.callBackFunction == undefined) { deleteOptions.callBackFunction = adminDeletedMessage; }
                     if (deleteOptions.deleteNode != undefined) { $(deleteOptions.deleteNode).remove(); }
                     //adminPostForm(deleteOptions.action,null,{ callBackFunction: deleteOptions.callBackFunction, method:"DELETE",buttonContainer:deleteOptions.buttonContainer });
-                    net3000.common.handlePromise({ apiurl: deleteOptions.action, parameters: { callBackFunction: deleteOptions.callBackFunction }, method: "DELETE",account: @User.FindFirst(System.Security.Claims.ClaimTypes.GroupSid)?.Value });
+                    net3000.common.handlePromise({ apiurl: deleteOptions.action, parameters: { callBackFunction: deleteOptions.callBackFunction }, method: "DELETE" });
                 }
             });
         }
