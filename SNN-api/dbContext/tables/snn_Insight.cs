@@ -20,9 +20,30 @@ namespace snn
         public string image { get; set; }
         public string title { get; set; }
         public string link { get; set; }
-        [ForeignKey("type")]
+        [ForeignKey("type"), JsonIgnore]
         public virtual ref_InsightType ref_InsightType { get; set; }
-        [ForeignKey("ref_Status")]
-        public virtual ref_Status ref_Statuses { get; set; }
+        [NotMapped]
+        public string typeName {
+            get {
+                if (ref_InsightType != null) {
+                    return ref_InsightType.name;
+                }
+                return null;
+            }
+        }
+        [ForeignKey("ref_Status"), JsonIgnore]
+        public virtual ref_Status ref_StatusObject { get; set; }
+        [NotMapped]
+        public string statusName
+        {
+            get
+            {
+                if (ref_StatusObject != null)
+                {
+                    return ref_StatusObject.name;
+                }
+                return null;
+            }
+        }
     }
 }

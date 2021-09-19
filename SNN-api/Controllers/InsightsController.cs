@@ -18,7 +18,7 @@ namespace snn.Controllers
         apiResponse myResponse;
         net3000.common.lib clib = new net3000.common.lib();
         SNNLib lib = new SNNLib();
-        int pageSize = 10;
+        int pageSize = 24;
 
         public InsightsController(IConfiguration configuration, platformDB snnDB)
         {
@@ -27,14 +27,25 @@ namespace snn.Controllers
         }
 
         [HttpGet("/admin/Insights")]
-        public IActionResult Index(string keywords = null, int Type = 0, int status = -90, int pageIndex = 0, bool json = false)
+        public IActionResult Index(string keywords = null, int? type = null, int? status = null, int pageIndex = 0, bool json = false)
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            var insights = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).
-                  Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses).OrderByDescending(a => a.id).ToList();
-            myResponse.count = insights.Count();
-            myResponse.data = insights.Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
+            //var insightQuery = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses);
+            IQueryable<snn_Insight> insightQuery = lib.platformDB.snn_Insight.Include(Z => Z.ref_InsightType).Include(a => a.ref_StatusObject);
+            if (type.HasValue) {
+                insightQuery = insightQuery.Where(a => a.type == type.Value);
+            }
+            if (status.HasValue)
+            {
+                insightQuery = insightQuery.Where(a => a.ref_Status == status.Value);
+            }
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                insightQuery = insightQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
+            }
+            myResponse.count = insightQuery.Count();
+            myResponse.data = insightQuery.OrderByDescending(a => a.id).ToList().Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
             if (json)

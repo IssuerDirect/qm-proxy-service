@@ -5,8 +5,8 @@ $(function () {
         data: {
             fullList: insightsListData.data,
             action: "unhide",
-            typeId: 0,
-            statusId: -90,
+            typeId: null,
+            statusId: null,
             keywords: "",
             recs: [],
             selectAll: false,
@@ -28,6 +28,10 @@ $(function () {
             }
         },
         methods: {
+            dateFormat: function (dt) {
+                if (!dt) { return null; }
+                return moment(dt).format("LLLL");
+            },
             selectionChange: function () {
                 this.recs = [];
                 if (this.selectAll) {
