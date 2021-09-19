@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights")]
+    [Route("/admin/Insights"), Authorize]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -57,12 +57,22 @@ namespace snn.Controllers
             return View();
         }
 
-        void fillDataBags() {
+        void fillDataBags(snn_Insight insight = null) {
+            if (insight != null) {
+                if (insight.id == 0)
+                {
+                    ViewData["title"] = "Create Insight";
+                }
+                else
+                {
+                    ViewData["title"] = "Edit Insight# " + insight.id;
+                }
+            }
             ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             ViewBag.types = lib.platformDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
         }
 
-        [HttpGet("/admin/Insights/details")]
+        [HttpGet("/admin/Insights/details/{id?}")]
         public IActionResult details(int? id = null)
         {
             if (!readContext()) { return Unauthorized(); }
@@ -74,19 +84,15 @@ namespace snn.Controllers
                 {
                     return NotFound();
                 }
-                ViewData["title"] = "Edit Insight# " + id.Value;
             }
-            else {
-                ViewData["title"] = "Create Insight";
-            }
-            fillDataBags();
+            fillDataBags(model);
             return View("details", model);
         }
 
-        [HttpPost("/admin/insight")]
-        public apiResponse saveInsight([FromBody] snn_Insight insight)
+        [HttpPost("/admin/Insights/details")]
+        public IActionResult saveInsight(snn_Insight insight)
         {
-            if (!readContext()) { return standardMessages.unauthorized; }
+            if (!readContext()) { return Unauthorized(); }
             var myInsight = new snn_Insight();
             if (insight.id == 0)
             {
@@ -95,14 +101,15 @@ namespace snn.Controllers
             else
             {
                 myInsight = lib.platformDB.snn_Insight.Where(i => i.id == insight.id).FirstOrDefault();
-                if (myInsight == null) { return standardMessages.notFound; }
+                if (myInsight == null) { return NotFound(); }
                 clib.mergeChanges(myInsight, myInsight);
                 lib.platformDB.snn_Insight.Update(myInsight);
             }
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
-            return myResponse;
+            fillDataBags(insight);
+            return View("details",insight);
         }
 
         [HttpDelete("/admin/Insight")]
