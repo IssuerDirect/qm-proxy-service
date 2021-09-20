@@ -8,6 +8,7 @@ using net3000;
 using Microsoft.Extensions.Configuration;
 using net3000.common;
 using net3000.common.models;
+using Microsoft.EntityFrameworkCore;
 
 namespace snn.Controllers
 {
@@ -29,7 +30,7 @@ namespace snn.Controllers
         public apiResponse insights(int index = 0)
         {
             myResponse = standardMessages.found;
-            var myList = lib.platformDB.snn_Insight.Where(i => i.id > 86 && (i.ref_Status == 125 || i.ref_Status == 25))
+            var myList = lib.platformDB.snn_Insight.Where(i => i.id > 86 && (i.ref_Status == 125 || i.ref_Status == 25)).Include(i => i.ref_StatusObject).Include(i => i.ref_InsightType)
                 .Select(i => new snn_Insight()
                 {
                     id = i.id,
@@ -55,7 +56,7 @@ namespace snn.Controllers
             if (id != 0)
             {
                 myResponse = standardMessages.found;
-                var model = lib.platformDB.snn_Insight.Where(i => i.id == id).FirstOrDefault();
+                var model = lib.platformDB.snn_Insight.Where(i => i.id == id).Include(i => i.ref_StatusObject).Include(i => i.ref_InsightType).FirstOrDefault();
                 if (model != null)
                 {
                     myResponse.data = model;
