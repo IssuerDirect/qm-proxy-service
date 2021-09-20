@@ -1,0 +1,90 @@
+﻿<div id="events">
+    <h1>{{title}}</h1>
+    <div v-html="msgBox"></div>
+    <div class="row mb-4">
+
+  
+        <div class="col-md-6">
+
+            <form v-on:submit.prevent="search()" method="post">
+                <div class="input-group">
+                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
+                    <div class="input-group-append ">
+                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" href='@Url.Action("details")'>Create event</a>
+
+        </div>
+    </div>
+
+
+    <table class="table">
+        <thead class="thead-blue">
+            <tr>
+                <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Date
+                </th>
+
+                <th>
+                    Location
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="event of fullList">
+                <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="event.id" /></td>
+                <td>
+                    {{ event.id }}
+                </td>
+                <td>
+                    {{ event.title }}
+                </td>
+                <td>
+                    {{ dateFormat(event.date) }}
+                </td>
+                <td>
+                    {{ event.location }}
+                </td>
+                <td class="text-right">
+
+                    <div class="btn-group btn-group-sm">
+                        <a v-on:click="deleteevent(event)" class="btn btn-outline-secondary btn-sm" title="Delete" :id="event.id"><i class="fa fa-trash"></i></a>
+                        <a :href="'snn_events/details/' + event.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div v-if="showloader" class="text-center">
+        <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
+    </div>
+    <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar" >
+        <div class="form-inline">
+            <div class="input-group mx-auto">
+                <select class="form-control" v-model="action">
+                    <option value="delete">Delete Selected</option>
+                </select>
+                <div class="input-group-append">
+                    <button id="Button1" v-on:click="deleteevent()" class="btn btn-primary">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    eventsListData = @Html.Raw(ViewData["events"]);
+</script>
+<script src="/js/admin/events.js?v=120"></script>

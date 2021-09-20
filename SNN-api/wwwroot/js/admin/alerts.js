@@ -4,7 +4,7 @@ $(function () {
         el: "#alerts",
         data: {
             fullList: alertsListData.data,
-            action: "unhide",
+            action: "delete",
             categoryId: 0,
             keywords: "",
             recs: [],
@@ -19,6 +19,9 @@ $(function () {
             },
             showloader: function () {
                 return this.totalCount > this.fullList.length;
+            },
+            showactionBar: function () {
+                if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }
             }
         },
         methods: {
@@ -54,7 +57,7 @@ $(function () {
             async deletealert(item = null) {
                 let confirmResult = await Swal.fire({
                     title: 'Are you sure?',
-                    text: `You're about to delete client# ${this.recs.length > 0 ? this.recs.join() : item.id}`,
+                    text: `You're about to delete alert# ${this.recs.length > 0 ? this.recs.join() : item.id}`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Delete'
@@ -67,16 +70,13 @@ $(function () {
                     if (this.recs.length > 0) {
                         this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
                         this.totalCount = this.totalCount - this.recs.length;
-                        this.recs = new [];
+                        this.recs =  [];
                     }
                     else {
                         this.fullList = this.fullList.filter(c => c.id != item.id);
                         this.totalCount = this.totalCount - 1;
                     } 
                 } 
-            },
-            showactionBar: function () {
-                if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }
             }
         }
     });

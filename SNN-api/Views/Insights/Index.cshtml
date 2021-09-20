@@ -18,7 +18,7 @@
         </div>
       
         <div class="col-md-3">
-            <form v-on:submit.prevent="search(true)" method="post">
+            <form v-on:submit.prevent="search()" method="post">
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
                     <div class="input-group-append ">
@@ -84,7 +84,7 @@
     <div v-if="showloader" class="text-center">
         <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
     </div>
-    <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar()">
+    <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
         <div class="form-inline">
             <div class="input-group mx-auto">
                 <select class="form-control" v-model="action">
