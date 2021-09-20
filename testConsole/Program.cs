@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using net3000;
+using System.ServiceModel.Syndication;
+using System.Xml;
 
 namespace testConsole
 {
@@ -20,7 +22,10 @@ namespace testConsole
             IConfigurationRoot configuration = builder.Build();
             net3000.common.lib clib = new net3000.common.lib();
             clib.myConfiguration = configuration;
-            string encrypted = clib.encrypt("stocknewsnow10");
+            var url = "http://feeds.feedburner.com/brontecapital";
+            using var reader = XmlReader.Create(url);
+            var feed = SyndicationFeed.Load(reader);
+            var items = feed.Items.Where(f => f.PublishDate > DateTime.Now.Date).Count();
         }
     }
 }
