@@ -41,13 +41,12 @@ $(function () {
                 }
             },
             search: async  function () {
-
-                    this.currentPage = 0;
-                    var items = await (await net3000.common.handlePromise({
-                        apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
-                    })).json();
-             this.fullList = items.data;
-                    this.totalCount = items.count;
+                this.currentPage = 0;
+                var items = await (await net3000.common.handlePromise({
+                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
+                })).json();
+                this.fullList = items.data;
+                this.totalCount = items.count;
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
@@ -70,12 +69,15 @@ $(function () {
                     var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0? this.recs.join() : item.id}`, method: "Delete" })).json();
                     this.msgBox = res.html;
                     this.processing = false;
-                    if (this.recs.length > 0)
+                    if (this.recs.length > 0) {
                         this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
-                    else
+                        this.totalCount = this.totalCount - this.recs.length;
+                        this.recs = new [];
+                    }
+                    else {
                         this.fullList = this.fullList.filter(c => c.id != item.id);
-                    this.recs = new [];
-                    this.totalCount = this.fullList.count;
+                        this.totalCount = this.totalCount - 1;
+                    } 
                }
 
             },
