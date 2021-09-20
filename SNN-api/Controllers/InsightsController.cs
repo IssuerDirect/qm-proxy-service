@@ -25,14 +25,15 @@ namespace snn.Controllers
             lib.platformDB = snnDB;
             clib.myConfiguration = configuration;
         }
-
+        #region details
         [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int? type = null, int? status = null, int pageIndex = 0, bool json = false)
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
             IQueryable<snn_Insight> insightQuery = lib.platformDB.snn_Insight.Where(i => i.id > 86).Include(Z => Z.ref_InsightType).Include(a => a.ref_StatusObject);
-            if (type.HasValue) {
+            if (type.HasValue)
+            {
                 insightQuery = insightQuery.Where(a => a.type == type.Value);
             }
             if (status.HasValue)
@@ -41,7 +42,7 @@ namespace snn.Controllers
             }
             if (!string.IsNullOrEmpty(keywords))
             {
-                insightQuery = insightQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
+                insightQuery = insightQuery.Where(a => a.src.ToLower().Contains(keywords.ToLower()));
             }
             myResponse.count = insightQuery.Count();
             myResponse.data = insightQuery.OrderByDescending(a => a.id).ToList().Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
@@ -56,15 +57,17 @@ namespace snn.Controllers
             return View();
         }
 
-        void fillDataBags(snn_Insight insight = null) {
-            if (insight != null) {
-                if (insight.id == 0)
+        void fillDataBags(int? insightID = null)
+        {
+            if (insightID != null)
+            {
+                if (insightID == 0)
                 {
                     ViewData["title"] = "Create Insight";
                 }
                 else
                 {
-                    ViewData["title"] = "Edit Insight# " + insight.id;
+                    ViewData["title"] = "Edit Insight# " + insightID;
                 }
             }
             ViewBag.statuses = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
@@ -84,7 +87,7 @@ namespace snn.Controllers
                     return NotFound();
                 }
             }
-            fillDataBags(model);
+            fillDataBags(model.id);
             return View("details", model);
         }
 
@@ -107,9 +110,9 @@ namespace snn.Controllers
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
-            fillDataBags(insight);
+            fillDataBags(insight.id);
             TempData["msgBox"] = myResponse.html;
-            return RedirectToAction("details", new { id = insight.id});
+            return RedirectToAction("details", new { id = insight.id });
         }
 
         [HttpDelete("/admin/Insight")]
@@ -131,7 +134,99 @@ namespace snn.Controllers
             }
             return myResponse;
         }
+        #endregion
 
+        #region content
+        [HttpGet("/admin/Insights/content")]
+        public IActionResult content(string keywords = null, int? type = null, int? status = null, int pageIndex = 0, bool json = false)
+        {
+            if (!readContext()) { return Unauthorized(); }
+            myResponse = standardMessages.found;
+            IQueryable<snn_InsightContent> insightQuery = lib.platformDB.snn_InsightContent.Where(i => i.id > 86).Include(Z => Z.ref_InsightType).Include(a => a.ref_StatusObject);
+            if (type.HasValue)
+            {
+                insightQuery = insightQuery.Where(a => a.type == type.Value);
+            }
+            if (status.HasValue)
+            {
+                insightQuery = insightQuery.Where(a => a.ref_Status == status.Value.ToString());
+            }
+            if (!string.IsNullOrEmpty(keywords))
+            {
+                insightQuery = insightQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
+            }
+            myResponse.count = insightQuery.Count();
+            myResponse.data = insightQuery.OrderByDescending(a => a.id).ToList().Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
+            myResponse.pageSize = pageSize;
+            myResponse.pageIndex = pageIndex;
+            if (json)
+            {
+                return Json(myResponse);
+            }
+            ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
+            fillDataBags();
+            return View();
+        }
+        [HttpGet("/admin/Insights/contentDetails/{id?}")]
+        public IActionResult contentDetails(int? id = null)
+        {
+            if (!readContext()) { return Unauthorized(); }
+            snn_InsightContent model = new snn_InsightContent();
+            if (id.HasValue)
+            {
+                model = lib.platformDB.snn_InsightContent.Where(i => i.id == id).FirstOrDefault();
+                if (model == null)
+                {
+                    return NotFound();
+                }
+            }
+            fillDataBags(model.id);
+            return View("contentDetails", model);
+        }
+
+        [HttpPost("/admin/Insights/contentDetails")]
+        public IActionResult saveContentDetails(snn_InsightContent insight)
+        {
+            if (!readContext()) { return Unauthorized(); }
+            var myInsight = new snn_InsightContent();
+            if (insight.id == 0)
+            {
+                lib.platformDB.snn_InsightContent.Add(insight);
+            }
+            else
+            {
+                myInsight = lib.platformDB.snn_InsightContent.Where(i => i.id == insight.id).FirstOrDefault();
+                if (myInsight == null) { return NotFound(); }
+                clib.mergeChanges(myInsight, insight);
+                lib.platformDB.snn_InsightContent.Update(myInsight);
+            }
+            lib.platformDB.SaveChanges();
+            myResponse = standardMessages.saved;
+            myResponse.data = insight;
+            fillDataBags(insight.id);
+            TempData["msgBox"] = myResponse.html;
+            return RedirectToAction("contentDetails", new { id = insight.id });
+        }
+        [HttpDelete("/admin/InsightContent")]
+        public apiResponse deleteContent([FromQuery] string ids)
+        {
+            if (!readContext()) { return standardMessages.invalid; }
+            var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
+            var tobeRemoved = lib.platformDB.snn_InsightContent.Where(a => IDS.Contains(a.id)).ToList();
+            if (tobeRemoved.Any())
+            {
+                lib.platformDB.snn_InsightContent.RemoveRange(tobeRemoved);
+                lib.platformDB.SaveChanges();
+                myResponse = standardMessages.deleted;
+                myResponse.data = ids;
+            }
+            else
+            {
+                myResponse = standardMessages.notFound;
+            }
+            return myResponse;
+        }
+        #endregion
         bool readContext()
         {
             lib.myUser(User);

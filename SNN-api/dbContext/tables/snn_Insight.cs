@@ -18,9 +18,6 @@ namespace snn
         public int type { get; set; }
         public string src { get; set; }
         public string image { get; set; }
-        public string title { get; set; }
-        public string link { get; set; }
-        public string body { get; set; }
         [ForeignKey("type"), JsonIgnore]
         public virtual ref_InsightType ref_InsightType { get; set; }
         [NotMapped]

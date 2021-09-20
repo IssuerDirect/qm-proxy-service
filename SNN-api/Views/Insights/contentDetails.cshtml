@@ -1,4 +1,4 @@
-﻿@model snn.snn_Insight
+﻿@model snn.snn_InsightContent
 <h1>
     @ViewData["title"]
 </h1>
@@ -8,12 +8,12 @@
 <form asp-action="saveInsight" method="post">
     <div class="form-group row">
         <div class="col-sm-6">
-            <label>URL</label>
-            <input type="text" asp-for="src" class="form-control" />
+            <label>Title</label>
+            <input type="text" asp-for="title" class="form-control" />
         </div>
         <div class="col-sm-2">
             <label>Date</label>
-            <input type="date" asp-for="create_time" class="form-control" />
+            <input type="date" asp-for="date" class="form-control" />
         </div>
         <div class="col-sm-2">
             <label>Type</label>
@@ -28,7 +28,7 @@
             </select>
         </div>
     </div>
-
+    <textarea asp-for="body" id="body"></textarea>
     <input type="hidden" asp-for="id" />
     <div class="border-top border-bottom py-2 mt-3">
         <div class="row">
