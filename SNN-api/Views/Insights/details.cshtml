@@ -1,10 +1,10 @@
 ﻿@model snn.snn_Insight
-@section headercode {
-    <link href="~/js/ckeditor/theme.css" rel="stylesheet" />
-}
 <h1>
     @ViewData["title"]
 </h1>
+
+@Html.Raw(TempData["msgBox"])
+
 <form asp-action="saveInsight" method="post">
     <div class="form-group row">
         <div class="col-sm-6">
@@ -13,7 +13,7 @@
         </div>
         <div class="col-sm-2">
             <label>Date</label>
-            <input type="datetime-local" asp-for="create_time" class="form-control" />
+            <input type="date" asp-for="create_time" class="form-control" />
         </div>
         <div class="col-sm-2">
             <label>Type</label>
@@ -30,21 +30,19 @@
     </div>
 
 <textarea asp-for="body" id="body"></textarea>
-
-<div class="border-top border-bottom py-2 mt-3">
-    <div class="row">
-        <div class="col">
-            <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
-        </div>
-        <div class="col text-right">
-            <button class="btn-primary btn" type="submit">Save</button>
+    <input type="hidden" asp-for="id" />
+    <div class="border-top border-bottom py-2 mt-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
+            </div>
+            <div class="col text-right">
+                <button class="btn-primary btn" type="submit">Save</button>
+            </div>
         </div>
     </div>
-</div>
 </form>
-<script src="~/js/ckeditor/ckeditor.js"></script>
-
-
+<script src="https://cdn.ckeditor.com/ckeditor5/29.2.0/classic/ckeditor.js"></script>
 
 <script>
     $(function () {

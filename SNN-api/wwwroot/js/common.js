@@ -36,7 +36,7 @@ var net3000;
             this.code = code;
             this.count = count;
         }
-        html() {
+        get html() {
             return `
                 <div class="alert alert-${this.cssClass} alert-dismissible fade show" role="alert">
                     <i class="fa ${this.icon} mr-2"></i><strong>${this.title}</strong>. ${this.message}.
@@ -113,12 +113,10 @@ var net3000;
     net3000.account = account;
     class common {
         static apiURL() {
-            //if (net3000.common.apiurl != undefined) { return net3000.common.apiurl; }
-            //if (window.location.host.includes("localhost")) {
-            //    return "http://localhost:3000/";
-            //} else {
+            if (net3000.common.apiurl != undefined) {
+                return net3000.common.apiurl;
+            }
             return "https://api.net3000.ca/v2/";
-            //}
         }
         static cdnURL() {
             if (net3000.common.apiurl != undefined) {
@@ -131,12 +129,21 @@ var net3000;
                 return "https://cdn.net3000.ca/";
             }
         }
+        static loginLink(parameters) {
+            net3000.common.handlePromise({ url: `loginLink?email=${parameters.email}`, parameters: { callBackFunction: parameters.callBackFunction } });
+        }
+        static verifyLoginLink(parameters) {
+            net3000.common.handlePromise({ url: `authorizeLoginLink?token=${parameters.token}`, parameters: { callBackFunction: parameters.callBackFunction } });
+        }
         static verifyCaptcha(parameters) {
             if (parameters.actionName == undefined) {
                 parameters.actionName = "website";
             }
+            if (parameters.sitekey == undefined) {
+                parameters.sitekey = '6Le1cs4UAAAAAFzAcc-6pcJDZI2A2hg0cEaDCGvT';
+            }
             grecaptcha.ready(function () {
-                grecaptcha.execute('6Le1cs4UAAAAAFzAcc-6pcJDZI2A2hg0cEaDCGvT', { action: parameters.actionName }).then(function (token) {
+                grecaptcha.execute(parameters.sitekey, { action: parameters.actionName }).then(function (token) {
                     let apiResponse = net3000.common.handlePromise({ url: `recaptcha?token=${token}`, parameters: { account: 0 } });
                     if (apiResponse != null) {
                         apiResponse.then(function (response) {
@@ -217,7 +224,10 @@ var net3000;
         }
         static parameterAccount(account) {
             if (account == undefined || account == null) {
-                if (this.getCookie("account") != null) {
+                if (net3000Account != undefined) {
+                    account = net3000Account;
+                }
+                else if (this.getCookie("account") != null) {
                     if (this.getCookie("account") != null) {
                         account = parseInt(this.getCookie("account"));
                     }
@@ -243,7 +253,7 @@ var net3000;
             }
             myParameters.parameters.account = net3000.common.parameterAccount(myParameters.parameters.account);
             if (myParameters.parameters.buttonContainer != undefined) {
-                $(`${myParameters.parameters.buttonContainer} > *`).toggle();
+                jQuery(`${myParameters.parameters.buttonContainer} > *`).toggle();
             }
             let fetchUrl = net3000.common.apiURL() + myParameters.url;
             if (myParameters.apiurl != undefined) {
@@ -263,8 +273,8 @@ var net3000;
             if (myParameters.formData != undefined) {
                 fetchBody = myParameters.formData;
             }
-            if ($("input[name='AntiforgeryFieldname']").length > 0) {
-                fetchHeaders["X-CSRF-TOKEN-HEADERNAME"] = $("input[name='AntiforgeryFieldname']").val();
+            if (jQuery("input[name='AntiforgeryFieldname']").length > 0) {
+                fetchHeaders["X-CSRF-TOKEN-HEADERNAME"] = jQuery("input[name='AntiforgeryFieldname']").val();
             }
             //client tokens are saved in session storage, admin tokens are saved in local storage
             if (sessionStorage.getItem("token") != null) {
@@ -286,24 +296,24 @@ var net3000;
                         let res = myResponse;
                         if (myParameters.parameters.container != undefined && myParameters.parameters.template != undefined) {
                             if (myParameters.parameters.append == true) {
-                                $(myParameters.parameters.container).append(Mustache.render($(myParameters.parameters.template).html(), res));
+                                jQuery(myParameters.parameters.container).append(Mustache.render(jQuery(myParameters.parameters.template).html(), res));
                             }
                             else {
-                                $(myParameters.parameters.container).html(Mustache.render($(myParameters.parameters.template).html(), res));
+                                jQuery(myParameters.parameters.container).html(Mustache.render(jQuery(myParameters.parameters.template).html(), res));
                             }
                         }
                         if (myParameters.parameters.loadMore != undefined) {
                             if (myResponse.pageSize != null && (myResponse.count <= (myResponse.pageSize * (myResponse.pageIndex + 1)) || myResponse.pageSize >= myResponse.count)) {
                                 //hide load more
-                                $(myParameters.parameters.loadMore).hide();
+                                jQuery(myParameters.parameters.loadMore).hide();
                                 //if count > page size, show scroll to top
                                 if (myParameters.parameters.scrollToTop != undefined && myResponse.count <= myResponse.pageSize * (myResponse.pageIndex + 1)) {
-                                    $(myParameters.parameters.scrollToTop).removeClass("d-none");
-                                    $(myParameters.parameters.scrollToTop).show();
+                                    jQuery(myParameters.parameters.scrollToTop).removeClass("d-none");
+                                    jQuery(myParameters.parameters.scrollToTop).show();
                                 }
                             }
                             else {
-                                $(myParameters.parameters.loadMore).show();
+                                jQuery(myParameters.parameters.loadMore).show();
                             }
                         }
                         if (myParameters.parameters.callBackFunction != undefined) {
@@ -322,13 +332,13 @@ var net3000;
             });
             function bindResponse(res) {
                 if (myParameters.parameters.modalMsgBox != undefined) {
-                    $(myParameters.parameters.modalMsgBox).html(net3000.common.msgBox(res));
+                    jQuery(myParameters.parameters.modalMsgBox).html(net3000.common.msgBox(res));
                 }
                 else if (myParameters.parameters.msgBox != undefined) {
-                    $(myParameters.parameters.msgBox).html(net3000.common.msgBox(res));
+                    jQuery(myParameters.parameters.msgBox).html(net3000.common.msgBox(res));
                 }
                 if (myParameters.parameters.buttonContainer != undefined) {
-                    $(`${myParameters.parameters.buttonContainer} > *`).toggle();
+                    jQuery(`${myParameters.parameters.buttonContainer} > *`).toggle();
                 }
             }
             return;
@@ -341,60 +351,69 @@ var net3000;
             }
         }
         static recaptcha(parameters) {
-            net3000.common.handlePromise({ url: `recaptcha?token=${parameters.token}`, parameters: { callBackFunction: recapchaResponse } });
-            function recapchaResponse(apiResponse) {
-                if (Number(apiResponse.data.score) > 0.7 && apiResponse.data.action == parameters.action) {
-                    parameters.callBackFunction();
+            return __awaiter(this, void 0, void 0, function* () {
+                if (parameters.callBackFunction == undefined) {
+                    let res = yield (yield net3000.common.handlePromise({ url: `recaptcha?token=${parameters.token}` })).json();
+                    if (res.data.score != undefined && Number(res.data.score) > 0.7) {
+                        return true;
+                    }
+                    return false;
                 }
-                else {
-                    console.info(`Recaptcha score is ${apiResponse.data.score}`);
+                net3000.common.handlePromise({ url: `recaptcha?token=${parameters.token}`, parameters: { callBackFunction: recapchaResponse } });
+                function recapchaResponse(apiResponse) {
+                    if (Number(apiResponse.data.score) > 0.7 && apiResponse.data.action == parameters.action) {
+                        parameters.callBackFunction();
+                    }
+                    else {
+                        console.info(`Recaptcha score is ${apiResponse.data.score}`);
+                    }
                 }
-            }
+            });
         }
         static collectData(selector, reset = true) {
             if (reset) {
                 this.myData = {};
             }
             let myLocalData = this.myData;
-            $(`${selector} :input`).each(function () {
-                if ($(this).attr("type") == "checkbox" || $(this).attr("type") == "radio") {
+            jQuery(`${selector} :input`).each(function () {
+                if (jQuery(this).attr("type") == "checkbox" || jQuery(this).attr("type") == "radio") {
                     return;
                 }
-                if ($(this).attr("name") != undefined) {
-                    myLocalData[$(this).attr("name")] = $(this).val();
+                if (jQuery(this).attr("name") != undefined) {
+                    myLocalData[jQuery(this).attr("name")] = jQuery(this).val();
                 }
             });
-            $(`${selector} input[type='checkbox'],${selector} input[type='radio']`).each(function () {
+            jQuery(`${selector} input[type='checkbox'],${selector} input[type='radio']`).each(function () {
                 var collectUnchecked = true;
-                if ($(`${selector} input[name='${$(this).attr("name")}']`).length > 1) {
+                if (jQuery(`${selector} input[name='${jQuery(this).attr("name")}']`).length > 1) {
                     collectUnchecked = false;
                 }
-                if ($(this).attr("name") != undefined) {
-                    if ($(this).prop("checked")) {
-                        if ($(this).attr("value") != undefined) {
-                            if (myLocalData[$(this).attr("name")] == undefined) {
-                                myLocalData[$(this).attr("name")] = $(this).attr("value");
+                if (jQuery(this).attr("name") != undefined) {
+                    if (jQuery(this).prop("checked")) {
+                        if (jQuery(this).attr("value") != undefined) {
+                            if (myLocalData[jQuery(this).attr("name")] == undefined) {
+                                myLocalData[jQuery(this).attr("name")] = jQuery(this).attr("value");
                             }
                             else {
-                                myLocalData[$(this).attr("name")] += ',' + $(this).attr("value");
+                                myLocalData[jQuery(this).attr("name")] += ',' + jQuery(this).attr("value");
                             }
                         }
                         else {
-                            if (myLocalData[$(this).attr("name")] == undefined) {
-                                myLocalData[$(this).attr("name")] = "true";
+                            if (myLocalData[jQuery(this).attr("name")] == undefined) {
+                                myLocalData[jQuery(this).attr("name")] = "true";
                             }
                             else {
-                                myLocalData[$(this).attr("name")] += ',true';
+                                myLocalData[jQuery(this).attr("name")] += ',true';
                             }
                         }
                     }
                     else {
                         if (collectUnchecked) {
-                            if (myLocalData[$(this).attr("name")] == undefined) {
-                                myLocalData[$(this).attr("name")] = "false";
+                            if (myLocalData[jQuery(this).attr("name")] == undefined) {
+                                myLocalData[jQuery(this).attr("name")] = "false";
                             }
                             else {
-                                myLocalData[$(this).attr("name")] += ',false';
+                                myLocalData[jQuery(this).attr("name")] += ',false';
                             }
                         }
                     }
@@ -408,10 +427,10 @@ var net3000;
                 this.myDictionary = [];
             }
             let myLocalDictionary = this.myDictionary;
-            $(`${selector} :input`).each(function () {
-                if ($(this).attr("name") !== undefined) {
+            jQuery(`${selector} :input`).each(function () {
+                if (jQuery(this).attr("name") !== undefined) {
                     let newPair = {};
-                    newPair[$(this).attr("name")] = $(this).val();
+                    newPair[jQuery(this).attr("name")] = jQuery(this).val();
                     myLocalDictionary.push(newPair);
                 }
             });
@@ -419,8 +438,8 @@ var net3000;
             return this.myDictionary;
         }
         static clearForm(selector) {
-            $(`${selector} :input`).each(function () {
-                $(this).val("");
+            jQuery(`${selector} :input`).each(function () {
+                jQuery(this).val("");
             });
         }
         static getAccount(account) {
@@ -456,8 +475,8 @@ var net3000;
             });
         }
         static bindData(selector, myData) {
-            $(`${selector} :input`).each(function () {
-                $(this).val(myData[$(this).attr("name")]);
+            jQuery(`${selector} :input`).each(function () {
+                jQuery(this).val(myData[jQuery(this).attr("name")]);
             });
         }
         static msgBox(myMsg) {
@@ -476,15 +495,15 @@ var net3000;
         }
         static switchView(viewName) {
             if (net3000.common.currentView != undefined) {
-                $(net3000.common.currentView).hide();
+                jQuery(net3000.common.currentView).hide();
             }
             net3000.common.currentView = viewName;
-            $(viewName).show();
+            jQuery(viewName).show();
         }
         static pickRandomImage(urls, backgroundSelector = "background-image") {
             var StaticImgURL = urls[Math.floor(Math.random() * urls.length)];
-            if (backgroundSelector != undefined && $(backgroundSelector).length > 0) {
-                $(backgroundSelector).css("background-image", "url(" + StaticImgURL + ")");
+            if (backgroundSelector != undefined && jQuery(backgroundSelector).length > 0) {
+                jQuery(backgroundSelector).css("background-image", "url(" + StaticImgURL + ")");
             }
             return StaticImgURL;
         }
@@ -527,6 +546,32 @@ var net3000;
                 return null;
             });
         }
+        static loadUser(parameters) {
+            return __awaiter(this, void 0, void 0, function* () {
+                let myUser = new loginUser();
+                if (localStorage.getItem("token") != undefined || sessionStorage.getItem("token") != undefined) {
+                    let res = yield (yield net3000.common.handlePromise({
+                        url: "user"
+                    })).json();
+                    if (res.code == 200) {
+                        myUser = res.data;
+                        myUser.loggedIn = true;
+                    }
+                }
+                net3000.common.apps[parameters.elementID] = new Vue({
+                    el: "#" + parameters.elementID,
+                    data: {
+                        client: myUser
+                    },
+                    methods: {
+                        logout: function () {
+                            net3000.common.logOut(parameters.redirect);
+                            this.client = new loginUser();
+                        }
+                    }
+                });
+            });
+        }
         static getAddresses() {
             return __awaiter(this, void 0, void 0, function* () {
                 if (localStorage.getItem("token") == undefined) {
@@ -541,16 +586,41 @@ var net3000;
                 return null;
             });
         }
-        static logOut(redirect) {
+        static logOut(redirect = null) {
             localStorage.removeItem("user");
             localStorage.removeItem("token");
             if (redirect != undefined) {
                 window.location.href = redirect;
             }
         }
+        static replacePlaceHolders(body, obj) {
+            if (body == null || body == undefined) {
+                return null;
+            }
+            for (let prop in obj) {
+                body = body.replace(`##${prop}##`, obj[prop]);
+            }
+            return body;
+        }
+        static passwordStrength(password) {
+            let errors = [];
+            if (password.length < 8) {
+                errors.push("Password must be at least 8 characters.");
+            }
+            if (password.match(/[A-Z]/g) == null) {
+                errors.push("Password must include an uppercase character.");
+            }
+            if (password.match(/[a-z]/g) == null) {
+                errors.push("Password must include a lowercase character.");
+            }
+            if (password.match(/[0-9]/g) == null) {
+                errors.push("Password must include a number.");
+            }
+            return errors;
+        }
         static initializeLogin() {
             return __awaiter(this, void 0, void 0, function* () {
-                let loginTemplate = yield (yield net3000.common.handlePromise({ url: "common/setting/loginComponent" })).json();
+                let loginTemplate = yield (yield net3000.common.handlePromise({ url: "common/setting?title=loginComponent" })).json();
                 Vue.component('useraccount', {
                     template: loginTemplate.data,
                     props: ['logingroup', 'client'],
@@ -594,7 +664,6 @@ var net3000;
                             return __awaiter(this, void 0, void 0, function* () {
                                 this.processing = true;
                                 let response = yield (yield net3000.common.handlePromise({ url: `authorizeCode?email=${this.client.email}&code=${this.client.authorizationCode}` })).json();
-                                debugger;
                                 if (response.code == 200) {
                                     this.client.firstName = response.data.client.firstName;
                                     this.client.lastName = response.data.client.lastName;
@@ -606,6 +675,7 @@ var net3000;
                                     localStorage.setItem("token", response.data.token);
                                     localStorage.setItem(response.data.client.loginGroupID, JSON.stringify(response.data.client));
                                     this.msgBox = '';
+                                    this.$emit("continue");
                                 }
                                 else {
                                     this.showAuhorization = null;
@@ -633,7 +703,7 @@ var net3000;
                                     this.$emit("continue");
                                 }
                                 else {
-                                    //$("#userLoginButtonContainer > *").toggle();
+                                    //jQuery("#userLoginButtonContainer > *").toggle();
                                     this.processing = false;
                                     this.showAuhorization = null;
                                     this.msgBox = response.html;
@@ -642,7 +712,7 @@ var net3000;
                         },
                         register: function () {
                             return __awaiter(this, void 0, void 0, function* () {
-                                //$("#userRegisterButtonContainer > *").toggle();
+                                //jQuery("#userRegisterButtonContainer > *").toggle();
                                 this.processing = true;
                                 let response = yield (yield net3000.common.handlePromise({
                                     url: "registerOrGet", body: JSON.stringify({
@@ -666,7 +736,7 @@ var net3000;
                                     this.$emit("continue");
                                 }
                                 else {
-                                    //$("#userRegisterButtonContainer > *").toggle();
+                                    //jQuery("#userRegisterButtonContainer > *").toggle();
                                     this.showAuhorization = null;
                                     this.msgBox = response.html;
                                 }
@@ -709,7 +779,7 @@ var net3000;
         }
         static initializeAccountUpdate() {
             return __awaiter(this, void 0, void 0, function* () {
-                let loginTemplate = yield (yield net3000.common.handlePromise({ url: "common/setting/updateAccount" })).json();
+                let loginTemplate = yield (yield net3000.common.handlePromise({ url: "common/setting?title=updateAccount" })).json();
                 Vue.component('userupdate', {
                     template: loginTemplate.data,
                     props: ['client'],
@@ -735,12 +805,12 @@ var net3000;
                                 this.msgBox = {};
                                 let AddressForm = document.querySelector("form.clientDetails");
                                 if (!AddressForm.checkValidity() || !(this.client.password == undefined || this.client.password == '' || this.client.password == this.client.confirmPassword)) {
-                                    $("form.clientDetails").addClass("was-validated");
+                                    jQuery("form.clientDetails").addClass("was-validated");
                                     this.processing = false;
                                     return;
                                 }
                                 else {
-                                    $("form.clientDetails").removeClass("was-validated");
+                                    jQuery("form.clientDetails").removeClass("was-validated");
                                 }
                                 let postClient = Object.assign({}, this.client);
                                 delete postClient.isNew;
@@ -773,7 +843,7 @@ var net3000;
         }
         static initializeProvinceList() {
             return __awaiter(this, void 0, void 0, function* () {
-                //let loginTemplate: apiResponse = await (await net3000.common.handlePromise({ url: "common/setting/provinceList" })).json();
+                //let loginTemplate: apiResponse = await (await net3000.common.handlePromise({ url: "common/setting?title=provinceList" })).json();
                 let allStatesAndProvinces = yield (yield net3000.common.handlePromise({ url: "/provinces" })).json();
                 Vue.component('provinces', {
                     template: `<div>
@@ -840,6 +910,24 @@ var net3000;
                 });
             });
         }
+        static screenSize() {
+            let width = window.innerWidth;
+            if (width < 576) {
+                return "xs";
+            }
+            else if (width < 768) {
+                return "sm";
+            }
+            else if (width < 992) {
+                return "md";
+            }
+            else if (width < 1200) {
+                return "lg";
+            }
+            else {
+                return "xl";
+            }
+        }
     }
     //Generated from type
     //Global Variables 
@@ -854,9 +942,10 @@ var net3000;
     common.myResponse = new net3000.apiResponse();
     net3000.common = common;
 })(net3000 || (net3000 = {}));
-$(function () {
-    $("[data-getdata]").each(function () {
-        net3000.common.getData({ elementID: $(this).attr("id"), source: $(this).data("getdata"), localStorage: $(this).data("localstorage"), sessionStorage: $(this).data("sessionstorage") });
+let net3000Account = undefined;
+jQuery(function () {
+    jQuery("[data-getdata]").each(function () {
+        net3000.common.getData({ elementID: jQuery(this).attr("id"), source: jQuery(this).data("getdata"), localStorage: jQuery(this).data("localstorage"), sessionStorage: jQuery(this).data("sessionstorage") });
     });
 });
 //# sourceMappingURL=common.js.map

@@ -12,7 +12,7 @@ namespace snn
     {
         [Key]
         public int id { get; set; }
-        public DateTime? create_time { get; set; } = DateTime.Now;
+        public DateTime? create_time { get; set; }
         public DateTime? update_time { get; set; }
         public int ref_Status { get; set; }
         public int type { get; set; }

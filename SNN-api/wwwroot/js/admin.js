@@ -58,54 +58,7 @@ function fixMenu() {
 var editors = [];
 function createEditor(name) {
     if (editors[name] === undefined) {
-        ClassicEditor.create(document.querySelector(name),
-            {
-                toolbar: {
-                    items: [
-                        'heading',
-                        '|',
-                        'bold',
-                        'italic',
-                        'link',
-                        'bulletedList',
-                        'numberedList',
-                        '|',
-                        'indent',
-                        'outdent',
-                        '|',
-                        'imageUpload',
-                        'blockQuote',
-                        'insertTable',
-                        'mediaEmbed',
-                        'undo',
-                        'redo',
-                        'alignment',
-                        'fontSize',
-                        'fontColor',
-                        'underline',
-                        'removeFormat'
-                    ]
-                },
-                language: 'en',
-                image: {
-                    toolbar: [
-                        'imageTextAlternative',
-                        'imageStyle:full',
-                        'imageStyle:side'
-                    ]
-                },
-                table: {
-                    contentToolbar: [
-                        'tableColumn',
-                        'tableRow',
-                        'mergeTableCells',
-                        'tableCellProperties',
-                        'tableProperties'
-                    ]
-                }
-                , filebrowserImageUploadUrl: '/api/uploadImage/' 
-            }
-        ).then(newEditor => { editors[name] = newEditor; });
+        ClassicEditor.create(document.querySelector(name)).then(newEditor => { editors[name] = newEditor; });
         $(name + "editorOptions > *").toggle();
     }
 }

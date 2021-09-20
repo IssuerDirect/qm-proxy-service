@@ -101,14 +101,15 @@ namespace snn.Controllers
             {
                 myInsight = lib.platformDB.snn_Insight.Where(i => i.id == insight.id).FirstOrDefault();
                 if (myInsight == null) { return NotFound(); }
-                clib.mergeChanges(myInsight, myInsight);
+                clib.mergeChanges(myInsight, insight);
                 lib.platformDB.snn_Insight.Update(myInsight);
             }
             lib.platformDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
             fillDataBags(insight);
-            return View("details",insight);
+            TempData["msgBox"] = myResponse.html;
+            return RedirectToAction("details", new { id = insight.id});
         }
 
         [HttpDelete("/admin/Insight")]
