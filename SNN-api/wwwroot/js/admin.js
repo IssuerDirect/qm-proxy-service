@@ -55,6 +55,7 @@ function fixMenu() {
         $("nav").removeClass("fixed-top");
     }
 }
+
 var editors = [];
 function createEditor(name) {
     if (editors[name] === undefined) {
@@ -70,8 +71,6 @@ function closeEditor(name) {
         $(name + "editorOptions > *").toggle();
     }
 }
-
-var ckeditor5DefaultConfig = { customConfig: '/js/ckeditor/Adminconfig.js', filebrowserImageUploadUrl: '/api/CkeditorImage/' };
 
 //loads images to local storage, initializes VUE instances on each input with class feature-image
 function mountFeatureImages() {
