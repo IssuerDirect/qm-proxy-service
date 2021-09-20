@@ -41,13 +41,12 @@ $(function () {
                 }
             },
             search: async  function () {
-
-                    this.currentPage = 0;
-                    var items = await (await net3000.common.handlePromise({
-                        apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
-                    })).json();
-             this.fullList = items.data;
-                    this.totalCount = items.count;
+                this.currentPage = 0;
+                var items = await (await net3000.common.handlePromise({
+                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
+                })).json();
+                this.fullList = items.data;
+                this.totalCount = items.count;
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
