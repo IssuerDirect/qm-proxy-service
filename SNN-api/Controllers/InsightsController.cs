@@ -31,8 +31,7 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            //var insightQuery = lib.platformDB.snn_Insight.Where(a => (Type == 0 || a.type == Type) && (status == -90 || a.ref_Status == status) && (keywords == null || a.title.Contains(keywords))).Include(Z => Z.ref_InsightType).Include(a => a.ref_Statuses);
-            IQueryable<snn_Insight> insightQuery = lib.platformDB.snn_Insight.Include(Z => Z.ref_InsightType).Include(a => a.ref_StatusObject);
+            IQueryable<snn_Insight> insightQuery = lib.platformDB.snn_Insight.Where(i => i.id > 86).Include(Z => Z.ref_InsightType).Include(a => a.ref_StatusObject);
             if (type.HasValue) {
                 insightQuery = insightQuery.Where(a => a.type == type.Value);
             }
