@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SNN-api\SNN-api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

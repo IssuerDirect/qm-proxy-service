@@ -22,6 +22,9 @@ namespace testConsole
             IConfigurationRoot configuration = builder.Build();
             net3000.common.lib clib = new net3000.common.lib();
             clib.myConfiguration = configuration;
+            snn.SNNLib lib = new snn.SNNLib();
+            lib.config = configuration;
+
             var url = "http://feeds.feedburner.com/brontecapital";
             using var reader = XmlReader.Create(url);
             var feed = SyndicationFeed.Load(reader);
