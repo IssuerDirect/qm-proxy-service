@@ -149,7 +149,7 @@ namespace snn.Controllers
             }
             if (status.HasValue)
             {
-                insightQuery = insightQuery.Where(a => a.ref_Status == status.Value.ToString());
+                insightQuery = insightQuery.Where(a => a.ref_Status == status.Value);
             }
             if (!string.IsNullOrEmpty(keywords))
             {

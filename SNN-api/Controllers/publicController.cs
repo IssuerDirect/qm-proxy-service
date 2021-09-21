@@ -34,15 +34,12 @@ namespace snn.Controllers
                 .Select(i => new snn_Insight()
                 {
                     id = i.id,
-                    body = clib.des(i.body, 125, "..."),
                     create_time = i.create_time,
                     image = i.image,
-                    link = i.link,
                     ref_InsightType = i.ref_InsightType,
                     ref_Status = i.ref_Status,
                     ref_StatusObject = i.ref_StatusObject,
                     src = i.src,
-                    title = i.title,
                     type = i.type,
                     update_time = i.update_time
                 });
