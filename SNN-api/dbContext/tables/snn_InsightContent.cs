@@ -15,7 +15,7 @@ namespace snn
         public DateTime date { get; set; } = DateTime.Now;
         public int type { get; set; }
         public string image { get; set; }
-        public string ref_Status { get; set; }
+        public int ref_Status { get; set; }
         public string title { get; set; }
         public string body { get; set; }
         [ForeignKey("type"), JsonIgnore]
