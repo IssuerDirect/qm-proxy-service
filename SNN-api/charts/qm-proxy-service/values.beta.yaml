@@ -1,3 +1,9 @@
+image:
+  repository: gcr.io/isdr-dev/beta-qm-proxy-service
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
 ingress:
   dnsName: &dnsName beta-qm-proxy.isdrdev.com
   secretName: &secretName beta-qm-proxy-isdrdev-com
