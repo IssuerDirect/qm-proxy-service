@@ -9,12 +9,12 @@ namespace snn
     public class cc_SnnInsight
     {
         [Key]
-        public int id { get; set; }
+        public string id { get; set; }
         public DateTime? create_time { get; set; }
         public DateTime? update_time { get; set; }
         public DateTime? occur { get; set; }
         public int ref_InsightType { get; set; }
-        public int type { get; set; }
+        public string type { get; set; }
         public string src { get; set; }
         public string tags { get; set; }
         public string thumb { get; set; }

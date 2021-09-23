@@ -21,7 +21,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
 
 namespace snn
 {
@@ -29,6 +28,8 @@ namespace snn
     {
         lib clib = new lib();
         public platformDB platformDB;
+        public companyHubDB companyhubDB;
+        public peopleDB peopleDB;
         public IConfiguration config {
             set {
                 clib.myConfiguration = value;

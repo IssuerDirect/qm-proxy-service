@@ -4,9 +4,8 @@ $(function () {
         el: "#insights",
         data: {
             fullList: insightsListData.data,
-            action: "unhide",
+            action: "delete",
             typeId: null,
-            statusId: null,
             keywords: "",
             recs: [],
             selectAll: false,
@@ -46,7 +45,7 @@ $(function () {
             search: async  function () {
                 this.currentPage = 0;
                 var items = await (await net3000.common.handlePromise({
-                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
+                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&json=true`
                 })).json();
                 this.fullList = items.data;
                 this.totalCount = items.count;
@@ -55,7 +54,7 @@ $(function () {
                 //not using this now. We're loading all account packages and filtering on page
                 this.currentPage+=1;
                 var nextPage = await (await net3000.common.handlePromise({
-                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&keywords=${this.keywords}&Type=${this.typeId}&status=${this.statusId}&json=true`
+                    apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&keywords=${this.keywords}&Type=${this.typeId}&json=true`
                 })).json();
                 this.fullList =this.fullList.concat(nextPage.data);
             },

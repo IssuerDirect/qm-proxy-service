@@ -2,22 +2,15 @@
     <h1>{{title}}</h1>
     <div v-html="msgBox"></div>
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control"  v-on:change="search()">
                     <option value="null">Filter Type</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <select asp-items="ViewBag.statuses" v-model.number="statusId" class="form-control" v-on:change="search()">
-                    <option value="null">Filter Status</option>
-                </select>
-            </div>
-        </div>
       
-        <div class="col-md-3">
+        <div class="col-md-4">
             <form v-on:submit.prevent="search()" method="post">
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
@@ -27,7 +20,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-3 text-right">
+        <div class="col-md-4 text-right">
             <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
 
         </div>
@@ -48,10 +41,7 @@
                 </th>
                 <th>
                     Type
-                </th>
-                <th colspan="2">
-                    Status
-                </th>
+                </th> <th></th>
             </tr>
         </thead>
         <tbody>
@@ -67,11 +57,8 @@
                     {{ insight.title }}
                 </td>
                 <td>
-                    {{ insight.typeName }}
-                </td>
-                <td>
-                    {{ insight.statusName }}
-                </td>
+                    {{ insight.type }}
+                </td> 
                 <td class="text-right">
                     <div class="btn-group btn-group-sm">
                         <a v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
@@ -102,4 +89,4 @@
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
-<script src="/js/admin/insights.js?v=990"></script>
+<script src="/js/admin/insights.js?v=90"></script>
