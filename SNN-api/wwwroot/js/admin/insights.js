@@ -32,7 +32,7 @@ $(function () {
         methods: {
             dateFormat: function (dt) {
                 if (!dt) { return null; }
-                return moment(dt).format("LLLL");
+                return moment(dt).format("l LT");
             },
             selectionChange: function () {
                 this.recs = [];

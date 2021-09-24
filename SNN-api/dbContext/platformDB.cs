@@ -11,13 +11,9 @@ namespace snn
         {
         }
         public DbSet<snn_alerts> snn_alerts { get; set; }
-        public DbSet<snn_Insight> snn_Insight { get; set; }
-        public DbSet<snn_events> snn_events { get; set; }
         public DbSet<ref_InsightType> ref_InsightType { get; set; }
         public DbSet<ref_Status> ref_Status { get; set; }
         public DbSet<snn_alertsCategrories> snn_alertsCategrories { get; set; }
-        public DbSet<snn_videooftheday> snn_videooftheday { get; set; }
-        public DbSet<snn_InsightContent> snn_InsightContent { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
