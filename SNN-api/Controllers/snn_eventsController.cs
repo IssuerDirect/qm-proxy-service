@@ -48,11 +48,11 @@ namespace snn.Controllers
 
 
         [HttpGet("/admin/events/details/{id?}")]
-        public IActionResult details(string id = null)
+        public IActionResult details(int? id = null)
         {
             if (!readContext()) { return Unauthorized(); }
             cc_Conference model = new cc_Conference();
-            if (!string.IsNullOrEmpty(id))
+            if (id.HasValue)
             {
                 model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).FirstOrDefault();
                 if (model == null)
@@ -68,7 +68,7 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             var myevent = new cc_Conference();
-            if (string.IsNullOrEmpty(_event.id))
+            if (_event.id == 0)
             {
                 lib.companyHubDB.cc_Conference.Add(_event);
             }
