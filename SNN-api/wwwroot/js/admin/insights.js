@@ -10,6 +10,8 @@ $(function () {
             recs: [],
             selectAll: false,
             msgBox: "",
+            refTypeId: null,
+            url: "",
             totalCount: insightsListData.count,
             currentPage: 0
         },
@@ -32,7 +34,7 @@ $(function () {
         methods: {
             dateFormat: function (dt) {
                 if (!dt) { return null; }
-                return moment(dt).format("LLLL");
+                return moment(dt).format("l LT");
             },
             selectionChange: function () {
                 this.recs = [];
@@ -49,6 +51,11 @@ $(function () {
                 })).json();
                 this.fullList = items.data;
                 this.totalCount = items.count;
+            },
+            importInsights: async function () {
+                var items = await (await net3000.common.handlePromise({
+                    apiurl: `/admin/Insights/import?url=${this.url}&typeID=${this.refTypeId}&json=true`
+                })).json();
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page

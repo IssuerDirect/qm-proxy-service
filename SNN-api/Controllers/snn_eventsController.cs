@@ -29,7 +29,7 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            IQueryable<snn_events> eventQuery = lib.platformDB.snn_events; 
+            IQueryable<cc_Conference> eventQuery = lib.companyHubDB.cc_Conference; 
             if (!string.IsNullOrEmpty(keywords))
             {
                 eventQuery = eventQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
@@ -48,13 +48,13 @@ namespace snn.Controllers
 
 
         [HttpGet("/admin/events/details/{id?}")]
-        public IActionResult details(int? id = null)
+        public IActionResult details(string id = null)
         {
             if (!readContext()) { return Unauthorized(); }
-            snn_events model = new snn_events();
-            if (id.HasValue)
+            cc_Conference model = new cc_Conference();
+            if (!string.IsNullOrEmpty(id))
             {
-                model = lib.platformDB.snn_events.Where(i => i.id == id).FirstOrDefault();
+                model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).FirstOrDefault();
                 if (model == null)
                 {
                     return NotFound();
@@ -64,22 +64,22 @@ namespace snn.Controllers
         }
 
         [HttpPost("/admin/events/details")]
-        public IActionResult saveevent(snn_events _event)
+        public IActionResult saveevent(cc_Conference _event)
         {
             if (!readContext()) { return Unauthorized(); }
-            var myevent = new snn_events();
-            if (_event.id == 0)
+            var myevent = new cc_Conference();
+            if (string.IsNullOrEmpty(_event.id))
             {
-                lib.platformDB.snn_events.Add(_event);
+                lib.companyHubDB.cc_Conference.Add(_event);
             }
             else
             {
-                myevent = lib.platformDB.snn_events.Where(i => i.id == _event.id).FirstOrDefault();
+                myevent = lib.companyHubDB.cc_Conference.Where(i => i.id == _event.id).FirstOrDefault();
                 if (myevent == null) { return NotFound(); }
                 clib.mergeChanges(myevent, _event);
-                lib.platformDB.snn_events.Update(myevent);
+                lib.companyHubDB.cc_Conference.Update(myevent);
             }
-            lib.platformDB.SaveChanges();
+            lib.companyHubDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = _event; 
             TempData["msgBox"] = myResponse.html;
@@ -91,11 +91,11 @@ namespace snn.Controllers
         {
             if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
-            var tobeRemoved = lib.platformDB.snn_events.Where(a => IDS.Contains(a.id)).ToList();
+            var tobeRemoved = lib.companyHubDB.cc_Conference.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
             {
-                lib.platformDB.snn_events.RemoveRange(tobeRemoved);
-                lib.platformDB.SaveChanges();
+                lib.companyHubDB.cc_Conference.RemoveRange(tobeRemoved);
+                lib.companyHubDB.SaveChanges();
                 myResponse = standardMessages.deleted;
                 myResponse.data = ids;
             }
