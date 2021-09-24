@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using net3000.common;
 using net3000.common.models;
-
+using System.ServiceModel.Syndication;
+using System.Xml;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -112,7 +113,6 @@ namespace snn
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
         public loginUsers myUser(ClaimsPrincipal myUser)
         {
             if (user != null) { return user; }
@@ -126,6 +126,34 @@ namespace snn
                 user.email = myUser.FindFirst(ClaimTypes.Email)?.Value;
             }
             return user;
+        }
+        public List<snn.cc_SnnInsight> readFeed(string url, int type)
+        {
+            var results = new List<snn.cc_SnnInsight>();
+            try
+            {
+                using var reader = XmlReader.Create(url);
+                var feed = SyndicationFeed.Load(reader);
+                var items = feed.Items.ToList();
+                results = items.Select(i => new snn.cc_SnnInsight()
+                {
+                    headline = i.Title.Text,
+                    occur = i.PublishDate.DateTime,
+                    id = Guid.NewGuid().ToString(),
+                    summary = i.Summary.Text,
+                    thumb = feed.ImageUrl.ToString(),
+                    type = url,
+                    pi_Person = user.userid,
+                    src = i.Links.FirstOrDefault().Uri.ToString(),
+                    ref_InsightType = type
+                }).ToList();
+            }
+            catch { }
+            if (results.Count > 0) {
+                companyHubDB.cc_SnnInsight.AddRange(results);
+                companyHubDB.SaveChanges();
+            }
+            return results;
         }
     }
 
