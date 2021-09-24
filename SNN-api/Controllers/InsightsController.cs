@@ -87,7 +87,11 @@ namespace snn.Controllers
             fillDataBags(model.id);
             return View("details", model);
         }
-
+        [HttpPost("/admin/Insights/import")]
+        public apiResponse  importInsight(string url,int typeID)
+        {
+            return standardMessages.saved;
+        }
         [HttpPost("/admin/Insights/details")]
         public IActionResult saveInsight(cc_SnnInsight insight)
         {
