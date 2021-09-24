@@ -89,10 +89,14 @@ namespace snn.Controllers
         }
 
         [HttpPost("/admin/Insights/import")]
-        public  IActionResult importInsight(string url,string  typeID)
+        public apiResponse importInsight([FromQuery] string url, [FromQuery] string  typeID)
         {
-            if (!readContext()) { return Unauthorized(); } 
-            return Ok(lib.readFeed(url,Convert.ToInt32( typeID)));
+            if (!readContext()) { return standardMessages.unauthorized; }
+            var importedList = lib.readFeed(url, Convert.ToInt32(typeID));
+            myResponse = standardMessages.saved;
+            myResponse.data = importedList;
+            myResponse.count = importedList.Count;
+            return myResponse;
         }
 
         [HttpPost("/admin/Insights/details")]

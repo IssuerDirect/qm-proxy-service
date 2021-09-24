@@ -1,6 +1,6 @@
 ﻿<div id="insights">
     <h1>SNN Insights</h1>
-    <div v-html="msgBox"></div>
+    <div v-if="msgBox" v-html="msgBox.html"></div>
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="form-group">
@@ -26,23 +26,26 @@
 
             <!-- Modal -->
             <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Import By URL</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Import RSS</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <form class="text-center" id="importform" method="post">
-                                <select asp-items="ViewBag.types" v-model="refTypeId" class="form-control" required>
-                                    <option value="">Filter Type</option>
-                                </select>
-                                <div class="input-group-append">
+                                <div class="form-group">
                                     <input type="url" class="form-control" v-model="url" placeholder="paste feed url" required />
-
-                                    <button type="submit" class="btn btn-primary" v-on:click="importInsights()">Import</button>
+                                </div>
+                                <div class="input-group">
+                                    <select asp-items="ViewBag.types" v-model="refTypeId" class="form-control" required>
+                                        <option :value="null">Filter Type</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary" v-on:click="importInsights()">Import</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -56,7 +59,7 @@
             </div>
 
     
-                    <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
+                    <a class="btn btn-primary" href='@Url.Action("details")'>Add Insight</a>
                 </div>
             </div>
 

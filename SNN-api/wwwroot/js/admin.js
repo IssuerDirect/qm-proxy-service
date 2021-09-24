@@ -4,11 +4,11 @@ var menuTop;
 
 $(function () {
 
-    if (sessionStorage.getItem("adminMenu") === null) {
-        net3000.common.handlePromise({ apiurl: "/api/getmenu", parameters: { container: "#adminHeaderContainer", template: "#adminHeaderTemplate", callBackFunction: saveMenu } });
-    } else if ($("#adminHeaderContainer").length > 0) {
-        $("#adminHeaderContainer").html(Mustache.render($("#adminHeaderTemplate").html(), JSON.parse(sessionStorage.getItem("adminMenu"))));
-    }
+    //if (sessionStorage.getItem("adminMenu") === null) {
+    //    net3000.common.handlePromise({ apiurl: "/api/getmenu", parameters: { container: "#adminHeaderContainer", template: "#adminHeaderTemplate", callBackFunction: saveMenu } });
+    //} else if ($("#adminHeaderContainer").length > 0) {
+    //    $("#adminHeaderContainer").html(Mustache.render($("#adminHeaderTemplate").html(), JSON.parse(sessionStorage.getItem("adminMenu"))));
+    //}
 
     if ($(".feature-image").length > 0) {
         mountFeatureImages();

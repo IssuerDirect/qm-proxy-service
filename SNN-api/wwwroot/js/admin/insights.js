@@ -9,8 +9,8 @@ $(function () {
             keywords: "",
             recs: [],
             selectAll: false,
-            msgBox: "",
-            refTypeId: "",
+            msgBox: null,
+            refTypeId: null,
             url: "",
             totalCount: insightsListData.count,
             currentPage: 0
@@ -51,10 +51,14 @@ $(function () {
                 } else {
                     $("#importform").remove("was-validated");
                     if (this.refTypeId !== null && this.url !== "") {
-                        net3000.common.handlePromise({
+                        var res = await (await net3000.common.handlePromise({
                             apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method: 'POST'
-                        });
+                        })).json();
                         this.search();
+                        if (res.success) {
+                            this.fullList = this.fullList.unshift(res.data);
+                        }
+                        this.msgBox = res;
                         $('#importModal').modal().hide();
                     }
                 }
@@ -79,7 +83,7 @@ $(function () {
                 if (confirmResult.value) {
                     this.processing = true;
                     var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0 ? this.recs.join() : item.id}`, method: "Delete" })).json();
-                    this.msgBox = res.html;
+                    this.msgBox = res;
                     this.processing = false;
                     if (this.recs.length > 0) {
                         this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
