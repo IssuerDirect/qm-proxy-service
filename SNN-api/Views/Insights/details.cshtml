@@ -16,7 +16,12 @@
             <select asp-items="ViewBag.types" class="form-control" asp-for="ref_InsightType">
                 <option value="null">Select Type</option>
             </select>
-        </div>        
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Source</label>
+        <input type="url" asp-for="src" class="form-control" />
     </div>
 
     <div class="form-group">
@@ -26,9 +31,9 @@
 
     <div class="form-group">
         <label>Feature Image</label>
-        <input type="url" asp-for="thumb" class="form-control"/>
+        <input type="url" asp-for="thumb" class="form-control" />
     </div>
-    
+
     <div class="form-group">
         <textarea asp-for="body" id="body" width="100%"></textarea>
     </div>
@@ -38,7 +43,7 @@
             <label>Author</label>
             <input type="text" asp-for="author" class="form-control" />
         </div>
-        <div class="col-md-3">
+        <div class="col-md-9">
             <label>Keywords</label>
             <input type="text" asp-for="keywords" class="form-control" />
         </div>
