@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace snn
 {
-    public class snn_users
+    public class loginUsers
     {
         [Key]
         public int id { get; set; }
@@ -15,8 +15,7 @@ namespace snn
         public string phone { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public string country { get; set; }
-        public int? userid { get; set; }
-        public int? logingroupid { get; set; }
+        public string userid { get; set; }
+        public string logingroupid { get; set; }
     }
 }

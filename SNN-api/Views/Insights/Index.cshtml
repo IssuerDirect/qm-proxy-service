@@ -1,0 +1,114 @@
+﻿<div id="insights">
+    <h1>SNN Insights</h1>
+    <div v-if="msgBox" v-html="msgBox.html"></div>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="form-group">
+                <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control" v-on:change="search()">
+                    <option value="null">Filter Type</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form v-on:submit.prevent="search()" method="post">
+                <div class="input-group">
+                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
+                    <div class="input-group-append ">
+                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>   
+        <div class="col-md-3 text-right">
+            <button type="button" class="btn btn-outline-primary mr-3" data-toggle="modal" data-target="#importModal">
+                Import RSS
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Import RSS</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="text-center" id="importform" method="post">
+                                <div class="form-group">
+                                    <input type="url" class="form-control" v-model="url" placeholder="paste feed url" required />
+                                </div>
+                                <div class="input-group">
+                                    <select asp-items="ViewBag.types" v-model="refTypeId" class="form-control" required>
+                                        <option :value="null">Filter Type</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary" v-on:click="importInsights()">Import</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    
+                    <a class="btn btn-primary" href='@Url.Action("details")'>Add Insight</a>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead class="thead-blue">
+                    <tr>
+                        <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
+                        <th colspan="2">
+                            Title
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="insight of fullList">
+                        <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="insight.id" /></td>
+                        <td>
+                            {{ insight.title }}
+                            <div class="small text-muted">
+                                {{ dateFormat(insight.create_time) }}, {{ insight.typeTitle }}
+                            </div>
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group btn-group-sm">
+                                <a v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
+                                <a :href="'/admin/Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div v-if="showloader" class="text-center">
+                <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
+            </div>
+            <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
+                <div class="form-inline">
+                    <div class="input-group mx-auto">
+                        <select class="form-control" v-model="action">
+                            <option :value="null">Select Action</option>
+                            <option value="delete">Delete Selected</option>
+                            <option value="125">Set as Public</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script>
+    insightsListData = @Html.Raw(ViewData["insights"]);
+</script>
+<script src="/js/admin/insights.js?v=00"></script>

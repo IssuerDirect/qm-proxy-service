@@ -1,0 +1,214 @@
+﻿a {
+    color: royalblue;
+}
+
+.bg-black-opacity50 {
+    background-color: rgba(0,0,0,0.5);
+}
+
+span.form-check label {
+    margin-left: 5px;
+}
+
+h1 {
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+ul.navbar-nav > .nav-item > .nav-link {
+    color: #fff;
+}
+.navbar-expand-md ul.navbar-nav > li.nav-item > a.nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.table .thead-blue th {
+    color: #fff;
+    background-color: #0a3c85 !important;
+    border-color: #000;
+}
+
+.table .thead-dark th {
+    color: #fff;
+    background-color: #0a3c85;
+    border-color: #000;
+}
+
+    .table .thead-dark th a {
+        color: lightblue;
+    }
+
+/* Extra Small devices (desktops, 768px and up) */
+@media (max-width: 767px) {
+    ul.navbar-nav li.nav-item {
+        border-bottom: 1px solid rgba(255,255,255,.3);
+    }
+
+        ul.navbar-nav li.nav-item:last-child {
+            border-bottom: none;
+        }
+    ul.dropdown-menu li.nav-item {
+        padding: .25rem 1.5rem !important;
+    }
+
+}
+/* Small devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+}
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    ul.navbar-nav > li.nav-item {
+        /*background-position: right center;
+            background-image: url(images/menuseparator.png);
+            background-repeat: no-repeat;*/
+        border-right: 1px solid rgba(255,255,255,0.5);
+    }
+
+        ul.navbar-nav > li.nav-item:last-child {
+            background-image: none;
+        }
+
+        ul.navbar-nav > li.nav-item.dropdown:hover > ul.dropdown-menu {
+            display: block;
+        }
+    ul.navbar-nav .dropdown-menu {
+        box-shadow: 0 0 5px 0 rgba(0,0,0,0.3);
+    }
+}
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .dropdown-menu {
+        border: 1px solid white;
+        margin: 0;
+
+    }
+}
+
+.btn-primary {
+    background-color: #0a3c85;
+    border-color: #0a3c85;
+}
+
+.dropDownListControl {
+    position: relative;
+    display: inline-block;
+}
+
+.controlBox {
+    display: inline-block;
+}
+
+.dropDownListControl .controlBox {
+    border: 1px solid #ccc;
+    padding: 3px 7px;
+    cursor: pointer;
+}
+
+.dropDownListControl .fa {
+    margin-left: 5px;
+}
+
+.dropDownListControl ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropDownListOptionsContainer {
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background-color: #fff;
+    padding: 5px;
+    display: none;
+    z-index: 100;
+}
+
+.dropDownListControlOptions {
+    overflow-y: auto;
+    height: 100%;
+    margin-bottom: 3px;
+}
+
+    .dropDownListControlOptions label {
+        width: calc(100% - 20px);
+        vertical-align: top;
+    }
+
+.dropDownListControlClose {
+    cursor: pointer;
+    text-align: center;
+    background-color: #ddd;
+    padding: 5px;
+}
+
+    .dropDownListControlClose:hover {
+        background-color: #c4c4c4;
+    }
+.bg-primary {
+    background-color: #0a3c85;
+}
+
+.bg-gradient {
+    background: linear-gradient(to bottom, #0a3c85, #1651a7);
+}
+
+ul.navbar-nav > li > a {
+    color: #fff;
+}
+
+nav {
+    background: -webkit-linear-gradient(to bottom, #0a3c85, #1651a7); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #0a3c85, #1651a7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+li.nav-item a {
+    color: inherit;
+}
+
+ul.dropdown-menu li.nav-item {
+    border-bottom: 1px solid #ccc;
+}
+
+li.nav-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu {
+    border: 1px solid #ccc;
+    padding: 0;
+}
+
+li.nav-item.dropdown:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    left: 0;
+    width: 100%;
+}
+
+h1, h2, h3, h4 {
+    color: #0a3c85;
+}
+
+.table-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: #000000;
+    opacity: 0.5;
+}
+
+.table-loading-inner {
+    width: 100%;
+    height: 100%;
+}

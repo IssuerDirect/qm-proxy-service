@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="net3000.common" Version="4.1.0" />
+    <PackageReference Include="System.ServiceModel.Syndication" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SNN-api\SNN-api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CleanOutput">
+    <PropertyGroup>
+      <Clean>true</Clean>
+    </PropertyGroup>
+    <Message Importance="high" Text="Cleaning Build Output - Removing bin and obj Folders for Project: $(MSBuildProjectName)" />
+    <RemoveDir Condition="Exists('$(MSBuildProjectDirectory)\bin\')" Directories="$(MSBuildProjectDirectory)\bin\" />
+    <RemoveDir Condition="Exists('$(MSBuildProjectDirectory)\obj\')" Directories="$(MSBuildProjectDirectory)\obj\" />
+  </Target>
+
+</Project>

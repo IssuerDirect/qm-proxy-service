@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["title"] = "Login";
+    Layout = "~/views/shared/_appSplash.cshtml";
+}
+
+<div class="rounded bg-white p-3 shadow-10" style="width: 400px; display: none" id="loginApp">
+    <div class="tab-content border-0">
+        <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="loginTab" id="loginPanel">
+            <h4 class="text-center">Administration Login</h4>
+            <div v-if="msgBox" v-html="msgBox.html"></div>
+            <form id="loginForm" class="needs-validation" novalidate v-on:submit.prevent="verifyCaptcha()">
+                <div class="form-group">
+                    <input type="email" name="email" required class="form-control" id="loginEmail" placeholder="enter your email" v-model="email" />
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="password" name="password" required class="form-control" id="loginpassword" placeholder="and your password" v-model="password" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" v-if="!processing" type="submit">
+                                Login <i class="mt-1 fa fa-arrow-circle-right"></i>
+                            </button>
+                            <button disabled class="btn btn-primary" v-if="processing">
+                                <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                                Please Wait
+                            </button>
+                        </div>
+                    </div>
+                </div>                
+            </form>
+        </div>
+
+        <div id="passwordPanel" class="tab-pane fade" role="tabpanel" aria-labelledby="passwordTab">
+            <h4 class="text-center">Forgot Password?</h4>
+            <div v-if="msgBox" v-html="msgBox.html"></div>
+            <form id="loginLinkform" class="needs-validation" novalidate v-on:submit.prevent="verifyCaptcha2()">
+                <p>I'll send you a link you can use once to create a password and login.</p>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="email" placeholder="Enter your email" class="form-control" required v-model="email" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" v-if="!processing">
+                                <i class="mt-1 fa fa-arrow-circle-right"></i>
+                            </button>
+                            <button class="btn btn-primary" disabled v-if="processing">
+                                <i class="spinner-border spinner-border-sm"></i>
+                            </button>                            
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        
+    </div>
+    
+    
+</div>
+<script>
+    $(function () {
+        new Vue({
+            el: "#loginApp",
+            data: {
+                msgBox: @Html.Raw(ViewData["msgBox"]),
+                email: null,
+                password: null,
+                confirmPassword: null,
+                processing: false,
+                message: null,
+                token: null
+            },
+            methods: {
+                verifyCaptcha: async function () {
+                    net3000.common.verifyCaptcha({
+                        actionName: "loginUser",
+                        callBackFunction: this.login
+                    });
+                },
+                login: async function () {
+                    this.msgBox = {};
+                    $("#loginForm").removeClass("was-validated");
+                    if (!document.getElementById("loginForm").checkValidity()) {
+                        $("#loginForm").addClass("was-validated");
+                        return;
+                    }
+                    this.processing = true;
+                    let loginData = { email: this.email, password: this.password };
+                    if (net3000.common.getQueryString("ReturnUrl") != null) {
+                        loginData.ReturnUrl = net3000.common.getQueryString("ReturnUrl");
+                    }
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const myParam = urlParams.get('ReturnUrl');
+
+                    this.msgBox = await (await net3000.common.handlePromise({
+                        apiurl: "/login",
+                        method: "post",
+                        body: JSON.stringify(loginData)
+                    })).json();
+                    if (this.msgBox.code == 200) {
+                        if (myParam) {
+                            window.location = myParam;
+                        }
+                        else {
+                            window.location = this.msgBox.data;
+                            //window.location = "/dashboard";
+                        }
+                    }
+                    this.processing = false;
+                },
+                verifyCaptcha2: async function () {
+                    net3000.common.verifyCaptcha({
+                        actionName: "loginUser",
+                        callBackFunction: this.loginLink
+                    });
+                }
+            },
+            mounted: function () {
+                $("#loginApp").show();
+                this.token = net3000.common.getQueryString("token");
+            }
+        })
+    });
+</script>

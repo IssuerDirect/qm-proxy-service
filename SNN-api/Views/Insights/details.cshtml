@@ -1,0 +1,71 @@
+﻿@model snn.cc_SnnInsight
+<h1>
+    @ViewData["title"]
+</h1>
+
+@Html.Raw(TempData["msgBox"])
+
+<form asp-action="saveInsight" method="post">
+    <div class="form-group row">
+        <div class="col-sm-9">
+            <label>Title</label>
+            <input type="text" asp-for="title" class="form-control" />
+        </div>
+        <div class="col-sm-3">
+            <label>Type</label>
+            <select asp-items="ViewBag.types" class="form-control" asp-for="ref_InsightType">
+                <option value="null">Select Type</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Source</label>
+        <input type="url" asp-for="src" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Summary</label>
+        <textarea asp-for="summary" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Feature Image</label>
+        <input type="url" asp-for="thumb" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <textarea asp-for="body" id="body" width="100%"></textarea>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <label>Author</label>
+            <input type="text" asp-for="author" class="form-control" />
+        </div>
+        <div class="col-md-9">
+            <label>Keywords</label>
+            <input type="text" asp-for="keywords" class="form-control" />
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="id" />
+
+    <div class="border-top border-bottom py-2 mt-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
+            </div>
+            <div class="col text-right">
+                <button class="btn-primary btn" type="submit">Save</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://cdn.ckeditor.com/ckeditor5/29.2.0/classic/ckeditor.js"></script>
+
+<script>
+    $(function () {
+        createEditor("#body");
+    })
+</script>

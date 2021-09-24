@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace snn
 {
     public class Startup
@@ -29,7 +30,8 @@ namespace snn
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<platformDB>(x => x.UseMySql(Configuration.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(Configuration.GetConnectionString("PlatformID"))));
-
+            services.AddDbContextPool<companyHubDB>(x => x.UseMySql(Configuration.GetConnectionString("company_hub"), ServerVersion.AutoDetect(Configuration.GetConnectionString("company_hub"))));
+            services.AddDbContextPool<peopleHubDB>(x => x.UseMySql(Configuration.GetConnectionString("people_hub"), ServerVersion.AutoDetect(Configuration.GetConnectionString("people_hub"))));          
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -39,13 +41,28 @@ namespace snn
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com", "http://snn.alpha.svc.cluster.local", "https://snn.isdrdev.com", "http://snn.alpha")
+                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com", "http://snn.alpha.svc.cluster.local", "http://snn.isdrdev.com")
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
+            services.AddControllersWithViews();
+            services.AddAuthentication("CookieAuthentication")
+                 .AddCookie("CookieAuthentication", config =>
+                 {
+                     config.Cookie.Name = "loginUser";
+                     config.LoginPath = "/messageid/loginrequired";
+                     config.LogoutPath = "/logout";
+                 });
+            services.AddAntiforgery(options =>
+            {
+                // Set Cookie properties using CookieBuilder properties†.
+                options.FormFieldName = "AntiforgeryFieldname";
+                options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+                options.SuppressXFrameOptionsHeader = false;
+            });
         }
-
+       
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -59,10 +76,10 @@ namespace snn
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors("CorsPolicy");
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
