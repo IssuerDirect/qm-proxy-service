@@ -24,5 +24,6 @@ namespace snn
         public string summary { get; set; }
         public string body { get; set; }
         public string author { get; set; }
+        public string title { get; set; }
     }
 }
