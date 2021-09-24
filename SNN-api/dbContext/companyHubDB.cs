@@ -16,6 +16,8 @@ namespace snn
         }
         public DbSet<cc_SnnInsight> cc_SnnInsight { get; set; }
         public DbSet<ref_InsightType> ref_InsightType { get; set; }
+        public DbSet<cc_Conference> cc_Conference { get; set; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
