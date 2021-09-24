@@ -19,10 +19,11 @@ namespace snn.Controllers
         lib clib = new lib();
         SNNLib lib = new SNNLib();
         int pageSize = 24;
-        public publicController(IConfiguration config, platformDB platformDB)
+        public publicController(IConfiguration config, peopleHubDB peopleHubDB, companyHubDB companyHubDB)
         {
             lib.config = config;
-            lib.platformDB = platformDB;
+            lib.companyhubDB = companyHubDB;
+            lib.peopleHubDB = peopleHubDB;
             clib.myConfiguration = config;
         }
 
@@ -67,17 +68,17 @@ namespace snn.Controllers
         public apiResponse loggedin(Dictionary<string, string> user)
         {
             if (!user.ContainsKey("email")) { return null; }
-            var users = lib.platformDB.snn_users.Where(u => u.userid == user["userid"]).FirstOrDefault();
+            var users = lib.peopleHubDB.loginUsers.Where(u => u.userid == user["userid"]).FirstOrDefault();
             if (users == null)
             {
-                users = new snn_users();
+                users = new loginUsers();
                 merge();
-                lib.platformDB.snn_users.Add(users);
+                lib.peopleHubDB.loginUsers.Add(users);
             }
             else
             {
                 merge();
-                lib.platformDB.snn_users.Update(users);
+                lib.peopleHubDB.loginUsers.Update(users);
             }
 
             void merge()
@@ -91,8 +92,6 @@ namespace snn.Controllers
                 users.firstName = user["first_name"];
                 users.lastname = user["last_name"];
                 users.phone = user["phone"];
-                users.ref_Country = user["ref_Country"];
-                users.additional = user["additional"];
             }
 
             string token = lib.GenerateJSONWebToken(users);

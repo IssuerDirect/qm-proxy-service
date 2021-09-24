@@ -29,7 +29,7 @@ namespace snn
         lib clib = new lib();
         public platformDB platformDB;
         public companyHubDB companyhubDB;
-        public peopleDB peopleDB;
+        public peopleHubDB peopleHubDB;
         public IConfiguration config {
             set {
                 clib.myConfiguration = value;
@@ -42,7 +42,7 @@ namespace snn
         public loginUsers user;
         public apiResponse logMeIn(Dictionary<string, string> inputUser, HttpContext myContext = null)
         {
-            var possibleUsers = platformDB.snn_users.Where(u => u.email == inputUser["email"]);
+            var possibleUsers = peopleHubDB.loginUsers.Where(u => u.email == inputUser["email"]);
             if (inputUser.ContainsKey("logingroupid"))
             {
                 possibleUsers = possibleUsers.Where(u => u.logingroupid == inputUser["logingroupid"]);

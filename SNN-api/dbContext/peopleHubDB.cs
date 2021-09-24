@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace snn
 {
-    public class peopleDB : DbContext
+    public class peopleHubDB : DbContext
     {
         public IConfiguration myConfig;
-        public peopleDB(DbContextOptions<peopleDB> options = null)
+        public peopleHubDB(DbContextOptions<peopleHubDB> options = null)
             : base(options)
         {
         }
         public DbSet<pi_User> pi_User { get; set; }
+        public DbSet<loginUsers> loginUsers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

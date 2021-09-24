@@ -19,9 +19,9 @@ namespace snn.Controllers
         lib clib = new lib();
         SNNLib lib = new SNNLib();
         int pageSize = 24;
-        public AdminController(IConfiguration config, platformDB platformDB)
+        public AdminController(IConfiguration config, peopleHubDB peopleHubDB)
         {
-            lib.platformDB = platformDB;
+            lib.peopleHubDB = peopleHubDB;
             lib.config = config;
             clib.myConfiguration = config;
         }

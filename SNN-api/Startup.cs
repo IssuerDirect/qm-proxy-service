@@ -31,7 +31,7 @@ namespace snn
         {
             services.AddDbContextPool<platformDB>(x => x.UseMySql(Configuration.GetConnectionString("PlatformID"), ServerVersion.AutoDetect(Configuration.GetConnectionString("PlatformID"))));
             services.AddDbContextPool<companyHubDB>(x => x.UseMySql(Configuration.GetConnectionString("company_hub"), ServerVersion.AutoDetect(Configuration.GetConnectionString("company_hub"))));
-            services.AddDbContextPool<peopleDB>(x => x.UseMySql(Configuration.GetConnectionString("people_hub"), ServerVersion.AutoDetect(Configuration.GetConnectionString("people_hub"))));          
+            services.AddDbContextPool<peopleHubDB>(x => x.UseMySql(Configuration.GetConnectionString("people_hub"), ServerVersion.AutoDetect(Configuration.GetConnectionString("people_hub"))));          
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
