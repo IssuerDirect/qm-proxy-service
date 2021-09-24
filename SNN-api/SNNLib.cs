@@ -145,7 +145,8 @@ namespace snn
                     type = url,
                     pi_Person = user.userid,
                     src = i.Links.FirstOrDefault().Uri.ToString(),
-                    ref_InsightType = type
+                    ref_InsightType = type,
+                    create_time=DateTime.Now 
                 }).ToList();
             }
             catch { }
