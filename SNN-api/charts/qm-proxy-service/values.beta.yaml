@@ -1,0 +1,17 @@
+ingress:
+  dnsName: &dnsName beta-qm-proxy.isdrdev.com
+  secretName: &secretName beta-qm-proxy-isdrdev-com
+  enabled: true
+  className: ""
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: *dnsName
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - *dnsName
+    secretName: *secretName
