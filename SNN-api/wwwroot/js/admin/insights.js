@@ -52,15 +52,19 @@ $(function () {
                 } else {
                     $("#importform").remove("was-validated");
                     if (this.refTypeId !== null && this.url !== "") {
+         $('#importModal').modal('toggle');
                         var res = await (await net3000.common.handlePromise({
                             apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method: 'POST'
                         })).json();
-                        this.search();
-                        if (res.success) {
-                            this.fullList = this.fullList.unshift(res.data);
-                        }
+                       
+                            this.fullList = res.data;
+                        this.currentPage = ((res.count / 24) - 1).toString().split('.')[0];
+                        if (this.currentPage < 0)
+                            this.currentPage = 0;
+                            this.totalCount += res.count;
                         this.msgBox = res;
-                        $('#importModal').modal().hide();
+                        this.keywords = '';
+                        this.typeId = null;
                     }
                 }
 

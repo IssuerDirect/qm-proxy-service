@@ -18,7 +18,7 @@ namespace snn.Controllers
         apiResponse myResponse;
         net3000.common.lib clib = new net3000.common.lib();
         SNNLib lib = new SNNLib();
-        int pageSize = 24;
+        int pageSize = 20;
 
         public InsightsController(IConfiguration configuration,  companyHubDB snnDB,platformDB _platformDB)
         {
@@ -39,7 +39,7 @@ namespace snn.Controllers
             }
             if (!string.IsNullOrEmpty(keywords))
             {
-                insightQuery = insightQuery.Where(a => a.src.ToLower().Contains(keywords.ToLower()));
+                insightQuery = insightQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
             }
             myResponse.count = insightQuery.Count();
             myResponse.data = insightQuery.OrderByDescending(a => a.create_time).Include(a => a.ref_InsightTypeObject).Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
@@ -89,14 +89,14 @@ namespace snn.Controllers
         }
 
         [HttpPost("/admin/Insights/import")]
-        public apiResponse importInsight([FromQuery] string url, [FromQuery] string  typeID)
+        public IActionResult importInsight([FromQuery] string url, [FromQuery] int  typeID)
         {
-            if (!readContext()) { return standardMessages.unauthorized; }
-            var importedList = lib.readFeed(url, Convert.ToInt32(typeID));
+            if (!readContext()) { return NotFound(standardMessages.unauthorized); }
+            var importedList = lib.readFeed(url, typeID);
             myResponse = standardMessages.saved;
             myResponse.data = importedList;
             myResponse.count = importedList.Count;
-            return myResponse;
+            return Json(myResponse);
         }
 
         [HttpPost("/admin/Insights/details")]
