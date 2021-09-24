@@ -23,55 +23,88 @@
             <button type="button" class="btn btn-outline-primary mr-3" data-toggle="modal" data-target="#importModal">
                 Import RSS
             </button>
-            <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
-        </div>
-    </div>
 
-    <table class="table">
-        <thead class="thead-blue">
-            <tr>
-                <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
-                <th colspan="2">
-                    Title
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="insight of fullList">
-                <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="insight.id" /></td>
-                <td>
-                    {{ insight.title }}
-                    <div class="small text-muted">
-                        {{ dateFormat(insight.create_time) }}, {{ insight.type }}
+            <!-- Modal -->
+            <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Import By URL</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="text-center" id="importform" method="post">
+                                <select asp-items="ViewBag.types" v-model="refTypeId" class="form-control" required>
+                                    <option value="">Filter Type</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <input type="url" class="form-control" v-model="url" placeholder="paste feed url" required />
+
+                                    <button type="submit" class="btn btn-primary" v-on:click="importInsights()">Import</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
                     </div>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group btn-group-sm">
-                        <a v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
-                        <a :href="'/admin/Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                </div>
+            </div>
+
+    
+                    <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead class="thead-blue">
+                    <tr>
+                        <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
+                        <th colspan="2">
+                            Title
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="insight of fullList">
+                        <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="insight.id" /></td>
+                        <td>
+                            {{ insight.title }}
+                            <div class="small text-muted">
+                                {{ dateFormat(insight.create_time) }}, {{ insight.type }}
+                            </div>
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group btn-group-sm">
+                                <a v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
+                                <a :href="'/admin/Insights/details/' + insight.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div v-if="showloader" class="text-center">
+                <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
+            </div>
+            <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
+                <div class="form-inline">
+                    <div class="input-group mx-auto">
+                        <select class="form-control" v-model="action">
+                            <option :value="null">Select Action</option>
+                            <option value="delete">Delete Selected</option>
+                            <option value="125">Set as Public</option>
+                        </select>
+                        <div class="input-group-append">
+                            <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>
+                        </div>
                     </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <div v-if="showloader" class="text-center">
-        <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
-    </div>
-    <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
-        <div class="form-inline">
-            <div class="input-group mx-auto">
-                <select class="form-control" v-model="action">
-                    <option :value="null">Select Action</option>
-                    <option value="delete">Delete Selected</option>
-                    <option value="125">Set as Public</option>
-                </select>
-                <div class="input-group-append">
-                    <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
