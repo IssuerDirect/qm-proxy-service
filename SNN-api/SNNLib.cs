@@ -139,6 +139,7 @@ namespace snn
                 {
                     headline = i.Title.Text,
                     occur = i.PublishDate.DateTime,
+                    id = Guid.NewGuid().ToString(),
                     summary = i.Summary.Text,
                     thumb = feed.ImageUrl.ToString(),
                     type = url,
