@@ -7,7 +7,7 @@
 
 <form asp-action="saveInsight" method="post">
     <div class="form-group row">
-        <div class="col-sm-6">
+        <div class="col-sm-9">
             <label>Title</label>
             <input type="text" asp-for="title" class="form-control" />
         </div>
@@ -16,36 +16,36 @@
             <select asp-items="ViewBag.types" class="form-control" asp-for="ref_InsightType">
                 <option value="null">Select Type</option>
             </select>
-        </div>
-        <div class="col-sm-3">
-            <label>Date</label>
-            <input type="date" asp-for="occur" class="form-control" />
-        </div>
+        </div>        
+    </div>
+
+    <div class="form-group">
+        <label>Summary</label>
+        <textarea asp-for="summary" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Feature Image</label>
+        <input type="url" asp-for="thumb" class="form-control"/>
+    </div>
+    
+    <div class="form-group">
+        <textarea asp-for="body" id="body" width="100%"></textarea>
     </div>
 
     <div class="form-group row">
-        <label>Summary</label>
-        <input type="text" asp-for="summary" class="form-control" />
-    </div>
-    <img src="@Model.thumb" height="150px" />
-    <div class="form-group row">
-        <label>Head Line</label>
-        <input type="text" asp-for="headline" class="form-control" />
-    </div>
-    <div class="form-group row">
-        <textarea asp-for="body" id="body" width="100%" ></textarea>
-    </div>   
-    <div class="form-group row">
-        <label>Author</label>
-        <input type="text" asp-for="author" class="form-control" />
-    </div>
-    <div class="form-group row">
-        <label>Keywords</label>
-        <input type="text" asp-for="keywords" class="form-control" />
+        <div class="col-md-3">
+            <label>Author</label>
+            <input type="text" asp-for="author" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label>Keywords</label>
+            <input type="text" asp-for="keywords" class="form-control" />
+        </div>
     </div>
 
     <input type="hidden" asp-for="id" />
-    <input type="hidden" asp-for="create_time" />
+
     <div class="border-top border-bottom py-2 mt-3">
         <div class="row">
             <div class="col">

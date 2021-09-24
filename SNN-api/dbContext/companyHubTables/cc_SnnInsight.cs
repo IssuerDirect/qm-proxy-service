@@ -9,7 +9,7 @@ namespace snn
     public class cc_SnnInsight
     {
         [Key]
-        public string id { get; set; } = Guid.NewGuid().ToString();
+        public string id { get; set; }
         public DateTime? create_time { get; set; } = DateTime.Now;
         public DateTime? update_time { get; set; } = DateTime.Now;
         public DateTime? occur { get; set; }
