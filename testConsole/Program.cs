@@ -25,11 +25,11 @@ namespace testConsole
             snn.SNNLib lib = new snn.SNNLib();
             lib.config = configuration;
 
-            var getThis = readFeed("http://feeds.feedburner.com/brontecapital");
+            var getThis = readFeed("https://acquirersmultiple.com/feed", 2);
             //using var reader = XmlReader.Create(url);
             //var feed = SyndicationFeed.Load(reader);
             //var items = feed.Items.Where(f => f.PublishDate > DateTime.Now.Date).Count();
-            List<snn.cc_SnnInsight> readFeed(string url) {
+            List<snn.cc_SnnInsight> readFeed(string url, int type) {
                 var results = new List<snn.cc_SnnInsight>();
                 try {
                     using var reader = XmlReader.Create(url);
@@ -41,10 +41,9 @@ namespace testConsole
                     summary = i.Summary.Text,
                     thumb = feed.ImageUrl.ToString(),
                     type = url,
-                    src = i.Links.First().ToString()
+                    src = i.Links.FirstOrDefault().Uri.ToString(),
+                    ref_InsightType = type
                     }).ToList();
-
-
                 }
                 catch { }
                 return results;
