@@ -19,12 +19,14 @@ namespace snn.Controllers
         SNNLib lib = new SNNLib();
         int pageSize = 50;
 
-        public alertsController(IConfiguration configuration, platformDB snnDB)
+        public alertsController(IConfiguration config, companyHubDB companyHubDB, peopleHubDB peopleHubDB)
         {
-            lib.platformDB = snnDB;
-            clib.myConfiguration = configuration;
-            lib.config = configuration;
+            lib.config = config;
+            lib.companyHubDB = companyHubDB;
+            lib.peopleHubDB = peopleHubDB;
+            clib.myConfiguration = config;
         }
+
         [HttpGet("/admin/Alerts")]
         public IActionResult Index(string keywords = null,int categoryId=0, int pageIndex = 0,bool json=false)
         {

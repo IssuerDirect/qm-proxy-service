@@ -18,10 +18,11 @@ namespace snn.Controllers
         lib clib = new lib();
         SNNLib lib = new SNNLib();
         int pageSize = 24;
-        public clientController(IConfiguration config, platformDB platformDB)
+        public clientController(IConfiguration config, companyHubDB companyHubDB, peopleHubDB peopleHubDB)
         {
             lib.config = config;
-            lib.platformDB = platformDB;
+            lib.companyHubDB = companyHubDB;
+            lib.peopleHubDB = peopleHubDB;
             clib.myConfiguration = config;
         }
 

@@ -16,10 +16,12 @@ namespace snn.Controllers
         SNNLib lib = new SNNLib();
         int pageSize = 24;
 
-        public snn_eventsController(IConfiguration configuration, platformDB snnDB)
+        public snn_eventsController(IConfiguration config, companyHubDB companyHubDB, peopleHubDB peopleHubDB)
         {
-            lib.platformDB = snnDB;
-            clib.myConfiguration = configuration;
+            lib.config = config;
+            lib.companyHubDB = companyHubDB;
+            lib.peopleHubDB = peopleHubDB;
+            clib.myConfiguration = config;
         }
 
         [HttpGet("/admin/events")]

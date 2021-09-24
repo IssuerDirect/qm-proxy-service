@@ -22,7 +22,7 @@ namespace snn.Controllers
         public publicController(IConfiguration config, peopleHubDB peopleHubDB, companyHubDB companyHubDB)
         {
             lib.config = config;
-            lib.companyhubDB = companyHubDB;
+            lib.companyHubDB = companyHubDB;
             lib.peopleHubDB = peopleHubDB;
             clib.myConfiguration = config;
         }

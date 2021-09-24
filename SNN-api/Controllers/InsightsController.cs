@@ -22,7 +22,7 @@ namespace snn.Controllers
 
         public InsightsController(IConfiguration configuration,  companyHubDB snnDB,platformDB _platformDB)
         {
-            lib.companyhubDB  = snnDB;
+            lib.companyHubDB  = snnDB;
             lib.platformDB = _platformDB;
             clib.myConfiguration = configuration;
         }
@@ -32,7 +32,7 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
-            IQueryable<cc_SnnInsight> insightQuery = lib.companyhubDB.cc_SnnInsight;
+            IQueryable<cc_SnnInsight> insightQuery = lib.companyHubDB.cc_SnnInsight;
             if (type.HasValue)
             {
                 insightQuery = insightQuery.Where(a => a.ref_InsightType == type.Value);
@@ -68,7 +68,7 @@ namespace snn.Controllers
                 }
             }
            // ViewBag.statuses = lib..ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-            ViewBag.types = lib.companyhubDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+            ViewBag.types = lib.companyHubDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
         }
 
         [HttpGet("/admin/Insights/details/{id?}")]
@@ -78,7 +78,7 @@ namespace snn.Controllers
             cc_SnnInsight model = new cc_SnnInsight();
             if (id!=null)
             {
-                model = lib.companyhubDB.cc_SnnInsight.Where(i => i.id == id).FirstOrDefault();
+                model = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == id).FirstOrDefault();
                 if (model == null)
                 {
                     return NotFound();
@@ -96,17 +96,17 @@ namespace snn.Controllers
             if (insight.id == null)
             {
                 insight.create_time = DateTime.Now;
-                lib.companyhubDB.cc_SnnInsight.Add(insight);
+                lib.companyHubDB.cc_SnnInsight.Add(insight);
             }
             else
             {
-                myInsight = lib.companyhubDB.cc_SnnInsight.Where(i => i.id == insight.id).FirstOrDefault();
+                myInsight = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == insight.id).FirstOrDefault();
                 if (myInsight == null) { return NotFound(); }
                 clib.mergeChanges(myInsight, insight);
                 insight.update_time = DateTime.Now;
-                lib.companyhubDB.cc_SnnInsight.Update(myInsight);
+                lib.companyHubDB.cc_SnnInsight.Update(myInsight);
             }
-            lib.companyhubDB.SaveChanges();
+            lib.companyHubDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
             fillDataBags(insight.id);
@@ -119,11 +119,11 @@ namespace snn.Controllers
         {
             if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => a).ToList();
-            var tobeRemoved = lib.companyhubDB.cc_SnnInsight.Where(a => IDS.Contains(a.id)).ToList();
+            var tobeRemoved = lib.companyHubDB.cc_SnnInsight.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
             {
-                lib.companyhubDB.cc_SnnInsight.RemoveRange(tobeRemoved);
-                lib.companyhubDB.SaveChanges();
+                lib.companyHubDB.cc_SnnInsight.RemoveRange(tobeRemoved);
+                lib.companyHubDB.SaveChanges();
                 myResponse = standardMessages.deleted;
                 myResponse.data = ids;
             }

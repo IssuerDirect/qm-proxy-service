@@ -28,7 +28,7 @@ namespace snn
     {
         lib clib = new lib();
         public platformDB platformDB;
-        public companyHubDB companyhubDB;
+        public companyHubDB companyHubDB;
         public peopleHubDB peopleHubDB;
         public IConfiguration config {
             set {
