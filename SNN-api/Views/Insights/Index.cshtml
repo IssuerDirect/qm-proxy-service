@@ -1,5 +1,5 @@
 ﻿<div id="insights">
-    <h1>{{title}}</h1>
+    <h1>SNN Insights</h1>
     <div v-html="msgBox"></div>
     <div class="row mb-4">
         <div class="col-md-3">
@@ -9,8 +9,7 @@
                 </select>
             </div>
         </div>
-
-        <div class="col-md-3">
+        <div class="col-md-6">
             <form v-on:submit.prevent="search()" method="post">
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
@@ -20,44 +19,11 @@
                 </div>
             </form>
         </div>   
-        <div class="col-md-3">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">
-                Import
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Import By URL</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="form-inline" id="importform"  method="post">
-                                <label>Url</label>
-                                <input type="text" class="form-control" v-model="url" required />
-                                <select asp-items="ViewBag.types" v-model="refTypeId"  class="form-control" required>
-                                    <option value="">Filter Type</option>
-                                </select>
-                                <button type="submit" class="btn btn-primary"  v-on:click="importInsights()">Import</button>
-                            </form>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="col-md-3 text-right">
+            <button type="button" class="btn btn-outline-primary mr-3" data-toggle="modal" data-target="#importModal">
+                Import RSS
+            </button>
             <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
-
         </div>
     </div>
 
@@ -65,35 +31,20 @@
         <thead class="thead-blue">
             <tr>
                 <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
-                <th>
-                    ID
-                </th>
-                <th>
-                    Date
-                </th>
-                <th>
+                <th colspan="2">
                     Title
                 </th>
-                <th>
-                    Type
-                </th> <th></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="insight of fullList">
                 <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="insight.id" /></td>
                 <td>
-                    {{ insight.id }}
-                </td>
-                <td>
-                    {{ dateFormat(insight.create_time) }}
-                </td>
-                <td>
                     {{ insight.title }}
+                    <div class="small text-muted">
+                        {{ dateFormat(insight.create_time) }}, {{ insight.type }}
+                    </div>
                 </td>
-                <td>
-                    {{ insight.type }}
-                </td> 
                 <td class="text-right">
                     <div class="btn-group btn-group-sm">
                         <a v-on:click="deleteInsight(insight)" class="btn btn-outline-secondary btn-sm" title="Delete" id="insight.id"><i class="fa fa-trash"></i></a>
