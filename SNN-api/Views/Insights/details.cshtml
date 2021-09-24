@@ -20,6 +20,11 @@
     </div>
 
     <div class="form-group">
+        <label>Source</label>
+        <input type="url" asp-for="src" class="form-control" />
+    </div>
+
+    <div class="form-group">
         <label>Summary</label>
         <textarea asp-for="summary" class="form-control" rows="3"></textarea>
     </div>
@@ -31,11 +36,6 @@
 
     <div class="form-group">
         <textarea asp-for="body" id="body" width="100%"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label>Source</label>
-        <input type="url" asp-for="src" class="form-control" />
     </div>
 
     <div class="form-group row">
