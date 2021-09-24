@@ -16,16 +16,8 @@ $(function () {
             currentPage: 0
         },
         computed: {
-            title: function () {
-                //var sts = `${this.selectedStatus} ${this.packageTypes[this.packageType]} Packages`;
-                //if (this.packageType == 0) {
-                //    sts = "All " + sts;
-                //}                          
-                //return sts;
-                return 'SNN Insights';
-            },
             showloader: function () {
-                return this.totalCount > this.fullList.length ;
+                return this.totalCount > this.fullList.length;
             },
             showactionBar: function () {
                 if (this.recs.length > 0) { return "display: block;" } else { return "display: none;"; }
@@ -44,65 +36,64 @@ $(function () {
                     }
                 }
             },
-            search: async  function () {
+            search: async function () {
                 this.currentPage = 0;
                 var items = await (await net3000.common.handlePromise({
                     apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&json=true`
                 })).json();
                 this.fullList = items.data;
                 this.totalCount = items.count;
-                this.msgBox = items.html;
             },
             importInsights: async function () {
 
                 if (!document.getElementById("importform").checkValidity()) {
-                    $("#importform").addClass("was-validated"); 
+                    $("#importform").addClass("was-validated");
                 } else {
                     $("#importform").remove("was-validated");
-                if (this.refTypeId !== null && this.url !== "") {
-                   net3000.common.handlePromise({
-                        apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method:'POST'
-                    });
-                    this.search();
-                    $('#importModal').modal().hide();
-                }
+                    if (this.refTypeId !== null && this.url !== "") {
+                        net3000.common.handlePromise({
+                            apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method: 'POST'
+                        });
+                        this.search();
+                        $('#importModal').modal().hide();
+                    }
                 }
 
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
-                this.currentPage+=1;
+                this.currentPage += 1;
                 var nextPage = await (await net3000.common.handlePromise({
                     apiurl: `/admin/Insights/?pageIndex=${this.currentPage}&keywords=${this.keywords}&Type=${this.typeId}&json=true`
                 })).json();
-                this.fullList =this.fullList.concat(nextPage.data);
+                this.fullList = this.fullList.concat(nextPage.data);
             },
-           async deleteInsight(item=null) {
+            async deleteInsight(item = null) {
                 let confirmResult = await Swal.fire({
                     title: 'Are you sure?',
-                    text: `You're about to delete insight# ${this.recs.length > 0? this.recs.join() : item.id}`,
+                    text: `You're about to delete insight# ${this.recs.length > 0 ? this.recs.join() : item.id}`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Delete'
                 });
                 if (confirmResult.value) {
                     this.processing = true;
-                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0? this.recs.join() : item.id}`, method: "Delete" })).json();
+                    var res = await (await net3000.common.handlePromise({ apiurl: `/admin/Insight?ids=${this.recs.length > 0 ? this.recs.join() : item.id}`, method: "Delete" })).json();
                     this.msgBox = res.html;
                     this.processing = false;
                     if (this.recs.length > 0) {
                         this.fullList = this.fullList.filter(c => !this.recs.includes(c.id));
                         this.totalCount = this.totalCount - this.recs.length;
-                        this.recs =  [];
+                        this.recs = [];
                     }
                     else {
                         this.fullList = this.fullList.filter(c => c.id != item.id);
                         this.totalCount = this.totalCount - 1;
-                    } 
-               }
+                    }
+                }
 
             }
         }
-    });    
+    });
 
 });

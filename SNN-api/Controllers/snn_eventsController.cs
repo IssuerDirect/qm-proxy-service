@@ -67,10 +67,14 @@ namespace snn.Controllers
             {
                 ViewData["title"] = "Create Event";
             }
-            ViewBag.status = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+            setBags();
             return View("details", model);
         }
-
+        void setBags()
+        {
+            ViewBag.status = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+            ViewBag.companies = lib.companyHubDB.ci_Company.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
+        }
         [HttpPost("/admin/events/details")]
         public IActionResult saveevent(cc_Conference _event)
         {

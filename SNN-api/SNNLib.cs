@@ -137,7 +137,7 @@ namespace snn
                 var items = feed.Items.ToList();
                 results = items.Select(i => new snn.cc_SnnInsight()
                 {
-                    headline = i.Title.Text,
+                    title = i.Title.Text,
                     occur = i.PublishDate.DateTime,
                     id = Guid.NewGuid().ToString(),
                     summary = i.Summary.Text,

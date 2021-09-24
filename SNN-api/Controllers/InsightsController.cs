@@ -42,7 +42,7 @@ namespace snn.Controllers
                 insightQuery = insightQuery.Where(a => a.src.ToLower().Contains(keywords.ToLower()));
             }
             myResponse.count = insightQuery.Count();
-            myResponse.data = insightQuery.OrderByDescending(a => a.id).ToList().Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
+            myResponse.data = insightQuery.OrderByDescending(a => a.create_time).ToList().Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
             if (json)
@@ -54,19 +54,16 @@ namespace snn.Controllers
             return View();
         }
 
-        void fillDataBags(string insightID = null)
+        void fillDataBags(cc_SnnInsight insightID = null)
         {
             if (insightID != null)
             {
-                if (insightID == "0")
-                {
-                    ViewData["title"] = "Create Insight";
-                }
-                else
-                {
-                    ViewData["title"] = "Edit Insight# " + insightID;
-                }
+                ViewData["title"] = "Edit Insight: " + insightID.title;
             }
+            else {
+                ViewData["title"] = "Create Insight";
+            }
+                           
            // ViewBag.statuses = lib..ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             ViewBag.types = lib.companyHubDB.ref_InsightType.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
         }
@@ -76,45 +73,53 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             cc_SnnInsight model = new cc_SnnInsight();
-            if (id!=null)
+            if (id != null)
             {
                 model = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == id).FirstOrDefault();
                 if (model == null)
                 {
                     return NotFound();
                 }
+                fillDataBags(model);
             }
-            fillDataBags(model.id);
+            else {
+                fillDataBags();
+            }
             return View("details", model);
         }
+
         [HttpPost("/admin/Insights/import")]
         public  IActionResult importInsight(string url,string  typeID)
         {
             if (!readContext()) { return Unauthorized(); } 
             return Ok(lib.readFeed(url,Convert.ToInt32( typeID)));
         }
+
         [HttpPost("/admin/Insights/details")]
         public IActionResult saveInsight(cc_SnnInsight insight)
         {
             if (!readContext()) { return Unauthorized(); }
             var myInsight = new cc_SnnInsight();
-            if (insight.id == null)
+            var mergeFields = new List<string> { "title", "ref_InsightType", "title", "author", "body", "keywords", "summary", "src" };
+            if (string.IsNullOrEmpty(insight.id))
             {
-                insight.create_time = DateTime.Now;
-                lib.companyHubDB.cc_SnnInsight.Add(insight);
+                myInsight.id = Guid.NewGuid().ToString();
+                myInsight.create_time = DateTime.Now;
+                clib.mergeChanges(myInsight, insight, mergeFields);
+                lib.companyHubDB.cc_SnnInsight.Add(myInsight);
             }
             else
             {
                 myInsight = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == insight.id).FirstOrDefault();
                 if (myInsight == null) { return NotFound(); }
-                clib.mergeChanges(myInsight, insight, new List<string> { "title", "ref_InsightType", "headline","author","body" , "keywords", "summary" });
+                clib.mergeChanges(myInsight, insight, mergeFields);
                 insight.update_time = DateTime.Now;
                 lib.companyHubDB.cc_SnnInsight.Update(myInsight);
             }
             lib.companyHubDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = insight;
-            fillDataBags(insight.id);
+            fillDataBags(insight);
             TempData["msgBox"] = myResponse.html;
             return RedirectToAction("details", new { id = insight.id });
         }
