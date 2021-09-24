@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using net3000;
 using net3000.common.models;
@@ -16,12 +17,13 @@ namespace snn.Controllers
         SNNLib lib = new SNNLib();
         int pageSize = 24;
 
-        public snn_eventsController(IConfiguration config, companyHubDB companyHubDB, peopleHubDB peopleHubDB)
+        public snn_eventsController(IConfiguration _config, companyHubDB _companyHubDB, peopleHubDB _peopleHubDB,platformDB _platformDB)
         {
-            lib.config = config;
-            lib.companyHubDB = companyHubDB;
-            lib.peopleHubDB = peopleHubDB;
-            clib.myConfiguration = config;
+            lib.config = _config;
+            lib.companyHubDB = _companyHubDB;
+            lib.peopleHubDB = _peopleHubDB;
+            lib.platformDB = _platformDB;
+            clib.myConfiguration = _config;
         }
 
         [HttpGet("/admin/events")]
@@ -59,7 +61,13 @@ namespace snn.Controllers
                 {
                     return NotFound();
                 }
-            } 
+                ViewData["title"] = $"Updateing Event {model.title}";
+            }
+            else
+            {
+                ViewData["title"] = "Create Event";
+            }
+            ViewBag.status = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             return View("details", model);
         }
 
