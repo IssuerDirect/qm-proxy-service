@@ -24,11 +24,11 @@ namespace testConsole
             clib.myConfiguration = configuration;
             snn.SNNLib lib = new snn.SNNLib();
             lib.config = configuration;
-
-            var url = "http://feeds.feedburner.com/brontecapital";
-            using var reader = XmlReader.Create(url);
-            var feed = SyndicationFeed.Load(reader);
-            var items = feed.Items.Where(f => f.PublishDate > DateTime.Now.Date).Count();
+            var encrypted = clib.encrypt("stocknewsnow10");
+            //var url = "http://feeds.feedburner.com/brontecapital";
+            //using var reader = XmlReader.Create(url);
+            //var feed = SyndicationFeed.Load(reader);
+            //var items = feed.Items.Where(f => f.PublishDate > DateTime.Now.Date).Count();
         }
     }
 }
