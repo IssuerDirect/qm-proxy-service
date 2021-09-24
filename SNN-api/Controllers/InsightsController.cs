@@ -100,7 +100,7 @@ namespace snn.Controllers
         {
             if (!readContext()) { return Unauthorized(); }
             var myInsight = new cc_SnnInsight();
-            var mergeFields = new List<string> { "title", "ref_InsightType", "title", "author", "body", "keywords", "summary" };
+            var mergeFields = new List<string> { "title", "ref_InsightType", "title", "author", "body", "keywords", "summary", "src" };
             if (string.IsNullOrEmpty(insight.id))
             {
                 myInsight.id = Guid.NewGuid().ToString();
