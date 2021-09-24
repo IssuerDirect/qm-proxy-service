@@ -102,7 +102,7 @@ namespace snn.Controllers
             {
                 myInsight = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == insight.id).FirstOrDefault();
                 if (myInsight == null) { return NotFound(); }
-                clib.mergeChanges(myInsight, insight);
+                clib.mergeChanges(myInsight, insight, new List<string> { "title", "ref_InsightType", "headline","author","body" , "keywords", "summary" });
                 insight.update_time = DateTime.Now;
                 lib.companyHubDB.cc_SnnInsight.Update(myInsight);
             }
