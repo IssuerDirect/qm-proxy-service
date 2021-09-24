@@ -2,21 +2,32 @@
     <h1>{{title}}</h1>
     <div v-html="msgBox"></div>
     <div class="row mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="form-group">
                 <select asp-items="ViewBag.types" v-model.number="typeId" class="form-control" v-on:change="search()">
                     <option value="null">Filter Type</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-3">
+            <form v-on:submit.prevent="search()" method="post">
+                <div class="input-group">
+                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
+                    <div class="input-group-append ">
+                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>   
+        <div class="col-md-3">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">
                 Import
             </button>
 
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -26,39 +37,25 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-md-8">
-                                    <label>Url</label>
-                                    <input type="text" class="form-control"  v-model="url" />
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <select asp-items="ViewBag.types" v-model.number="refTypeId" class="form-control" >
-                                            <option value="null">Filter Type</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary"  v-on:click="importInsights()">Import</button>
-                            </div>
+                            <form class="form-inline" id="importform"  method="post">
+                                <label>Url</label>
+                                <input type="text" class="form-control" v-model="url" required />
+                                <select asp-items="ViewBag.types" v-model="refTypeId"  class="form-control" required>
+                                    <option value="">Filter Type</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary"  v-on:click="importInsights()">Import</button>
+                            </form>
                         </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <form v-on:submit.prevent="search()" method="post">
-                <div class="input-group">
-                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
-                    <div class="input-group-append ">
-                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-3 text-right">
             <a class="btn btn-primary" href='@Url.Action("details")'>Create Insight</a>
 
         </div>
@@ -127,4 +124,4 @@
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
-<script src="/js/admin/insights.js?v=90"></script>
+<script src="/js/admin/insights.js?v=00"></script>

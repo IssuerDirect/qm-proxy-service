@@ -10,7 +10,7 @@ $(function () {
             recs: [],
             selectAll: false,
             msgBox: "",
-            refTypeId: null,
+            refTypeId: "",
             url: "",
             totalCount: insightsListData.count,
             currentPage: 0
@@ -51,11 +51,23 @@ $(function () {
                 })).json();
                 this.fullList = items.data;
                 this.totalCount = items.count;
+                this.msgBox = items.html;
             },
             importInsights: async function () {
-                var items = await (await net3000.common.handlePromise({
-                    apiurl: `/admin/Insights/import?url=${this.url}&typeID=${this.refTypeId}&json=true`
-                })).json();
+
+                if (!document.getElementById("importform").checkValidity()) {
+                    $("#importform").addClass("was-validated"); 
+                } else {
+                    $("#importform").remove("was-validated");
+                if (this.refTypeId !== null && this.url !== "") {
+                   net3000.common.handlePromise({
+                        apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method:'POST'
+                    });
+                    this.search();
+                    $('#importModal').modal().hide();
+                }
+                }
+
             },
             loadNextPage: async function () {
                 //not using this now. We're loading all account packages and filtering on page
