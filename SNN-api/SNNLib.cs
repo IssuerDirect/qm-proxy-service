@@ -39,7 +39,7 @@ namespace snn
             }
         }
         apiResponse myResponse = new apiResponse();
-        public snn_users user;
+        public loginUsers user;
         public apiResponse logMeIn(Dictionary<string, string> inputUser, HttpContext myContext = null)
         {
             var possibleUsers = platformDB.snn_users.Where(u => u.email == inputUser["email"]);
@@ -61,7 +61,7 @@ namespace snn
                 return myResponse;
             }
         }
-        public apiResponse loginResponse(snn_users login, HttpContext myContext = null)
+        public apiResponse loginResponse(loginUsers login, HttpContext myContext = null)
         {
             if (myContext != null )
             {
@@ -71,8 +71,7 @@ namespace snn
                     new Claim(ClaimTypes.Sid,login.id.ToString()),
                     new Claim(ClaimTypes.Role, login.logingroupid.ToString()),
                     new Claim(ClaimTypes.Email,login.email),
-                    new Claim(ClaimTypes.Hash,login.password),
-                    new Claim(ClaimTypes.Expiration,DateTime.Now.AddMonths(3).ToString()),
+                    new Claim(ClaimTypes.Expiration,DateTime.Now.AddHours(12).ToString()),
                 };
                 var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
                 var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
@@ -95,7 +94,7 @@ namespace snn
                 return "/admin/insights";
             }
         }
-        public string GenerateJSONWebToken(snn_users user)
+        public string GenerateJSONWebToken(loginUsers user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clib.appSetting("Token")));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
@@ -106,8 +105,7 @@ namespace snn
                     new Claim(ClaimTypes.Name,user.firstName.ToString()),
                     new Claim(ClaimTypes.Sid,user.id.ToString()),
                     new Claim(ClaimTypes.Role, user.logingroupid.ToString()),
-                    new Claim(ClaimTypes.Email,user.email),
-                    new Claim(ClaimTypes.Hash,user.password)
+                    new Claim(ClaimTypes.Email,user.email)
                 });
             tokenDescriptor.SigningCredentials = credentials;
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -115,13 +113,13 @@ namespace snn
             return tokenHandler.WriteToken(token);
         }
 
-        public snn_users myUser(ClaimsPrincipal myUser)
+        public loginUsers myUser(ClaimsPrincipal myUser)
         {
             if (user != null) { return user; }
             if (myUser.FindFirst(ClaimTypes.Sid) != null)
             {
                 int userID = int.Parse(myUser.FindFirst(ClaimTypes.Sid)?.Value);
-                user = new snn_users();
+                user = new loginUsers();
                 user.id = userID;
                 user.firstName = myUser.FindFirst(ClaimTypes.Name)?.Value;
                 user.logingroupid = myUser.FindFirst(ClaimTypes.Role)?.Value;
