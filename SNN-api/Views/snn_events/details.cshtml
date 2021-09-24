@@ -28,23 +28,28 @@
             <input type="date" asp-for="end" class="form-control" />
         </div>
     </div>
-    <div class="form-group">
-        <label>CI Company</label>
-        <select asp-for="ci_Company" asp-items="ViewBag.companies" class="form-control">
-            <option value="0" selected>Select Company</option>
-        </select>
+    <div class="form-group row">
+        <div class="col-sm-4">
+            <label>CI Company</label>
+            <select asp-for="ci_Company" asp-items="ViewBag.companies" class="form-control">
+                <option value="0" selected>Select Company</option>
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <label>Slug</label>
+            <input type="text" asp-for="slug" class="form-control" />
+        </div>
+        <div class="col-sm-4">
+            <label>Status</label>
+            <select asp-for="ref_Status" asp-items="ViewBag.status" class="form-control">
+                <option value="0" selected>Select Status</option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
-        <label>Status</label>
-        <select asp-for="ref_Status" asp-items="ViewBag.status" class="form-control">
-            <option value="0" selected>Select Status</option>
-        </select>
+        <label>SRC</label>
+        <input type="url" asp-for="src" class="form-control" />
     </div>
-    <div class="form-group">
-        <label>Slug</label>
-        <input type="text" asp-for="slug" class="form-control" />
-    </div>
-    <img src="@Model.src" height="150px" />
     <div class="form-group">
         <label>Branding</label>
         <textarea asp-for="branding" rows="7" class="form-control"></textarea>
@@ -55,7 +60,9 @@
     </div>
     <div class="form-group">
         <label>Industry</label>
-        <input type="text" asp-for="industry" class="form-control" />
+        <select asp-for="industry" asp-items="ViewBag.industries" class="form-control">
+            <option value="0" selected>Select industry</option>
+        </select>
     </div>
     <div class="form-group">
         <label>Region</label>
