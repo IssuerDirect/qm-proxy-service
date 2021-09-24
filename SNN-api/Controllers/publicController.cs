@@ -31,30 +31,19 @@ namespace snn.Controllers
         public apiResponse insights(int index = 0)
         {
             myResponse = standardMessages.found;
-            var myList = lib.platformDB.snn_Insight.Where(i => i.id > 86 && (i.ref_Status == 125 || i.ref_Status == 25)).Include(i => i.ref_StatusObject).Include(i => i.ref_InsightType)
-                .Select(i => new snn_Insight()
-                {
-                    id = i.id,
-                    create_time = i.create_time,
-                    image = i.image,
-                    ref_InsightType = i.ref_InsightType,
-                    ref_Status = i.ref_Status,
-                    ref_StatusObject = i.ref_StatusObject,
-                    src = i.src,
-                    type = i.type,
-                    update_time = i.update_time
-                });
+            var myList = lib.companyHubDB.cc_SnnInsight.Include(i => i.ref_InsightType);
             myResponse.count = myList.Count();
             myResponse.data = myList.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
             return myResponse;
         }
+
         [HttpGet("/public/insight")]
-        public apiResponse insight(int id)
+        public apiResponse insight(string id)
         {
-            if (id != 0)
+            if (!string.IsNullOrEmpty(id))
             {
                 myResponse = standardMessages.found;
-                var model = lib.platformDB.snn_Insight.Where(i => i.id == id).Include(i => i.ref_StatusObject).Include(i => i.ref_InsightType).FirstOrDefault();
+                var model = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == id).Include(i => i.ref_InsightType).FirstOrDefault();
                 if (model != null)
                 {
                     myResponse.data = model;
@@ -64,6 +53,7 @@ namespace snn.Controllers
             myResponse = standardMessages.notFound;
             return myResponse;
         }
+
         [HttpPost("/public/loggedin")]
         public apiResponse loggedin(Dictionary<string, string> user)
         {
