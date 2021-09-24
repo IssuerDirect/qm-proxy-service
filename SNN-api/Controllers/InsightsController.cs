@@ -26,7 +26,7 @@ namespace snn.Controllers
             lib.platformDB = _platformDB;
             clib.myConfiguration = configuration;
         }
-        #region details
+       
         [HttpGet("/admin/Insights")]
         public IActionResult Index(string keywords = null, int? type = null,  int pageIndex = 0, bool json = false)
         {
@@ -133,7 +133,6 @@ namespace snn.Controllers
             }
             return myResponse;
         }
-        #endregion
 
         #region content
         [HttpGet("/admin/Insights/content")]
