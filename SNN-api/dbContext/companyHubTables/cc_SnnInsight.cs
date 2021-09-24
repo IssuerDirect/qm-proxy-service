@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace snn
 {
@@ -25,5 +27,16 @@ namespace snn
         public string body { get; set; }
         public string author { get; set; }
         public string title { get; set; }
+        [ForeignKey("ref_InsightType"), JsonIgnore]
+        public virtual ref_InsightType ref_InsightTypeObject { get; set; }
+        [NotMapped]
+        public string typeTitle {
+            get {
+                if (ref_InsightTypeObject != null) {
+                    return ref_InsightTypeObject.name;
+                }
+                return null;
+            }
+        }
     }
 }

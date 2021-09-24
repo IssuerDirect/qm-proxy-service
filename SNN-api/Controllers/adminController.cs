@@ -70,7 +70,15 @@ namespace snn.Controllers
             ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
             return View("index");
         }
-        
+        [HttpGet("/admin/companies")]
+        public apiResponse companies()
+        {
+            var cc = lib.companyHubDB.ci_Company.Select(a => new { a.id, company = a.name }).OrderBy(a => a.company).ToList();
+            myResponse = standardMessages.found;
+            myResponse.data = cc;
+            myResponse.count = cc.Count();
+            return myResponse;
+        }
         [HttpGet("/messageid/{messageID}")]
         public IActionResult messageid(string messageID)
         {
