@@ -20,12 +20,7 @@ namespace snn.Controllers
             lib.companyHubDB = snnDB;
             clib.myConfiguration = configuration;
         }
-        [HttpGet("/admin/videos")]
-        public IActionResult Index()
-        {
-            ViewData["title"] = "Homepage Videos";
-            return View();
-        }
+        [HttpGet("/admin/videos")] 
         public IActionResult Index(string keywords = null, int categoryId = 0, int pageIndex = 0, bool json = false)
         {
             if (!readContext()) { return Unauthorized(); }
@@ -41,11 +36,26 @@ namespace snn.Controllers
             }
        
             ViewData["videos"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
-
+            ViewData["title"] = "Homepage Videos";
             return View();
         }
 
-        [HttpPost("/admin/video")]
+        [HttpGet("/admin/latestvideo")]
+        public apiResponse latestvideo()
+        {
+            if (!readContext()) { return standardMessages.invalid; }
+            var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.create_time).FirstOrDefault();
+            if (video != null)
+            {
+                myResponse = standardMessages.found;
+                myResponse.data = video;
+                return myResponse;
+            }
+                myResponse = standardMessages.notFound; 
+                return myResponse;
+         }
+
+                [HttpPost("/admin/video")]
         public apiResponse saveVideo([FromBody] cc_SnnVideos video)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
