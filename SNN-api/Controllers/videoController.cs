@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc; 
 
 namespace snn.Controllers
 {
     public class videoController : Controller
     {
+        [HttpGet("/admin/videos")]
         public IActionResult Index()
         {
+            ViewData["title"] = "Homepage Videos";
             return View();
         }
     }
