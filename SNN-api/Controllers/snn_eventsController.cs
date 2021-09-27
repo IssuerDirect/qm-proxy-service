@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using net3000;
 using net3000.common.models;
 using System;
@@ -56,7 +57,7 @@ namespace snn.Controllers
             cc_Conference model = new cc_Conference();
             if (id.HasValue)
             {
-                model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).FirstOrDefault();
+                model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).Include(c => c.company).FirstOrDefault();
                 if (model == null)
                 {
                     return NotFound();

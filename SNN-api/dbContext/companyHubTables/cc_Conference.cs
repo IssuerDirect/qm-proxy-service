@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,5 +25,16 @@ namespace snn
         public string industry { get; set; }
         public string region { get; set; }
         public string host { get; set; }
+        [NotMapped]
+        public string companyName {
+            get {
+                if (company != null) {
+                    return company.name;
+                }
+                return null;
+            }
+        }
+        [ForeignKey("ci_Company")]
+        public virtual ci_Company company { get; set; }
     }
 }
