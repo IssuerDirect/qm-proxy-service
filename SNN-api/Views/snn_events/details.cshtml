@@ -31,9 +31,7 @@
     <div class="form-group row">
         <div class="col-sm-4">
             <label>CI Company</label>
-            <select asp-for="ci_Company" asp-items="ViewBag.companies" class="form-control">
-                <option value="0" selected>Select Company</option>
-            </select>
+            <input type="text" asp-for="ci_Company" class="form-control" />
         </div>
         <div class="col-sm-4">
             <label>Slug</label>
