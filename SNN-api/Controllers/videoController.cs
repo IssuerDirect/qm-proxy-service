@@ -18,10 +18,11 @@ namespace snn.Controllers
         public videoController(IConfiguration configuration, companyHubDB snnDB)
         {
             lib.companyHubDB = snnDB;
-            clib.myConfiguration = configuration;
+            lib.config = configuration;
+            clib.myConfiguration=configuration;
         }
         [HttpGet("/admin/videos")] 
-        public IActionResult Index(string keywords = null, int categoryId = 0, int pageIndex = 0, bool json = false)
+        public IActionResult Index(string keywords = null, int pageIndex = 0, bool json = false)
         {
             if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
@@ -55,7 +56,7 @@ namespace snn.Controllers
                 return myResponse;
          }
 
-                [HttpPost("/admin/video")]
+        [HttpPost("/admin/video")]
         public apiResponse saveVideo([FromBody] cc_SnnVideos video)
         {
             if (!readContext()) { return standardMessages.unauthorized; }
