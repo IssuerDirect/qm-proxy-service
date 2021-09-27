@@ -85,3 +85,50 @@
         </div>
     </div>
 </form>
+<script>
+import { async } from "q";
+
+    $(function () {
+        getCompanies();
+    });
+
+    async function getCompanies() {
+        var companies = [];
+        if (localStorage.getItem("companies")) {
+            let cachedData = JSON.parse(localStorage.getItem("companies"));
+            if (cachedData.updated < (new Date().getTime()) - 1000) {
+                companies = await loadCompanies();
+            }
+        } else {
+            companies = await loadCompanies();
+        }
+        new Vue({
+            el: "#companies",
+            data: {
+                companies: companies,
+                keywords: ""
+            },
+            computed: {
+                displayList: function () {
+                    if (this.keywords != "") {
+                        return this.companies.filter(c => c.name.toLowerCase().includes(this.keywords.toLowerCase()));
+                    }
+                    return [];
+                }
+            },
+            methods: {
+
+            }
+        })
+    }
+
+    async function loadCompanies() {
+        let res = await (await net3000.common.handlePromise({
+            apiurl: "/admin/companies"
+        })).json();
+        if (res.success) {
+            localStorage.setItem("companies", JSON.stringify({ updated: new Date().getTime(), companies: res.companies }));
+        }
+        return res.companies
+    }
+</script>

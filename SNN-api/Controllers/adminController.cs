@@ -18,7 +18,7 @@ namespace snn.Controllers
         apiResponse myResponse = new apiResponse();
         lib clib = new lib();
         SNNLib lib = new SNNLib();
-        int pageSize = 24;
+
         public AdminController(IConfiguration config, companyHubDB companyHubDB, peopleHubDB peopleHubDB)
         {
             lib.config = config;
@@ -70,15 +70,17 @@ namespace snn.Controllers
             ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
             return View("index");
         }
+
         [HttpGet("/admin/companies")]
         public apiResponse companies()
         {
-            var cc = lib.companyHubDB.ci_Company.Select(a => new { a.id, company = a.name }).OrderBy(a => a.company).ToList();
+            var cc = lib.companyHubDB.ci_Company.Select(a => new { a.id, a.name }).OrderBy(a => a.company).ToList();
             myResponse = standardMessages.found;
             myResponse.data = cc;
             myResponse.count = cc.Count();
             return myResponse;
         }
+
         [HttpGet("/messageid/{messageID}")]
         public IActionResult messageid(string messageID)
         {
