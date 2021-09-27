@@ -74,8 +74,7 @@ namespace snn.Controllers
         void setBags()
         {
             ViewBag.status = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-            ViewBag.companies = lib.companyHubDB.ci_Company.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-
+            //ViewBag.companies = lib.companyHubDB.ci_Company.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             ViewBag.industries = lib.companyHubDB.cc_Conference.Where(c => !string.IsNullOrEmpty(c.industry)).GroupBy(c => c.industry).OrderBy(o => o.Key).Select(a => new SelectListItem() { Value = a.Key.ToString(), Text = a.Key }).ToList();
         }
         [HttpPost("/admin/events/details")]
