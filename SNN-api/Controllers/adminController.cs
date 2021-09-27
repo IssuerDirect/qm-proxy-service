@@ -74,7 +74,7 @@ namespace snn.Controllers
         [HttpGet("/admin/companies")]
         public apiResponse companies()
         {
-            var cc = lib.companyHubDB.ci_Company.Select(a => new { a.id, a.name }).OrderBy(a => a.company).ToList();
+            var cc = lib.companyHubDB.ci_Company.Select(a => new { a.id, a.name }).OrderBy(a => a.name).ToList();
             myResponse = standardMessages.found;
             myResponse.data = cc;
             myResponse.count = cc.Count();

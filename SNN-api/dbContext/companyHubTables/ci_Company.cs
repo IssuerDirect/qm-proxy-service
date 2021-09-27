@@ -9,7 +9,7 @@ namespace snn
     public class ci_Company
     {
         [Key]
-        public int id { get; set; }
+        public string id { get; set; }
         public DateTime? create_time { get; set; }
         public DateTime? update_time { get; set; }
         public int ref_Source { get; set; }

@@ -30,8 +30,17 @@
     </div>
     <div class="form-group row">
         <div class="col-sm-4">
-            <label>CI Company</label>
-            <input type="text" asp-for="ci_Company" class="form-control" />
+            <label>Company</label>
+            <div id="companies">
+                <div style="position: relative" v-bind:class="{'d-none': selectedCompany.id}">
+                    <input type="text" class="form-control" v-model="keywords" />
+                    <div class="card" v-if="displayList.length > 0">
+                        <a class="dropdown-item" href="javascript:" v-for="company in displayList" v-on:click="selectedCompany = company; keywords = ''">{{company.name}}</a>
+                    </div>
+                </div>
+                <div class="form-control bg-light" v-if="selectedCompany.id">{{selectedCompany.name}} <i class="fa fa-times ml-3 text-danger" v-on:click="selectedCompany = {}" style="cursor: pointer"></i></div>
+                <input type="hidden" asp-for="ci_Company" v-model="selectedCompany.id" />
+            </div>
         </div>
         <div class="col-sm-4">
             <label>Slug</label>
@@ -84,18 +93,18 @@
     </div>
 </form>
 <script>
-import { async } from "q";
-
+    var companies = [];
     $(function () {
         getCompanies();
     });
 
     async function getCompanies() {
-        var companies = [];
         if (localStorage.getItem("companies")) {
             let cachedData = JSON.parse(localStorage.getItem("companies"));
-            if (cachedData.updated < (new Date().getTime()) - 1000) {
+            if (cachedData.updated < (new Date().getTime()) - 86400) {
                 companies = await loadCompanies();
+            } else {
+                companies = cachedData.companies;
             }
         } else {
             companies = await loadCompanies();
@@ -104,18 +113,22 @@ import { async } from "q";
             el: "#companies",
             data: {
                 companies: companies,
-                keywords: ""
+                keywords: "",
+                selectedCompany: {id: '@Model.ci_Company', name: '@Model.companyName'}
             },
             computed: {
                 displayList: function () {
                     if (this.keywords != "") {
-                        return this.companies.filter(c => c.name.toLowerCase().includes(this.keywords.toLowerCase()));
+                        var results = this.companies.filter(c => c.name.toLowerCase().includes(this.keywords.toLowerCase()));
+                        if (results.length > 0) {
+                            return results.slice(0, 10);
+                        }
                     }
                     return [];
                 }
             },
             methods: {
-
+                
             }
         })
     }
@@ -124,9 +137,9 @@ import { async } from "q";
         let res = await (await net3000.common.handlePromise({
             apiurl: "/admin/companies"
         })).json();
-        if (res.success) {
-            localStorage.setItem("companies", JSON.stringify({ updated: new Date().getTime(), companies: res.companies }));
+        if (res.code == 302) {
+            localStorage.setItem("companies", JSON.stringify({ updated: new Date().getTime(), companies: res.data }));
         }
-        return res.companies
+        return res.data
     }
 </script>
