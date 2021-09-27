@@ -51,6 +51,7 @@ namespace snn.Controllers
             }
             ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
             fillDataBags();
+            ViewData["title"] = "SNN Insights";
             return View();
         }
 

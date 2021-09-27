@@ -1,5 +1,5 @@
 ﻿<div id="insights">
-    <h1>SNN Insights</h1>
+    <h1>@ViewData["title"]</h1>
     <div v-if="msgBox" v-html="msgBox.html"></div>
     <div class="row mb-4">
         <div class="col-md-3">
@@ -95,13 +95,11 @@
         <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
             <div class="form-inline">
                 <div class="input-group mx-auto">
-                    <select class="form-control" v-model="action">
-                        <option :value="null">Select Action</option>
-                        <option value="delete">Delete Selected</option>
-                        <option value="125">Set as Public</option>
+                    <select class="form-control" > 
+                        <option :value="null">Delete Selected</option>
                     </select>
                     <div class="input-group-append">
-                        <button id="Button1" v-on:click="takeAction()" class="btn btn-primary">Go</button>
+                        <button id="Button1" v-on:click="deleteInsight()" class="btn btn-primary">Go</button>
                     </div>
                 </div>
             </div>
@@ -110,4 +108,4 @@
 <script>
     insightsListData = @Html.Raw(ViewData["insights"]);
 </script>
-<script src="/js/admin/insights.js?v=3"></script>
+<script src="/js/admin/insights.js?v=31"></script>
