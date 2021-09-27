@@ -39,8 +39,7 @@ $(function () {
             search: async function () {
                 this.currentPage = 0;
                 var items = await (await net3000.common.handlePromise({
-                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&Type=${this.typeId}&json=true`,
-                    method: "POST"
+                    apiurl: `/admin/Insights/?pageIndex=0&keywords=${this.keywords}&type=${this.typeId}&json=true`
                 })).json();
                 this.fullList = items.data;
                 this.totalCount = items.count;
