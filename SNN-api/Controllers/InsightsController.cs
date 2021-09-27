@@ -42,7 +42,7 @@ namespace snn.Controllers
                 insightQuery = insightQuery.Where(a => a.title.ToLower().Contains(keywords.ToLower()));
             }
             myResponse.count = insightQuery.Count();
-            myResponse.data = insightQuery.OrderByDescending(a => a.create_time).Include(a => a.ref_InsightTypeObject).Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
+            myResponse.data = insightQuery.OrderByDescending(a => a.create_time).ThenByDescending(a=>a.id ).Include(a => a.ref_InsightTypeObject).Skip(pageSize * pageIndex).Take(pageSize).ToList(); ;
             myResponse.pageSize = pageSize;
             myResponse.pageIndex = pageIndex;
             if (json)
