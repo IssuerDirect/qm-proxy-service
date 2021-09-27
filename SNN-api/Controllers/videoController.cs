@@ -29,11 +29,11 @@ namespace snn.Controllers
         public apiResponse latestvideo()
         {
             if (!readContext()) { return standardMessages.invalid; }
-            var vedio = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.id).FirstOrDefault();
-            if (vedio != null)
+            var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.id).FirstOrDefault();
+            if (video != null)
             {
                 myResponse = standardMessages.found;
-                myResponse.data = vedio;
+                myResponse.data = video;
                 return myResponse;
             }
             myResponse = standardMessages.notFound;
