@@ -28,7 +28,7 @@ namespace snn.Controllers
         [HttpGet("/admin/latestvideo")]
         public apiResponse latestvideo()
         {
-            //if (!readContext()) { return standardMessages.invalid; }
+            if (!readContext()) { return standardMessages.invalid; }
             var vedio = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.id).FirstOrDefault();
             if (vedio != null)
             {
