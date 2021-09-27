@@ -9,7 +9,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <form v-on:submit.prevent="search()" method="post">
                 <div class="input-group">
                     <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
@@ -19,7 +19,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3 text-right">
             <button type="button" class="btn btn-outline-primary mr-3" data-toggle="modal" data-target="#importModal">
                 Import RSS
             </button>
@@ -57,11 +57,9 @@
                     </div>
                 </div>
             </div>
-             
+
+            <a class="btn btn-primary" href='@Url.Action("details")'>Add Insight</a>
         </div>
-        <div class="col-md-3">
-        <a class="btn btn-primary" href='@Url.Action("details")'>Add Insight</a>
-    </div>
             </div>
 
             <table class="table">

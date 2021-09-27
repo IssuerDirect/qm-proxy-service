@@ -56,15 +56,16 @@ $(function () {
                         var res = await (await net3000.common.handlePromise({
                             apiurl: `/admin/Insights/import?typeID=${this.refTypeId}&url=${this.url}`, method: 'POST'
                         })).json();
-                       
+                        if (res.data.length > 0) {
                             this.fullList = res.data;
-                        this.currentPage = ((res.count / 24) - 1).toString().split('.')[0];
-                        if (this.currentPage < 0)
-                            this.currentPage = 0;
+                            this.currentPage = ((res.count / 24) - 1).toString().split('.')[0];
+                            if (this.currentPage < 0)
+                                this.currentPage = 0;
                             this.totalCount += res.count;
-                        this.msgBox = res;
-                        this.keywords = '';
-                        this.typeId = null;
+                            this.msgBox = res;
+                            this.keywords = '';
+                            this.typeId = null;
+                        }
                     }
                 }
 
