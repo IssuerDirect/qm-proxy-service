@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using net3000;
 using net3000.common.models;
 using System;
@@ -56,7 +57,7 @@ namespace snn.Controllers
             cc_Conference model = new cc_Conference();
             if (id.HasValue)
             {
-                model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).FirstOrDefault();
+                model = lib.companyHubDB.cc_Conference.Where(i => i.id == id).Include(c => c.company).FirstOrDefault();
                 if (model == null)
                 {
                     return NotFound();
@@ -73,8 +74,7 @@ namespace snn.Controllers
         void setBags()
         {
             ViewBag.status = lib.platformDB.ref_Status.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-            ViewBag.companies = lib.companyHubDB.ci_Company.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
-
+            //ViewBag.companies = lib.companyHubDB.ci_Company.Select(a => new SelectListItem() { Value = a.id.ToString(), Text = a.name }).ToList();
             ViewBag.industries = lib.companyHubDB.cc_Conference.Where(c => !string.IsNullOrEmpty(c.industry)).GroupBy(c => c.industry).OrderBy(o => o.Key).Select(a => new SelectListItem() { Value = a.Key.ToString(), Text = a.Key }).ToList();
         }
         [HttpPost("/admin/events/details")]
