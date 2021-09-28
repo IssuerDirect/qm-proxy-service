@@ -53,7 +53,19 @@ namespace snn.Controllers
             myResponse = standardMessages.notFound;
             return myResponse;
         }
-
+        [HttpGet("/public/latestvideo")]
+        public apiResponse latestvideo()
+        { 
+            var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.create_time).FirstOrDefault();
+            if (video != null)
+            {
+                myResponse = standardMessages.found;
+                myResponse.data = video;
+                return myResponse;
+            }
+            myResponse = standardMessages.notFound;
+            return myResponse;
+        }
         [HttpPost("/public/loggedin")]
         public apiResponse loggedin(Dictionary<string, string> user)
         {

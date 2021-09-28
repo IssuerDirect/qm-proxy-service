@@ -1,0 +1,37 @@
+﻿@model snn.cc_SnnVideos
+<h1>
+    @ViewData["title"]
+</h1>
+
+@Html.Raw(TempData["msgBox"])
+
+<form asp-action="saveVideo" method="post">
+    <div class="form-group"> 
+            <label>Title</label>
+            <input type="text" asp-for="title" class="form-control" /> 
+    </div>
+
+    <div class="form-group">
+        <label>Source</label>
+        <input type="url" asp-for="link" class="form-control" />
+    </div>
+     
+     
+    <div class="form-group "> 
+            <label>Author</label>
+            <input type="text" asp-for="author" class="form-control" />
+    </div>
+
+    <input type="hidden" asp-for="id" />
+
+    <div class="border-top border-bottom py-2 mt-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn-outline-secondary btn" href='@Url.Action("index")'>Back</a>
+            </div>
+            <div class="col text-right">
+                <button class="btn-primary btn" type="submit">Save</button>
+            </div>
+        </div>
+    </div>
+</form> 

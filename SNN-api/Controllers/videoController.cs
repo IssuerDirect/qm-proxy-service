@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace snn.Controllers
 {
+    [Route("/admin/video")]
     public class videoController : Controller
     {
         apiResponse myResponse;
@@ -21,10 +22,10 @@ namespace snn.Controllers
             lib.config = configuration;
             clib.myConfiguration=configuration;
         }
-        [HttpGet("/admin/videos")] 
+        [HttpGet("/admin/video")] 
         public IActionResult Index(string keywords = null, int pageIndex = 0, bool json = false)
         {
-            if (!readContext()) { return Unauthorized(); }
+            //if (!readContext()) { return Unauthorized(); }
             myResponse = standardMessages.found;
             var videos = lib.companyHubDB.cc_SnnVideos.Where(a =>  keywords == null || a.title.Contains(keywords)).OrderByDescending(a=>a.create_time).ToList();
             myResponse.count = videos.Count();
@@ -40,37 +41,48 @@ namespace snn.Controllers
             ViewData["title"] = "Homepage Videos";
             return View();
         }
-
-        [HttpGet("/admin/latestvideo")]
-        public apiResponse latestvideo()
+        [HttpGet("/admin/video/details/{id?}")]
+        public IActionResult details(int? id = null)
         {
-            if (!readContext()) { return standardMessages.invalid; }
-            var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.create_time).FirstOrDefault();
-            if (video != null)
+            //if (!readContext()) { return Unauthorized(); }
+            cc_SnnVideos model = new cc_SnnVideos();
+            if (id != null)
             {
-                myResponse = standardMessages.found;
-                myResponse.data = video;
-                return myResponse;
+                model = lib.companyHubDB.cc_SnnVideos.Where(i => i.id == id.Value).FirstOrDefault();
+                if (model == null)
+                {
+                    return NotFound();
+                }
             }
-                myResponse = standardMessages.notFound; 
-                return myResponse;
-         }
+            return View("details", model);
+        }
 
-        [HttpPost("/admin/video")]
-        public apiResponse saveVideo([FromBody] cc_SnnVideos video)
+
+        public IActionResult saveVideo([FromBody] cc_SnnVideos video)
         {
-            if (!readContext()) { return standardMessages.unauthorized; }
-            lib.companyHubDB.cc_SnnVideos.Add(video);
+            //if (!readContext()) { return Unauthorized(); }
+            if (video.id==0)
+            {
+                video.create_time = DateTime.Now; 
+                lib.companyHubDB.cc_SnnVideos.Add(video);
+            }
+            else
+            {
+            var  Videos = lib.companyHubDB.cc_SnnVideos.Where(i => i.id == video.id).FirstOrDefault();
+                if (Videos == null) { return  NotFound(); }
+                lib.companyHubDB.cc_SnnVideos.Update(video);
+            }
             lib.companyHubDB.SaveChanges();
             myResponse = standardMessages.saved;
-            myResponse.data = video;
-            return myResponse;
+            myResponse.data = video; 
+            TempData["msgBox"] = myResponse.html;
+            return RedirectToAction("details", new { id = video.id });
         }
 
         [HttpDelete("/admin/video")]
         public apiResponse delete([FromQuery] string ids)
         {
-            if (!readContext()) { return standardMessages.invalid; }
+            //if (!readContext()) { return standardMessages.invalid; }
             var IDS = ids.Split(',').Select(a => Convert.ToInt32(a)).ToList<int>();
             var tobeRemoved = lib.companyHubDB.cc_SnnVideos.Where(a => IDS.Contains(a.id)).ToList();
             if (tobeRemoved.Any())
