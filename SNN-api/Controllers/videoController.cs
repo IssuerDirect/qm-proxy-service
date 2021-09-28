@@ -22,6 +22,7 @@ namespace snn.Controllers
             lib.config = configuration;
             clib.myConfiguration=configuration;
         }
+
         [HttpGet("/admin/video")] 
         public IActionResult Index(string keywords = null, int pageIndex = 0, bool json = false)
         {
@@ -41,6 +42,7 @@ namespace snn.Controllers
             ViewData["title"] = "Homepage Videos";
             return View();
         }
+
         [HttpGet("/admin/video/details/{id?}")]
         public IActionResult details(int? id = null)
         {
@@ -57,7 +59,7 @@ namespace snn.Controllers
             return View("details", model);
         }
 
-
+        [HttpPost("/admin/video/saveVideo")]
         public IActionResult saveVideo([FromBody] cc_SnnVideos video)
         {
             //if (!readContext()) { return Unauthorized(); }
