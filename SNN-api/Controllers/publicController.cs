@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using net3000.common;
 using net3000.common.models;
 using Microsoft.EntityFrameworkCore;
+using static snn.Models.publicModels;
+using net3000.accounts.dbContext;
 
 namespace snn.Controllers
 {
@@ -18,13 +20,16 @@ namespace snn.Controllers
         apiResponse myResponse = new apiResponse();
         lib clib = new lib();
         SNNLib lib = new SNNLib();
+        emailMessage emsg = new emailMessage();
         int pageSize = 24;
         public publicController(IConfiguration config, peopleHubDB peopleHubDB, companyHubDB companyHubDB)
         {
             lib.config = config;
             lib.companyHubDB = companyHubDB;
-            lib.peopleHubDB = peopleHubDB;
+            lib.peopleHubDB = peopleHubDB; 
             clib.myConfiguration = config;
+            emsg.configuration = config;
+
         }
 
         [HttpGet("/public/insights")]
@@ -36,7 +41,23 @@ namespace snn.Controllers
             myResponse.data = myList.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
             return myResponse;
         }
-
+        [HttpPost("/public/issue")]
+        public IActionResult reportIssue(reportIssues issue)
+        {
+                emsg.setEmailTemplate = "report_issue";
+                emsg.emsg.Body = clib.replacePlaceholders(emsg.emsg.Body, issue);
+                emsg.subject = clib.replacePlaceholders(emsg.subject,issue);
+            if (clib.testMode)
+            {
+                emsg.sendTo.Add("info@net3000.ca");
+            }
+            else
+            {
+                emsg.sendTo.Add(clib.webmaster());
+            }
+            emsg.send();
+            return Ok();
+        }
         [HttpGet("/public/insight")]
         public apiResponse insight(string id)
         {
@@ -66,6 +87,7 @@ namespace snn.Controllers
             myResponse = standardMessages.notFound;
             return myResponse;
         }
+
         [HttpPost("/public/loggedin")]
         public apiResponse loggedin(Dictionary<string, string> user)
         {
