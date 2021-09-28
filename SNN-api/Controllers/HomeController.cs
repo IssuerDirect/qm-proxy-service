@@ -10,18 +10,12 @@ using net3000;
 
 namespace snn.Controllers
 {
-    [ApiController]
+    [ApiController, ApiExplorerSettings(GroupName = "Quote Media")]
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
         public HomeController(IConfiguration config) {
             myConfig = config;
-        }
-
-        [HttpGet("/")]
-        public string index()
-        {
-            return "Index";
         }
 
         [HttpGet("qm/{*queryvalues}")]

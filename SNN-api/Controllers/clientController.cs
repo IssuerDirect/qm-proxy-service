@@ -11,7 +11,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/client")]
+    [Route("/client"), ApiExplorerSettings(GroupName = "Client Actions")]
     public class clientController : Controller
     {
         apiResponse myResponse = new apiResponse();

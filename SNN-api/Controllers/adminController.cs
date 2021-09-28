@@ -12,7 +12,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/admin"), AutoValidateAntiforgeryToken]
+    [Route("/admin"), AutoValidateAntiforgeryToken, ApiExplorerSettings(GroupName = "Admin Actions")]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -27,6 +27,7 @@ namespace snn.Controllers
             clib.myConfiguration = config;
         }
 
+        [HttpGet("/admin")]
         public IActionResult Index()
         {
             ViewData["msgBox"] = "null";

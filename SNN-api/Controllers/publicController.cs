@@ -14,7 +14,7 @@ using net3000.accounts.dbContext;
 
 namespace snn.Controllers
 {
-    [Route("/public")]
+    [Route("/public"), ApiExplorerSettings(GroupName = "Public Actions")]
     public class publicController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -32,13 +32,19 @@ namespace snn.Controllers
 
         }
 
+        [HttpGet("/")]
+        public string index()
+        {
+            return "SNN API Application";
+        }
+
         /// <summary>
         /// Post Issue to admin.
         /// </summary>
         /// <param name="issue"></param>
         /// <returns></returns>
         /// <remarks>Post an issue with all details selected in the box. This will send an email to admin.</remarks>
-        [HttpPost("/public/issue"), ApiExplorerSettings(GroupName = "Public Actions")]
+        [HttpPost("/public/issue")]
         public IActionResult reportIssue(reportIssues issue)
         {
                 emsg.setEmailTemplate = "report_issue";
@@ -62,7 +68,7 @@ namespace snn.Controllers
         /// </summary>
         /// <returns></returns>
         /// <remarks>View latest video posted</remarks>
-        [HttpGet("/public/latestvideo"), ApiExplorerSettings(GroupName = "Public Actions")]
+        [HttpGet("/public/latestvideo")]
         public apiResponse latestvideo()
         { 
             var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.create_time).FirstOrDefault();

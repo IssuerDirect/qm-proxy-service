@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace snn.Controllers
 {
-    [Route("/admin/alerts"), AutoValidateAntiforgeryToken, Authorize]
+    [Route("/admin/alerts"), AutoValidateAntiforgeryToken, Authorize, ApiExplorerSettings(GroupName = "Alerts")]
     public class alertsController : Controller
     {
         apiResponse myResponse;
