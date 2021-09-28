@@ -32,16 +32,13 @@ namespace snn.Controllers
 
         }
 
-        [HttpGet("/public/insights")]
-        public apiResponse insights(int index = 0)
-        {
-            myResponse = standardMessages.found;
-            var myList = lib.companyHubDB.cc_SnnInsight.Include(i => i.ref_InsightType);
-            myResponse.count = myList.Count();
-            myResponse.data = myList.OrderByDescending(a => a.id).Skip(pageSize * index).Take(pageSize).ToList();
-            return myResponse;
-        }
-        [HttpPost("/public/issue")]
+        /// <summary>
+        /// Post Issue to admin.
+        /// </summary>
+        /// <param name="issue"></param>
+        /// <returns></returns>
+        /// <remarks>Post an issue with all details selected in the box. This will send an email to admin.</remarks>
+        [HttpPost("/public/issue"), ApiExplorerSettings(GroupName = "Public Actions")]
         public IActionResult reportIssue(reportIssues issue)
         {
                 emsg.setEmailTemplate = "report_issue";
@@ -58,23 +55,14 @@ namespace snn.Controllers
             emsg.send();
             return Ok();
         }
-        [HttpGet("/public/insight")]
-        public apiResponse insight(string id)
-        {
-            if (!string.IsNullOrEmpty(id))
-            {
-                myResponse = standardMessages.found;
-                var model = lib.companyHubDB.cc_SnnInsight.Where(i => i.id == id).Include(i => i.ref_InsightType).FirstOrDefault();
-                if (model != null)
-                {
-                    myResponse.data = model;
-                    return myResponse;
-                }
-            }
-            myResponse = standardMessages.notFound;
-            return myResponse;
-        }
-        [HttpGet("/public/latestvideo")]
+
+
+        /// <summary>
+        /// View Latest Video
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>View latest video posted</remarks>
+        [HttpGet("/public/latestvideo"), ApiExplorerSettings(GroupName = "Public Actions")]
         public apiResponse latestvideo()
         { 
             var video = lib.companyHubDB.cc_SnnVideos.OrderByDescending(v => v.create_time).FirstOrDefault();
@@ -88,55 +76,55 @@ namespace snn.Controllers
             return myResponse;
         }
 
-        [HttpPost("/public/loggedin")]
-        public apiResponse loggedin(Dictionary<string, string> user)
-        {
-            if (!user.ContainsKey("email")) { return null; }
-            var users = lib.peopleHubDB.loginUsers.Where(u => u.userid == user["userid"]).FirstOrDefault();
-            if (users == null)
-            {
-                users = new loginUsers();
-                merge();
-                lib.peopleHubDB.loginUsers.Add(users);
-            }
-            else
-            {
-                merge();
-                lib.peopleHubDB.loginUsers.Update(users);
-            }
+        //[HttpPost("/public/loggedin")]
+        //public apiResponse loggedin(Dictionary<string, string> user)
+        //{
+        //    if (!user.ContainsKey("email")) { return null; }
+        //    var users = lib.peopleHubDB.loginUsers.Where(u => u.userid == user["userid"]).FirstOrDefault();
+        //    if (users == null)
+        //    {
+        //        users = new loginUsers();
+        //        merge();
+        //        lib.peopleHubDB.loginUsers.Add(users);
+        //    }
+        //    else
+        //    {
+        //        merge();
+        //        lib.peopleHubDB.loginUsers.Update(users);
+        //    }
 
-            void merge()
-            {
-                users.email = user["email"];
-                users.userid = user["userid"];
-                if (user.ContainsKey("password"))
-                {
-                    users.password = clib.encrypt(user["password"]);
-                }
-                users.firstName = user["first_name"];
-                users.lastname = user["last_name"];
-                users.phone = user["phone"];
-            }
+        //    void merge()
+        //    {
+        //        users.email = user["email"];
+        //        users.userid = user["userid"];
+        //        if (user.ContainsKey("password"))
+        //        {
+        //            users.password = clib.encrypt(user["password"]);
+        //        }
+        //        users.firstName = user["first_name"];
+        //        users.lastname = user["last_name"];
+        //        users.phone = user["phone"];
+        //    }
 
-            string token = lib.GenerateJSONWebToken(users);
-            myResponse.data = token;
-            return myResponse;
-        }
+        //    string token = lib.GenerateJSONWebToken(users);
+        //    myResponse.data = token;
+        //    return myResponse;
+        //}
 
-        [HttpPost("/uploadImages")]
-        public ckeditorResponse uploadImages([FromQuery] string guid = null, [FromQuery] int? id = null)
-        {
-            ckeditorResponse fileList = new ckeditorResponse();
-            if (HttpContext.Request.Form.Files == null || HttpContext.Request.Form.Files.Count() == 0) { return new ckeditorResponse(); }
-            foreach (var file in HttpContext.Request.Form.Files)
-            {
-                string myName = clib.GetFriendlyLink(Path.GetFileNameWithoutExtension(file.FileName)) + Path.GetExtension(file.FileName);
-                var myStream = new MemoryStream();
-                file.CopyTo(myStream);
-                fileList.fileName = myName;
-            }
+        //[HttpPost("/uploadImages")]
+        //public ckeditorResponse uploadImages([FromQuery] string guid = null, [FromQuery] int? id = null)
+        //{
+        //    ckeditorResponse fileList = new ckeditorResponse();
+        //    if (HttpContext.Request.Form.Files == null || HttpContext.Request.Form.Files.Count() == 0) { return new ckeditorResponse(); }
+        //    foreach (var file in HttpContext.Request.Form.Files)
+        //    {
+        //        string myName = clib.GetFriendlyLink(Path.GetFileNameWithoutExtension(file.FileName)) + Path.GetExtension(file.FileName);
+        //        var myStream = new MemoryStream();
+        //        file.CopyTo(myStream);
+        //        fileList.fileName = myName;
+        //    }
 
-            return fileList;
-        }
+        //    return fileList;
+        //}
     }
 }
