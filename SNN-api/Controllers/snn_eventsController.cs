@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace snn.Controllers
 {
+    [Route("/admin/events"), Authorize, AutoValidateAntiforgeryToken]
     public class snn_eventsController : Controller
     {
         apiResponse myResponse;
