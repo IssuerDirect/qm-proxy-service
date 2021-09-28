@@ -41,7 +41,7 @@ namespace snn
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com", "http://snn.alpha.svc.cluster.local", "http://snn.isdrdev.com")
+                    builder => builder.WithOrigins("http://localhost:4200", "https://alpha.snn.network", "https://beta.snn.network", "https://stocknewsnow.com", "http://snn.alpha.svc.cluster.local", "http://snn.isdrdev.com", "https://alpha-snn.isdrdev.com")
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod());
@@ -56,7 +56,7 @@ namespace snn
                  });
             services.AddAntiforgery(options =>
             {
-                // Set Cookie properties using CookieBuilder properties†.
+                // Set Cookie properties using CookieBuilder propertiesï¿½.
                 options.FormFieldName = "AntiforgeryFieldname";
                 options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
                 options.SuppressXFrameOptionsHeader = false;
