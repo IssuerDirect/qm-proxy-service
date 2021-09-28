@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights")]
+    [Route("/admin/Insights"), Authorize, AutoValidateAntiforgeryToken]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
@@ -51,6 +51,7 @@ namespace snn.Controllers
             }
             ViewData["insights"] = System.Text.Json.JsonSerializer.Serialize(myResponse);
             fillDataBags();
+            ViewData["title"] = "SNN Insights";
             return View();
         }
 

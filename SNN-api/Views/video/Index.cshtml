@@ -1,0 +1,98 @@
+﻿
+
+<div id="videos">
+    <h1>@ViewData["title"]</h1>
+    <div v-html="msgBox"></div>
+    <div class="row mb-4">
+ 
+        <div class="col-md-6">
+
+            <form>
+                <div class="input-group">
+                    <input class="form-control" type="search" v-model="keywords" placeholder="search by title">
+                    <div class="input-group-append ">
+                        <button type="button" class="btn btn-secondary" v-on:click="search()">Search</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" href='@Url.Action("details")'>Create video</a>
+
+        </div>
+    </div>
+
+
+    <table class="table">
+        <thead class="thead-blue">
+            <tr>
+                <th><input type="checkbox" v-model="selectAll" v-on:change="selectionChange()" /></th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Author
+                </th>
+                <th>
+                    Link
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="video of fullList">
+                <td><input type="checkbox" class="chk" v-model.number="recs" name="recs" :value="video.id" /></td>
+                <td>
+                    {{ video.id }}
+                </td>
+                <td>
+                    {{ dateFormat(video.create_time) }}
+                </td>
+                <td>
+                    {{ video.title }}
+                </td>
+                <td>
+                    {{ video.author }}
+                </td>
+                <td>
+                    {{ video.link }}
+                </td>
+
+                <td class="text-right">
+
+                    <div class="btn-group btn-group-sm">
+                        <a v-on:click="deletevideo(video)" class="btn btn-outline-secondary btn-sm" title="Delete" :id="video.id"><i class="fa fa-trash"></i></a>
+                        <a :href="'video/details/' + video.id" class="btn btn-secondary" title="Edit"><i class="fa fa-edit"></i></a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div v-if="showloader" class="text-center">
+        <button v-on:click="loadNextPage()" class="btn btn-primary"> Load more ...</button>
+    </div>
+    <div id="MyPopup" class="py-4 text-center actionButtons fixed-bottom bg-black-opacity50" :style="showactionBar">
+        <div class="form-inline">
+            <div class="input-group mx-auto">
+                <select class="form-control" v-model="action">
+                    <option value="delete">Delete Selected</option>
+                </select>
+                <div class="input-group-append">
+                    <button id="Button1" v-on:click="deletevideo()" class="btn btn-primary">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    videosListData = @Html.Raw(ViewData["videos"]);
+</script>
+<script src="/js/admin/videos.js?v=990"></script>
