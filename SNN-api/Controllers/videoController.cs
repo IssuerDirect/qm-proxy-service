@@ -77,7 +77,6 @@ namespace snn.Controllers
             if (inputVideo.id == 0)
             {
                 lib.companyHubDB.cc_SnnVideos.Add(inputVideo);
-                lib.companyHubDB.SaveChanges();
                 dbVideo = inputVideo;
             }
             else
@@ -89,11 +88,11 @@ namespace snn.Controllers
                 dbVideo.link = inputVideo.link;
                 lib.companyHubDB.cc_SnnVideos.Update(dbVideo);
             }
-            
+            lib.companyHubDB.SaveChanges();
             myResponse = standardMessages.saved;
             myResponse.data = dbVideo;
             TempData["msgBox"] = myResponse.html;
-            return RedirectToAction("details", dbVideo);
+            return RedirectToAction("details", new { id = dbVideo.id });
         }
 
         [HttpDelete("/admin/video")]
