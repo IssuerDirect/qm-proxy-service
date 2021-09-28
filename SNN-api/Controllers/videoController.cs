@@ -81,7 +81,7 @@ namespace snn.Controllers
             myResponse = standardMessages.saved;
             myResponse.data = video; 
             TempData["msgBox"] = myResponse.html;
-            return RedirectToAction("details", new { id = video.id });
+            return RedirectToAction("details", video);
         }
 
         [HttpDelete("/admin/video")]
