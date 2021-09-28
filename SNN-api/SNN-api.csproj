@@ -1,10 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>snn</RootNamespace>
     <UserSecretsId>86c71e89-9a7d-478e-a66f-a3b2e14ed2f1</UserSecretsId>
     <AssemblyName>snn</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\newsroom\snn.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

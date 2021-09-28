@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>snn</name>
+    </assembly>
+    <members>
+        <member name="M:snn.Controllers.AdminController.logout">
+            <summary>
+            Linked from admin area top menu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:snn.Controllers.publicController.reportIssue(snn.Models.publicModels.reportIssues)">
+            <summary>
+            Post Issue to admin.
+            </summary>
+            <param name="issue"></param>
+            <returns></returns>
+            <remarks>Post an issue with all details selected in the box. This will send an email to admin.</remarks>
+        </member>
+        <member name="M:snn.Controllers.publicController.latestvideo">
+            <summary>
+            View Latest Video
+            </summary>
+            <returns></returns>
+            <remarks>View latest video posted</remarks>
+        </member>
+    </members>
+</doc>

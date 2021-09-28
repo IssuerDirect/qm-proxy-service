@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace snn.Controllers
 {
-    [Route("/admin/events"), Authorize, AutoValidateAntiforgeryToken]
+    [Route("/admin/events"), Authorize, AutoValidateAntiforgeryToken, ApiExplorerSettings(GroupName = "Events")]
     public class snn_eventsController : Controller
     {
         apiResponse myResponse;
