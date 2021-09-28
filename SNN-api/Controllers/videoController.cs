@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/video"), Authorize]
+    [Route("/admin/video"), Authorize, ValidateAntiForgeryToken]
     public class videoController : Controller
     {
         apiResponse myResponse;
@@ -62,31 +62,38 @@ namespace snn.Controllers
                 }
                 ViewData["title"] = "Edit Video: " + model.title;
             }
+            else {
                 ViewData["title"] = "Create Video";
+            }
 
             return View("details", model);
         }
 
         [HttpPost("/admin/video/details/{id?}")]
-        public IActionResult saveVideo([FromBody] cc_SnnVideos video)
+        public IActionResult saveVideo([FromBody] cc_SnnVideos inputVideo)
         {
             if (!readContext()) { return Unauthorized(); }
-            if (video.id==0)
+            cc_SnnVideos dbVideo = new cc_SnnVideos();
+            if (inputVideo.id == 0)
             {
-                video.create_time = DateTime.Now; 
-                lib.companyHubDB.cc_SnnVideos.Add(video);
+                lib.companyHubDB.cc_SnnVideos.Add(inputVideo);
+                lib.companyHubDB.SaveChanges();
+                dbVideo = inputVideo;
             }
             else
             {
-            var  Videos = lib.companyHubDB.cc_SnnVideos.Where(i => i.id == video.id).FirstOrDefault();
-                if (Videos == null) { return  NotFound(); }
-                lib.companyHubDB.cc_SnnVideos.Update(video);
+                dbVideo = lib.companyHubDB.cc_SnnVideos.Where(i => i.id == inputVideo.id).FirstOrDefault();
+                if (dbVideo == null) { return  NotFound(); }
+                dbVideo.title = inputVideo.title;
+                dbVideo.author = inputVideo.author;
+                dbVideo.link = inputVideo.link;
+                lib.companyHubDB.cc_SnnVideos.Update(dbVideo);
             }
-            lib.companyHubDB.SaveChanges();
+            
             myResponse = standardMessages.saved;
-            myResponse.data = video; 
+            myResponse.data = dbVideo;
             TempData["msgBox"] = myResponse.html;
-            return RedirectToAction("details", video);
+            return RedirectToAction("details", dbVideo);
         }
 
         [HttpDelete("/admin/video")]
