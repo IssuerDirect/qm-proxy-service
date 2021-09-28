@@ -1,7 +1,6 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  generation: 2
   name: {{ include "qm-proxy-service.fullname" . }}
 spec:
   dnsNames:
