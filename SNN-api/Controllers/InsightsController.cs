@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights")]
+    [Route("/admin/Insights"), Authorize]
     public class InsightsController : Controller
     {
         apiResponse myResponse;
