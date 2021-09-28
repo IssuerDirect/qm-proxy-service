@@ -69,8 +69,8 @@ namespace snn.Controllers
             return View("details", model);
         }
 
-        [HttpPost("/admin/video/details/{id?}")]
-        public IActionResult saveVideo([FromBody] cc_SnnVideos inputVideo)
+        [HttpPost("/admin/video/details")]
+        public IActionResult saveVideo(cc_SnnVideos inputVideo)
         {
             if (!readContext()) { return Unauthorized(); }
             cc_SnnVideos dbVideo = new cc_SnnVideos();
