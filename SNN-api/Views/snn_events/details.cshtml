@@ -31,7 +31,7 @@
     <div class="form-group row">
         <div class="col-md-6">
             <label>Company</label>
-            <div id="companies">
+            <div id="companies" style="display: none">
                 <div style="position: relative" v-bind:class="{'d-none': selectedCompany.id}">
                     <input type="text" class="form-control" v-model="keywords" />
                     <div class="card" v-if="displayList.length > 0">
@@ -151,8 +151,8 @@
                     return [];
                 }
             },
-            methods: {
-                
+            mounted: function () {
+                $("#companies").show();
             }
         })
     }
