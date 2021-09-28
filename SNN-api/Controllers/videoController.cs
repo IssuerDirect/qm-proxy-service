@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using net3000;
 using net3000.common.models;
+using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/video")]
+    [Route("/admin/video"), Authorize]
     public class videoController : Controller
     {
         apiResponse myResponse;
@@ -16,11 +21,11 @@ namespace snn.Controllers
         int pageSize = 50;
 
 
-        public videoController(IConfiguration configuration, companyHubDB snnDB)
+        public videoController(IConfiguration configuration, companyHubDB snnDB, platformDB _platformDB)
         {
             lib.companyHubDB = snnDB;
-            lib.config = configuration;
-            clib.myConfiguration=configuration;
+            lib.platformDB = _platformDB;
+            clib.myConfiguration = configuration;
         }
 
         [HttpGet("/admin/video")] 
@@ -106,8 +111,8 @@ namespace snn.Controllers
 
         bool readContext()
         {
-            clib.myUser(User);
-            if (clib.account <= 0) { return false; }
+            lib.myUser(User);
+            if (lib.user.id <= 0) { return false; }
             return true;
         }
 
