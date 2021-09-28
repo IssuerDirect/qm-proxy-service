@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/Insights"), Authorize, ValidateAntiForgeryToken]
+    [Route("/admin/Insights"), Authorize, AutoValidateAntiforgeryToken]
     public class InsightsController : Controller
     {
         apiResponse myResponse;

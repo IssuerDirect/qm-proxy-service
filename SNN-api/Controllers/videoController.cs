@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace snn.Controllers
 {
-    [Route("/admin/video"), Authorize, ValidateAntiForgeryToken]
+    [Route("/admin/video"), Authorize, AutoValidateAntiforgeryToken]
     public class videoController : Controller
     {
         apiResponse myResponse;
