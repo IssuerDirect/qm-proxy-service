@@ -55,7 +55,10 @@ namespace snn.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["title"] = "Edit Video: " + model.title;
             }
+                ViewData["title"] = "Create Video";
+
             return View("details", model);
         }
 
