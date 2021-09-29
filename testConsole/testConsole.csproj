@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SNN-api\SNN-api.csproj" />
+    <ProjectReference Include="..\SNN-admin\SNN-admin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
