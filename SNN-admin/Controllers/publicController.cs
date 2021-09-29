@@ -30,13 +30,7 @@ namespace snn.Controllers
             clib.myConfiguration = config;
             emsg.configuration = config;
 
-        }
-
-        [HttpGet("/")]
-        public string index()
-        {
-            return "SNN API Application";
-        }
+        }        
 
         /// <summary>
         /// Post Issue to admin.

@@ -49,3 +49,5 @@ Thumbs.db
 /SNN-api/bin/Release/net5.0
 /testConsole/obj
 /testConsole/bin/Debug/net5.0
+/SNN-admin/bin
+/SNN-admin/obj
