@@ -12,7 +12,7 @@ using net3000.common.models;
 
 namespace snn.Controllers
 {
-    [Route("/admin"), AutoValidateAntiforgeryToken, ApiExplorerSettings(GroupName = "Admin Actions")]
+    [Route("/"), AutoValidateAntiforgeryToken, ApiExplorerSettings(GroupName = "Admin Actions")]
     public class AdminController : Controller
     {
         apiResponse myResponse = new apiResponse();
@@ -26,8 +26,7 @@ namespace snn.Controllers
             lib.peopleHubDB = peopleHubDB;
             clib.myConfiguration = config;
         }
-
-        [HttpGet("/admin")]
+      
         public IActionResult Index()
         {
             ViewData["msgBox"] = "null";
@@ -98,14 +97,6 @@ namespace snn.Controllers
             ViewData["msgBox"] = Newtonsoft.Json.JsonConvert.SerializeObject(myResponse);
             return View("index");
         }
-        bool isAdmin()
-        {
-            if (HttpContext.Request.Headers != null && HttpContext.Request.Headers.ContainsKey("Authorization"))
-            {
-                //Temporarily
-                return HttpContext.Request.Headers["Authorization"] == "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiOS8xNi8yMDIxIDQ6MDY6NDEgQU0iLCJyb2xlIjoiMC0xIiwibmJmIjoxNjMxNzM2NDAxLCJleHAiOjE2MzE3Nzk2MDEsImlhdCI6MTYzMTczNjQwMX0.IWs7Dn-k0KaH08BQ4_FJKyUyVbx5nqkku0vNr6YqW1luVl0iuifGbWTht1rSdc9_KRU9x9TDY74kyPttZxj2vQ";
-            }
-            return false;
-        }
+        
     }
 }

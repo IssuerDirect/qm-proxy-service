@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Net;
-using net3000;
 
 namespace snn.Controllers
 {
-    [ApiController, ApiExplorerSettings(GroupName = "Quote Media")]
+    [ApiController, Route("/")]
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
         public HomeController(IConfiguration config) {
             myConfig = config;
+        }
+
+        public IActionResult Index()
+        {
+            return Content("SNN Proxy API");
         }
 
         [HttpGet("qm/{*queryvalues}")]
