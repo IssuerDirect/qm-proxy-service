@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNN-api", "SNN-api\SNN-api.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testConsole", "testConsole\testConsole.csproj", "{680E6B7C-19CC-4785-8A0A-6F8E1BC34E59}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SNN-admin", "SNN-admin\SNN-admin.csproj", "{F94DEC83-37A8-4843-9A66-97BC538A62BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{680E6B7C-19CC-4785-8A0A-6F8E1BC34E59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{680E6B7C-19CC-4785-8A0A-6F8E1BC34E59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{680E6B7C-19CC-4785-8A0A-6F8E1BC34E59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F94DEC83-37A8-4843-9A66-97BC538A62BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F94DEC83-37A8-4843-9A66-97BC538A62BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F94DEC83-37A8-4843-9A66-97BC538A62BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F94DEC83-37A8-4843-9A66-97BC538A62BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,21 @@
+image:
+  repository: gcr.io/isdr-dev/alpha-qm-proxy-service
+  tag: ""
+  pullPolicy: Always
+ingress:
+  dnsName: &dnsName alpha-qm-proxy.isdrdev.com
+  secretName: &secretName alpha-qm-proxy-isdrdev-com
+  enabled: true
+  className: ""
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: *dnsName
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - *dnsName
+    secretName: *secretName

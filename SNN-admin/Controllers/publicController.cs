@@ -31,13 +31,7 @@ namespace snn.Controllers
             emsg.accountsDB = accDB;
             emsg.configuration = config;
 
-        }
-
-        [HttpGet("/")]
-        public string index()
-        {
-            return "SNN API Application";
-        }
+        }        
 
         /// <summary>
         /// Post Issue to admin.
