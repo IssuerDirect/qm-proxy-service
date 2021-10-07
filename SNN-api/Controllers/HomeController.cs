@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using System;
