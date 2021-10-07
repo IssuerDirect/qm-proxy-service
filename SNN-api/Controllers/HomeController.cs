@@ -53,7 +53,7 @@ namespace snn.Controllers
             try
             {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-                byte[] buffer = encoding.GetBytes("{\"from\": \"0\",\"size\": \"10\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
+                byte[] buffer = encoding.GetBytes("{\"from\": \"" + index + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("text/json");
                 byteContent.Headers.ContentLength = buffer.Length;
