@@ -55,6 +55,7 @@ namespace snn.Controllers
             {
                 return ex.Message;
             }
+            return null;
         }
     }
     
