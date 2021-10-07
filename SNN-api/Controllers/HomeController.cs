@@ -40,6 +40,22 @@ namespace snn.Controllers
                 return ex.Message;
             }
         }
+
+        [HttpGet("/filings")]
+        public string qmIndex(int index = 0, int size = 24)
+        {
+            WebClient myClient = new WebClient();
+            myClient.Headers.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
+            try
+            {
+                //var myData = myClient.DownloadString($"http://app.quotemedia.com{HttpContext.Request.Path.ToString().Replace("qm/", "") + HttpContext.Request.QueryString}{appendWebmaster}webmasterId={myConfig.GetValue<string>("Quotemedia:webmasterid")}");
+                //return myData;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
     }
     
 }
