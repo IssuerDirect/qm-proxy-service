@@ -56,7 +56,7 @@ namespace snn.Controllers
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
                 byte[] buffer = encoding.GetBytes("{\"from\": \"" + index + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new MediaTypeHeaderValue("text/json");
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 byteContent.Headers.ContentLength = buffer.Length;
                 var response = client.PostAsync("https://api.sec-api.io", byteContent);
                 return await response.Result.Content.ReadAsStringAsync();
