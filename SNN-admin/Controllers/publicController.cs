@@ -22,12 +22,13 @@ namespace snn.Controllers
         SNNLib lib = new SNNLib();
         emailMessage emsg = new emailMessage();
         int pageSize = 24;
-        public publicController(IConfiguration config, peopleHubDB peopleHubDB, companyHubDB companyHubDB)
+        public publicController(IConfiguration config, peopleHubDB peopleHubDB, companyHubDB companyHubDB,accountsDB accDB)
         {
             lib.config = config;
             lib.companyHubDB = companyHubDB;
             lib.peopleHubDB = peopleHubDB; 
             clib.myConfiguration = config;
+            emsg.accountsDB = accDB;
             emsg.configuration = config;
 
         }        
