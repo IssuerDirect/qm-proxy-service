@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 using System.Net;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
+using System;
+using System.Web;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace snn.Controllers
 {
@@ -42,21 +47,24 @@ namespace snn.Controllers
         }
 
         [HttpGet("/filings")]
-        public string qmIndex(int index = 0, int size = 24)
+        public async Task<string> qmIndex(int index = 0, int size = 24)
         {
-            WebClient myClient = new WebClient();
-            myClient.Headers.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
             try
             {
-                //var myData = myClient.DownloadString($"http://app.quotemedia.com{HttpContext.Request.Path.ToString().Replace("qm/", "") + HttpContext.Request.QueryString}{appendWebmaster}webmasterId={myConfig.GetValue<string>("Quotemedia:webmasterid")}");
-                //return myData;
+                System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                byte[] buffer = encoding.GetBytes("{\"from\": \"" + index + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
+                ByteArrayContent byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("text/json");
+                byteContent.Headers.ContentLength = buffer.Length;
+                var response = client.PostAsync("https://api.sec-api.io", byteContent);
+                return await response.Result.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
                 return ex.Message;
             }
-            return null;
         }
-    }
-    
+    }    
 }
