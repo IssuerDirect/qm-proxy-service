@@ -8,6 +8,7 @@ using System;
 using System.Web;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using net3000;
 
 namespace snn.Controllers
 {
@@ -15,6 +16,7 @@ namespace snn.Controllers
     public class HomeController : ControllerBase
     {
         IConfiguration myConfig;
+        apiResponse myResponse = standardMessages.found;
         public HomeController(IConfiguration config) {
             myConfig = config;
         }
@@ -47,7 +49,7 @@ namespace snn.Controllers
         }
 
         [HttpGet("/filings")]
-        public async Task<string> qmIndex(int index = 0, int size = 24)
+        public async Task<apiResponse> qmIndex(int index = 0, int size = 24)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
@@ -59,12 +61,16 @@ namespace snn.Controllers
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 byteContent.Headers.ContentLength = buffer.Length;
                 var response = client.PostAsync("https://api.sec-api.io", byteContent);
-                return await response.Result.Content.ReadAsStringAsync();
+                var rawResponse = await response.Result.Content.ReadAsStringAsync();
+                fillingObject apiObject = System.Text.Json.JsonSerializer.Deserialize<fillingObject>(rawResponse);
+                myResponse.data = apiObject;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                myResponse = standardMessages.invalid;
+                myResponse.message = ex.Message;
             }
+            return myResponse;
         }
     }    
 }
