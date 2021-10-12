@@ -10,6 +10,7 @@ using System.Web;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using net3000;
+using System.Collections.Generic;
 
 namespace snn.Controllers
 {
@@ -61,25 +62,34 @@ namespace snn.Controllers
             try
             {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-                byte[] buffer = encoding.GetBytes("{\"from\": \"" + (index * size) + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
+                Root root = new Root();
+                Sort sort = new Sort();
+                root.from = (index * size).ToString();
+                root.size = size.ToString();
+                sort.filedAt.order = "desc";
+                root.sort.Add(sort);
+                string myParameters;
+                if (!string.IsNullOrEmpty(industry))
+                {
+                    root.query.query_string.query = "entities.sic: \""+ industry + "\"";
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
+                }
+                else if (startdate != null && enddate != null)
+                {
+                    root.query.query_string.query = "filedAt:{"+ startdate +" TO " + enddate + "}";
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
+                }
+                else
+                {
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.from, root.size, root.sort });
+                }
+                byte[] buffer = encoding.GetBytes(myParameters);
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 byteContent.Headers.ContentLength = buffer.Length;
                 var response = client.PostAsync("https://api.sec-api.io", byteContent);
                 var rawResponse = await response.Result.Content.ReadAsStringAsync();
                 fillingObject apiObject = System.Text.Json.JsonSerializer.Deserialize<fillingObject>(rawResponse);
-                //if (!string.IsNullOrEmpty(industry))
-                //{
-                //    apiObject.filings = apiObject.filings.Where(f => f.industry.Contains(industry)).ToList();
-                //}
-                //if (startdate != null)
-                //{
-                //    apiObject.filings = apiObject.filings.Where(f => f.filedAt >= startdate).ToList();
-                //}
-                //if (enddate != null)
-                //{
-                //    apiObject.filings = apiObject.filings.Where(f => f.filedAt <= enddate).ToList();
-                //}
                 myResponse.data = apiObject.filings.Select(f => new
                 {
                     f.companyName,
@@ -99,6 +109,29 @@ namespace snn.Controllers
                 myResponse.message = ex.Message;
             }
             return myResponse;
+        }
+        class Root
+        {
+            public Query query { get; set; } = new Query();
+            public string from { get; set; }
+            public string size { get; set; }
+            public List<Sort> sort { get; set; } = new List<Sort>();            
+        }
+        class QueryString
+        {
+            public string query { get; set; }
+        }
+        class Query
+        {
+            public QueryString query_string { get; set; } = new QueryString();
+        }
+        class FiledAt
+        {
+            public string order { get; set; } = "";
+        }
+        class Sort
+        {
+            public FiledAt filedAt { get; set; } = new FiledAt();
         }
     }
 }
