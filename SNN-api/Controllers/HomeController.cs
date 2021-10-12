@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using System;
@@ -63,7 +64,17 @@ namespace snn.Controllers
                 var response = client.PostAsync("https://api.sec-api.io", byteContent);
                 var rawResponse = await response.Result.Content.ReadAsStringAsync();
                 fillingObject apiObject = System.Text.Json.JsonSerializer.Deserialize<fillingObject>(rawResponse);
-                myResponse.data = apiObject;
+                myResponse.data = apiObject.filings.Select(f => new
+                {
+                    f.companyName,
+                    f.filedAt,
+                    f.ticker,
+                    f.linkToHtml,
+                    f.linkToTxt,
+                    f.linkToXbrl,
+                    f.linkToFilingDetails,
+                    f.industry
+                });
             }
             catch (Exception ex)
             {

@@ -64,6 +64,16 @@ namespace snn.Controllers
         public List<object> seriesAndClassesContractsInformation { get; set; }
         public string periodOfReport { get; set; }
         public string effectivenessDate { get; set; }
+        public string industry {
+            get {
+                if (entities != null && entities.Where(e => !string.IsNullOrEmpty(e.sic)).Any()) {
+                    var industry = entities.Where(e => !string.IsNullOrEmpty(e.sic)).FirstOrDefault().sic;
+                    industry = industry.Replace(industry.Split(" ")[0] + " ", "");
+                    return industry;
+                }
+                return null;
+            }
+        }
     }
 
     public class fillingObject
