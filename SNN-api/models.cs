@@ -74,6 +74,18 @@ namespace snn.Controllers
                 return "";
             }
         }
+        public string industryID
+        {
+            get
+            {
+                if (entities != null && entities.Where(e => !string.IsNullOrEmpty(e.sic)).Any())
+                {
+                    var myID = entities.Where(e => !string.IsNullOrEmpty(e.sic)).FirstOrDefault().sic;
+                    return myID.Split(" ")[0];
+                }
+                return null;
+            }
+        }
     }
 
     public class fillingObject
