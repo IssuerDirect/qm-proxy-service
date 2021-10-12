@@ -18,7 +18,8 @@ namespace snn.Controllers
     {
         IConfiguration myConfig;
         apiResponse myResponse = standardMessages.found;
-        public HomeController(IConfiguration config) {
+        public HomeController(IConfiguration config)
+        {
             myConfig = config;
         }
 
@@ -36,34 +37,49 @@ namespace snn.Controllers
             {
                 appendWebmaster = "&";
             }
-            else {
+            else
+            {
                 appendWebmaster = "?";
             }
             myClient.Headers.Add("Authorization", $"Bearer {myConfig.GetValue<string>("Quotemedia:token")}");
-            try {
+            try
+            {
                 var myData = myClient.DownloadString($"http://app.quotemedia.com{HttpContext.Request.Path.ToString().Replace("qm/", "") + HttpContext.Request.QueryString}{appendWebmaster}webmasterId={myConfig.GetValue<string>("Quotemedia:webmasterid")}");
                 return myData;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return ex.Message;
             }
         }
 
         [HttpGet("/filings")]
-        public async Task<apiResponse> qmIndex(int index = 0, int size = 24)
+        public async Task<apiResponse> qmIndex(int index = 0, int size = 24, string industry = null, DateTime? startdate = null, DateTime? enddate = null)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
             try
             {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-                byte[] buffer = encoding.GetBytes("{\"from\": \"" + index + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
+                byte[] buffer = encoding.GetBytes("{\"from\": \"" + (index * size) + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 byteContent.Headers.ContentLength = buffer.Length;
                 var response = client.PostAsync("https://api.sec-api.io", byteContent);
                 var rawResponse = await response.Result.Content.ReadAsStringAsync();
                 fillingObject apiObject = System.Text.Json.JsonSerializer.Deserialize<fillingObject>(rawResponse);
+                //if (!string.IsNullOrEmpty(industry))
+                //{
+                //    apiObject.filings = apiObject.filings.Where(f => f.industry.Contains(industry)).ToList();
+                //}
+                //if (startdate != null)
+                //{
+                //    apiObject.filings = apiObject.filings.Where(f => f.filedAt >= startdate).ToList();
+                //}
+                //if (enddate != null)
+                //{
+                //    apiObject.filings = apiObject.filings.Where(f => f.filedAt <= enddate).ToList();
+                //}
                 myResponse.data = apiObject.filings.Select(f => new
                 {
                     f.companyName,
@@ -75,6 +91,7 @@ namespace snn.Controllers
                     f.linkToFilingDetails,
                     f.industry
                 });
+                myResponse.count = apiObject.total.value;
             }
             catch (Exception ex)
             {
@@ -83,5 +100,5 @@ namespace snn.Controllers
             }
             return myResponse;
         }
-    }    
+    }
 }
