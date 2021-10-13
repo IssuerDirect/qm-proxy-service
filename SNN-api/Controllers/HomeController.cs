@@ -103,7 +103,8 @@ namespace snn.Controllers
                     f.linkToTxt,
                     f.linkToXbrl,
                     f.linkToFilingDetails,
-                    f.industry
+                    f.industry,
+                    f.formType
                 });
                 myResponse.count = apiObject.total.value;
             }
