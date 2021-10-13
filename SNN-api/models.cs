@@ -71,7 +71,7 @@ namespace snn.Controllers
                     industry = industry.Replace(industry.Split(" ")[0] + " ", "");
                     return industry;
                 }
-                return null;
+                return "";
             }
         }
         public string industryID

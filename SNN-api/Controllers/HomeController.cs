@@ -10,6 +10,7 @@ using System.Web;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using net3000;
+using System.Collections.Generic;
 
 namespace snn.Controllers
 {
@@ -18,7 +19,8 @@ namespace snn.Controllers
     {
         IConfiguration myConfig;
         apiResponse myResponse = standardMessages.found;
-        public HomeController(IConfiguration config) {
+        public HomeController(IConfiguration config)
+        {
             myConfig = config;
         }
 
@@ -36,28 +38,56 @@ namespace snn.Controllers
             {
                 appendWebmaster = "&";
             }
-            else {
+            else
+            {
                 appendWebmaster = "?";
             }
             myClient.Headers.Add("Authorization", $"Bearer {myConfig.GetValue<string>("Quotemedia:token")}");
-            try {
+            try
+            {
                 var myData = myClient.DownloadString($"http://app.quotemedia.com{HttpContext.Request.Path.ToString().Replace("qm/", "") + HttpContext.Request.QueryString}{appendWebmaster}webmasterId={myConfig.GetValue<string>("Quotemedia:webmasterid")}");
                 return myData;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return ex.Message;
             }
         }
 
         [HttpGet("/filings")]
-        public async Task<apiResponse> qmIndex(int index = 0, int size = 24)
+        public async Task<apiResponse> qmIndex(int index = 0, int size = 24, string industry = null, DateTime? startdate = null, DateTime? enddate = null)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"{myConfig.GetValue<string>("AppSettings:sec")}");
             try
             {
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-                byte[] buffer = encoding.GetBytes("{\"from\": \"" + index + "\",\"size\": \"" + size + "\",\"sort\": [{\"filedAt\": {\"order\": \"desc\"}}]}");
+                Root root = new Root();
+                Sort sort = new Sort();
+                root.from = (index * size).ToString();
+                root.size = size.ToString();
+                sort.filedAt.order = "desc";
+                root.sort.Add(sort);
+                string myParameters;
+                if (!string.IsNullOrEmpty(industry))
+                {
+                    root.query.query_string.query = "entities.sic: \"" + industry + "\"";
+                    if (startdate != null && enddate != null)
+                    {
+                        root.query.query_string.query += " AND filedAt:{" + startdate.Value.ToString("yyyy-MM-dd") + " TO " + enddate.Value.ToString("yyyy-MM-dd") + "}";
+                    }
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
+                }
+                else if (startdate != null && enddate != null)
+                {
+                    root.query.query_string.query = "filedAt:{" + startdate.Value.ToString("yyyy-MM-dd") + " TO " + enddate.Value.ToString("yyyy-MM-dd") + "}";
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
+                }
+                else
+                {
+                    myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.from, root.size, root.sort });
+                }
+                byte[] buffer = encoding.GetBytes(myParameters);
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 byteContent.Headers.ContentLength = buffer.Length;
@@ -76,6 +106,7 @@ namespace snn.Controllers
                     f.industry,
                     f.formType
                 });
+                myResponse.count = apiObject.total.value;
             }
             catch (Exception ex)
             {
@@ -84,5 +115,28 @@ namespace snn.Controllers
             }
             return myResponse;
         }
-    }    
+        class Root
+        {
+            public Query query { get; set; } = new Query();
+            public string from { get; set; }
+            public string size { get; set; }
+            public List<Sort> sort { get; set; } = new List<Sort>();
+        }
+        class QueryString
+        {
+            public string query { get; set; }
+        }
+        class Query
+        {
+            public QueryString query_string { get; set; } = new QueryString();
+        }
+        class FiledAt
+        {
+            public string order { get; set; } = "";
+        }
+        class Sort
+        {
+            public FiledAt filedAt { get; set; } = new FiledAt();
+        }
+    }
 }
