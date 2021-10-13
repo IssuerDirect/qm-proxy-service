@@ -71,12 +71,16 @@ namespace snn.Controllers
                 string myParameters;
                 if (!string.IsNullOrEmpty(industry))
                 {
-                    root.query.query_string.query = "entities.sic: \""+ industry + "\"";
+                    root.query.query_string.query = "entities.sic: \"" + industry + "\"";
+                    if (startdate != null && enddate != null)
+                    {
+                        root.query.query_string.query += " AND filedAt:{" + startdate.Value.ToString("yyyy-MM-dd") + " TO " + enddate.Value.ToString("yyyy-MM-dd") + "}";
+                    }
                     myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
                 }
                 else if (startdate != null && enddate != null)
                 {
-                    root.query.query_string.query = "filedAt:{"+ startdate +" TO " + enddate + "}";
+                    root.query.query_string.query = "filedAt:{" + startdate.Value.ToString("yyyy-MM-dd") + " TO " + enddate.Value.ToString("yyyy-MM-dd") + "}";
                     myParameters = System.Text.Json.JsonSerializer.Serialize(new { root.query, root.from, root.size, root.sort });
                 }
                 else
@@ -115,7 +119,7 @@ namespace snn.Controllers
             public Query query { get; set; } = new Query();
             public string from { get; set; }
             public string size { get; set; }
-            public List<Sort> sort { get; set; } = new List<Sort>();            
+            public List<Sort> sort { get; set; } = new List<Sort>();
         }
         class QueryString
         {
