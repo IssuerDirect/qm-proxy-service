@@ -73,7 +73,8 @@ namespace snn.Controllers
                     f.linkToTxt,
                     f.linkToXbrl,
                     f.linkToFilingDetails,
-                    f.industry
+                    f.industry,
+                    f.formType
                 });
             }
             catch (Exception ex)
