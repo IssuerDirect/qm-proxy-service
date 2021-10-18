@@ -53,7 +53,25 @@ namespace snn.Controllers
                 return ex.Message;
             }
         }
+        [HttpGet("/getArticle/{storyId}")]
+        public async Task<apiResponse> getArticle(string storyId)
+        {
+            WebClient myClient = new WebClient();
+            myClient.Headers.Add("Authorization", $"Bearer {myConfig.GetValue<string>("Quotemedia:token")}");
+          
+            HtmlAgilityPack.HtmlDocument htmldoc = new HtmlAgilityPack.HtmlDocument();
+            var response = myClient.DownloadString( $"https://api.quotemedia.com/supplement/news-story/?webmasterId={myConfig.GetValue<string>("Quotemedia:webmasterid")}&storyId={storyId}");
 
+            htmldoc.LoadHtml(response);
+            var title = htmldoc.DocumentNode.SelectSingleNode("//title").InnerText ;
+            var content = htmldoc.DocumentNode.SelectSingleNode("//div[@class='xn-content']");
+            if(content!=null)
+            {
+                myResponse = standardMessages.found;
+                myResponse.data = new { headLine = title, article = content.InnerHtml };
+            }
+            return standardMessages.notFound;
+        }
         [HttpGet("/filings")]
         public async Task<apiResponse> qmIndex(int index = 0, int size = 24, string industry = null, DateTime? startdate = null, DateTime? enddate = null)
         {
